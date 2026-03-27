@@ -1,0 +1,57 @@
+@model Ervilhinha.Models.ExpenseCategory
+
+@{
+    ViewData["Title"] = "Eliminar Categoria";
+}
+
+<h1>🗑️ Eliminar Categoria</h1>
+
+<div class="alert alert-danger">
+    <h4>⚠ Tens a certeza que queres eliminar esta categoria?</h4>
+    <p>Esta ação não pode ser revertida.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nome:</dt>
+            <dd class="col-sm-9">
+                <span class="badge" style="background-color: @Model.Color">
+                    @Model.Name
+                </span>
+            </dd>
+
+            <dt class="col-sm-3">Cor:</dt>
+            <dd class="col-sm-9">
+                <input type="color" value="@Model.Color" disabled />
+                <code>@Model.Color</code>
+            </dd>
+
+            <dt class="col-sm-3">Estado:</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Ativo</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inativo</span>
+                }
+            </dd>
+        </dl>
+
+        @if (Model.Expenses != null && Model.Expenses.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>⚠ Atenção:</strong> Esta categoria tem <strong>@Model.Expenses.Count despesa(s)</strong> associada(s). 
+                Ao eliminar a categoria, estas despesas ficarão sem categoria.
+            </div>
+        }
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Eliminar Categoria</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

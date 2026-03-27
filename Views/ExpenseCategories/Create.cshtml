@@ -1,0 +1,65 @@
+@model Ervilhinha.Models.ExpenseCategory
+
+@{
+    ViewData["Title"] = "Criar Categoria";
+}
+
+<h1>➕ Criar Categoria de Despesa</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Nome</label>
+                <input asp-for="Name" class="form-control" placeholder="Ex: Alimentação, Transporte..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Color" class="form-label">Cor</label>
+                <div class="input-group">
+                    <input asp-for="Color" type="color" class="form-control form-control-color" />
+                    <input asp-for="Color" type="text" class="form-control" placeholder="#FF5733" />
+                </div>
+                <div class="form-text">Escolhe uma cor para identificar esta categoria nos gráficos</div>
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">Categoria Ativa</label>
+                <div class="form-text">Apenas categorias ativas aparecem na criação de despesas</div>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5>💡 Sugestões de Categorias</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">🍼 <strong>Bebé</strong> - #FF69B4</li>
+                    <li class="mb-2">🏠 <strong>Casa</strong> - #4CAF50</li>
+                    <li class="mb-2">🚗 <strong>Transporte</strong> - #2196F3</li>
+                    <li class="mb-2">🛒 <strong>Supermercado</strong> - #FF9800</li>
+                    <li class="mb-2">⚡ <strong>Contas</strong> - #9C27B0</li>
+                    <li class="mb-2">💊 <strong>Saúde</strong> - #F44336</li>
+                    <li class="mb-2">🎉 <strong>Lazer</strong> - #00BCD4</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

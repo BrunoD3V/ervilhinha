@@ -1,0 +1,61 @@
+@model Ervilhinha.Models.ExpenseCategory
+
+@{
+    ViewData["Title"] = "Editar Categoria";
+}
+
+<h1>✏️ Editar Categoria</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Nome</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Color" class="form-label">Cor</label>
+                <div class="input-group">
+                    <input asp-for="Color" type="color" class="form-control form-control-color" />
+                    <input asp-for="Color" type="text" class="form-control" />
+                </div>
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">Categoria Ativa</label>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Guardar Alterações</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Pré-visualização</h5>
+            </div>
+            <div class="card-body">
+                <h3>
+                    <span class="badge" style="background-color: @Model.Color">
+                        @Model.Name
+                    </span>
+                </h3>
+                <p class="text-muted">Esta é a aparência da categoria nos relatórios.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

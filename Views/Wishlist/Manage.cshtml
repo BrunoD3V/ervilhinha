@@ -1,0 +1,293 @@
+@model Ervilhinha.Models.BabyWishlist
+
+@{
+    ViewData["Title"] = $"Gerir: {Model.Name}";
+    var totalItems = Model.Items.Count;
+    var availableItems = Model.Items.Count(i => i.AvailableQuantity > 0);
+    var reservedCount = Model.Items.Sum(i => i.ReservedQuantity);
+    var acquiredCount = Model.Items.Sum(i => i.AcquiredQuantity);
+    var totalQuantity = Model.Items.Sum(i => i.Quantity);
+    var progressPercent = totalQuantity > 0 ? (int)((reservedCount + acquiredCount) / (double)totalQuantity * 100) : 0;
+}
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="display-5 mb-1">🎁 @Model.Name</h1>
+            @if (!string.IsNullOrEmpty(Model.BabyName))
+            {
+                <p class="lead text-soft mb-0">👶 Para: <strong>@Model.BabyName</strong></p>
+            }
+        </div>
+        <div>
+            <a asp-action="MyLists" class="btn btn-outline-secondary">← Voltar às Minhas Listas</a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <p class="text-muted">@Model.Description</p>
+    }
+
+    @if (Model.ExpectedDate.HasValue)
+    {
+        <p class="text-soft">📅 Data Prevista: <strong>@Model.ExpectedDate.Value.ToString("dd/MM/yyyy")</strong></p>
+    }
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card card-pea shadow">
+            <div class="card-body">
+                <h5 class="mb-3">📊 Estatísticas da Lista</h5>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Progresso Geral</span>
+                        <strong>@progressPercent%</strong>
+                    </div>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-success" style="width: @progressPercent%"></div>
+                    </div>
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-3">
+                        <div class="text-soft small">Total Items</div>
+                        <div class="h4 mb-0">@totalItems</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Disponíveis</div>
+                        <div class="h4 mb-0 text-success">@availableItems</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Reservados</div>
+                        <div class="h4 mb-0 text-warning">@reservedCount</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Adquiridos</div>
+                        <div class="h4 mb-0 text-info">@acquiredCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-yellow shadow">
+            <div class="card-body">
+                <h6 class="mb-2">🔗 Código de Partilha</h6>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" value="@Model.ShareCode" readonly id="shareCode">
+                    <button class="btn btn-primary" onclick="copyCode()">📋</button>
+                </div>
+                <div class="d-grid gap-2">
+                    <a asp-action="Share" asp-route-id="@Model.Id" class="btn btn-info btn-sm">
+                        Partilhar Lista
+                    </a>
+                    <form asp-action="TogglePublic" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        @if (Model.IsPublic)
+                        {
+                            <button type="submit" class="btn btn-outline-warning btn-sm w-100">
+                                🔓 Tornar Privada
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-outline-success btn-sm w-100">
+                                🔒 Tornar Pública
+                            </button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">📝 Items da Lista</h5>
+        <a asp-action="AddItem" asp-route-id="@Model.Id" class="btn btn-primary">
+            ➕ Adicionar Item
+        </a>
+    </div>
+    <div class="card-body">
+        @if (!Model.Items.Any())
+        {
+            <div class="text-center py-5">
+                <p class="lead text-soft">Ainda não adicionaste nenhum item</p>
+                <a asp-action="AddItem" asp-route-id="@Model.Id" class="btn btn-primary">
+                    Adicionar Primeiro Item
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Categoria</th>
+                            <th>Prioridade</th>
+                            <th class="text-center">Quantidade</th>
+                            <th class="text-center">Reservado</th>
+                            <th class="text-center">Adquirido</th>
+                            <th>Preço Est.</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items.OrderByDescending(i => i.Priority).ThenBy(i => i.Name))
+                        {
+                            var statusClass = item.AvailableQuantity == 0 ? "table-secondary" : "";
+                            var priorityBadge = item.Priority switch
+                            {
+                                3 => "<span class='badge bg-danger'>Alta</span>",
+                                2 => "<span class='badge bg-warning text-dark'>Média</span>",
+                                _ => "<span class='badge bg-info'>Baixa</span>"
+                            };
+
+                            <tr class="@statusClass">
+                                <td>
+                                    <strong>@item.Name</strong>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <br /><small class="text-soft">@item.Description</small>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Category))
+                                    {
+                                        <span class="badge bg-secondary">@item.Category</span>
+                                    }
+                                </td>
+                                <td>@Html.Raw(priorityBadge)</td>
+                                <td class="text-center"><strong>@item.Quantity</strong></td>
+                                <td class="text-center">
+                                    @if (item.ReservedQuantity > 0)
+                                    {
+                                        <span class="badge bg-warning">@item.ReservedQuantity</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-soft">-</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (item.AcquiredQuantity > 0)
+                                    {
+                                        <span class="badge bg-success">@item.AcquiredQuantity</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-soft">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.EstimatedPrice.HasValue)
+                                    {
+                                        @item.EstimatedPrice.Value.ToString("C")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-soft">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="EditItem" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">
+                                            ✏️
+                                        </a>
+                                        @if (item.ReservedQuantity < item.Quantity)
+                                        {
+                                            <button type="button" class="btn btn-outline-success" onclick="markAcquired(@item.Id, '@item.Name')" title="Marcar como Adquirido">
+                                                ✅
+                                            </button>
+                                        }
+                                        <button type="button" class="btn btn-outline-danger" onclick="deleteItem(@item.Id, '@item.Name')" title="Eliminar">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="card card-pink shadow">
+        <div class="card-body">
+            <h5>👥 Gestores da Lista</h5>
+            <div class="row">
+                @foreach (var manager in Model.Managers.OrderByDescending(m => m.CanManageManagers))
+                {
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex align-items-center">
+                            <div class="me-2">
+                                @if (manager.CanManageManagers)
+                                {
+                                    <span class="badge bg-primary">👑</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">👤</span>
+                                }
+                            </div>
+                            <div>
+                                <strong>@manager.ManagerName</strong>
+                                <br /><small class="text-soft">@manager.ManagerEmail</small>
+                                @if (!string.IsNullOrEmpty(manager.Role))
+                                {
+                                    <br /><small class="badge bg-info">@manager.Role</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form oculto para eliminar item -->
+<form id="deleteItemForm" method="post" asp-action="DeleteItem" style="display: none;">
+    <input type="hidden" name="id" id="deleteItemId" />
+</form>
+
+<!-- Form oculto para marcar como adquirido -->
+<form id="markAcquiredForm" method="post" asp-action="MarkAcquired" style="display: none;">
+    <input type="hidden" name="id" id="acquiredItemId" />
+    <input type="hidden" name="quantity" value="1" />
+</form>
+
+@section Scripts {
+    <script>
+        function copyCode() {
+            const code = document.getElementById('shareCode').value;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Código copiado: ' + code);
+            });
+        }
+
+        function deleteItem(id, name) {
+            if (confirm(`Tens a certeza que queres eliminar "${name}"?`)) {
+                document.getElementById('deleteItemId').value = id;
+                document.getElementById('deleteItemForm').submit();
+            }
+        }
+
+        function markAcquired(id, name) {
+            if (confirm(`Marcar "${name}" como adquirido?`)) {
+                document.getElementById('acquiredItemId').value = id;
+                document.getElementById('markAcquiredForm').submit();
+            }
+        }
+    </script>
+}

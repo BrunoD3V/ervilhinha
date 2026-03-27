@@ -1,0 +1,50 @@
+@model Ervilhinha.Models.Expense
+
+@{
+    ViewData["Title"] = "Eliminar Despesa";
+}
+
+<h1>🗑️ Eliminar Despesa</h1>
+
+<div class="alert alert-warning">
+    <h4>Tens a certeza que queres eliminar esta despesa?</h4>
+    <p>Esta ação não pode ser revertida.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Data</dt>
+            <dd class="col-sm-9">@Model.Date.ToShortDateString()</dd>
+
+            <dt class="col-sm-3">Descrição</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Montante</dt>
+            <dd class="col-sm-9"><strong>€@Model.Amount.ToString("N2")</strong></dd>
+
+            <dt class="col-sm-3">Categoria</dt>
+            <dd class="col-sm-9">
+                @if (Model.ExpenseCategory != null)
+                {
+                    <span class="badge" style="background-color: @Model.ExpenseCategory.Color">@Model.ExpenseCategory.Name</span>
+                }
+            </dd>
+
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                <dt class="col-sm-3">Notas</dt>
+                <dd class="col-sm-9">@Model.Notes</dd>
+            }
+
+            <dt class="col-sm-3">Criado Por</dt>
+            <dd class="col-sm-9">@Model.CreatedBy em @Model.CreatedDate.ToLocalTime().ToString("g")</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+@model Ervilhinha.Models.BabyItem
+
+@{
+    ViewData["Title"] = "Adicionar Artigo do Bebé";
+}
+
+<h1>➕ Adicionar Artigo do Bebé</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Nome</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Descrição</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Category" class="form-label">Categoria</label>
+                    <input asp-for="Category" class="form-control" list="categoryList" />
+                    <datalist id="categoryList">
+                        <option value="Roupa"></option>
+                        <option value="Quarto do Bebé"></option>
+                        <option value="Alimentação"></option>
+                        <option value="Banho"></option>
+                        <option value="Fraldas"></option>
+                        <option value="Brinquedos"></option>
+                        <option value="Segurança"></option>
+                        <option value="Viagem"></option>
+                    </datalist>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Priority" class="form-label">Prioridade</label>
+                    <select asp-for="Priority" class="form-select">
+                        <option value="1">1 - Muito Alta</option>
+                        <option value="2">2 - Alta</option>
+                        <option value="3" selected>3 - Média</option>
+                        <option value="4">4 - Baixa</option>
+                        <option value="5">5 - Muito Baixa</option>
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EstimatedCost" class="form-label">Custo Estimado (€)</label>
+                    <input asp-for="EstimatedCost" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="EstimatedCost" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ActualCost" class="form-label">Custo Real (€)</label>
+                    <input asp-for="ActualCost" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="ActualCost" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Notas</label>
+                <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

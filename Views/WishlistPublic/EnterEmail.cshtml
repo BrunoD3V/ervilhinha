@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Consultar Reservas";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card card-pea shadow p-4">
+            <div class="card-body text-center">
+                <h1 class="display-5 mb-3">🎁 Minhas Reservas</h1>
+                <p class="lead text-soft mb-4">Consulta as reservas que fizeste usando o teu email</p>
+
+                <form asp-action="MyReservations" method="get">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email usado nas Reservas</label>
+                        <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="exemplo@email.com" required autofocus />
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            🔍 Ver Minhas Reservas
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-blue shadow mt-4">
+            <div class="card-body">
+                <h6>ℹ️ Informação</h6>
+                <ul class="mb-0 small">
+                    <li>Usa o mesmo email que usaste ao fazer as reservas</li>
+                    <li>Podes consultar, cancelar ou ver detalhes das tuas reservas</li>
+                    <li>Não precisas de criar conta ou fazer login</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                ← Voltar à Página Inicial
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Preencher email automaticamente se existir no localStorage
+        const savedEmail = localStorage.getItem('reservationEmail');
+        if (savedEmail) {
+            document.getElementById('email').value = savedEmail;
+        }
+    </script>
+}

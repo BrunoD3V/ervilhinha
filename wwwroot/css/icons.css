@@ -1,0 +1,31 @@
+/* ========================================
+   🎨 ÍCONES SVG PERSONALIZADOS ERVILHINHA
+   Ícones fofos e pastel para o tema Little Pea
+   ======================================== */
+
+/* Estilos para os ícones SVG */
+.icon-svg {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.icon-svg-large {
+    width: 80px;
+    height: 80px;
+}
+
+.icon-svg-small {
+    width: 40px;
+    height: 40px;
+}
+
+/* Animação suave para ícones */
+.icon-svg {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .icon-svg {
+    transform: scale(1.1) rotate(5deg);
+}

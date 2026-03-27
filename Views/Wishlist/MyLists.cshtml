@@ -1,0 +1,127 @@
+@model IEnumerable<Ervilhinha.Models.BabyWishlist>
+
+@{
+    ViewData["Title"] = "Minhas Listas de Desejos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="display-5">🎁 Minhas Listas de Desejos</h1>
+        <p class="text-soft">Gere as tuas listas para o bebé e partilha com familiares e amigos</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary btn-lg">
+        ➕ Criar Nova Lista
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card card-yellow shadow text-center p-5">
+        <h2>🌿 Ainda não tens listas de desejos</h2>
+        <p class="lead text-soft mb-4">Cria a tua primeira lista e começa a partilhar com família e amigos!</p>
+        <a asp-action="Create" class="btn btn-primary btn-lg">Criar Primeira Lista</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var wishlist in Model)
+        {
+            var totalItems = wishlist.Items.Count;
+            var reservedCount = wishlist.Items.Count(i => i.ReservedQuantity > 0);
+            var acquiredCount = wishlist.Items.Count(i => i.AcquiredQuantity > 0);
+            var progressPercent = totalItems > 0 
+                ? (int)((reservedCount + acquiredCount) / (double)totalItems * 100) 
+                : 0;
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-pea shadow h-100 fade-in-up">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3>@wishlist.Name</h3>
+                            @if (wishlist.IsPublic)
+                            {
+                                <span class="badge bg-success">Pública</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Privada</span>
+                            }
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(wishlist.BabyName))
+                        {
+                            <p class="text-soft mb-2">👶 <strong>@wishlist.BabyName</strong></p>
+                        }
+
+                        @if (wishlist.ExpectedDate.HasValue)
+                        {
+                            <p class="text-soft mb-2">📅 @wishlist.ExpectedDate.Value.ToShortDateString()</p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(wishlist.Description))
+                        {
+                            <p class="text-muted small mb-3">@wishlist.Description</p>
+                        }
+
+                        <hr />
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="text-soft">Progresso</small>
+                                <small class="text-soft"><strong>@progressPercent%</strong></small>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" style="width: @progressPercent%"></div>
+                            </div>
+                        </div>
+
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <div class="text-soft small">Items</div>
+                                <div class="h5 mb-0">@totalItems</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-soft small">Reservados</div>
+                                <div class="h5 mb-0 text-warning">@reservedCount</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-soft small">Adquiridos</div>
+                                <div class="h5 mb-0 text-success">@acquiredCount</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-soft">Código de Partilha:</small>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" value="@wishlist.ShareCode" readonly id="code-@wishlist.Id">
+                                <button class="btn btn-outline-secondary" type="button" onclick="copyCode('@wishlist.ShareCode', @wishlist.Id)">
+                                    📋 Copiar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a asp-action="Manage" asp-route-id="@wishlist.Id" class="btn btn-primary">
+                                Gerir Lista
+                            </a>
+                            <a asp-action="Share" asp-route-id="@wishlist.Id" class="btn btn-outline-info btn-sm">
+                                🔗 Partilhar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function copyCode(code, id) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Código copiado: ' + code);
+            });
+        }
+    </script>
+}

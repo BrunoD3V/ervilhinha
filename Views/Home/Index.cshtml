@@ -1,0 +1,1132 @@
+﻿@{
+    ViewData["Title"] = "Página Inicial";
+    Layout = "~/Views/Shared/_LayoutFullWidth.cshtml";
+}
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <!-- HERO SECTION MODERNO -->
+    <section class="hero-modern">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start scroll-reveal from-left">
+                    <h1 class="display-2 fw-bold mb-4">
+                        Bem-vindo à 
+                        <span class="text-gradient">Ervilhinha</span> 
+                        <span class="icon-bounce d-inline-block">🌿</span>
+                    </h1>
+                    <p class="lead text-soft mb-5 fs-4">
+                        A tua app completa para planeamento do bebé e gestão das finanças familiares
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                        <a asp-controller="Wishlist" asp-action="MyLists" class="btn btn-warning btn-lg btn-modern px-4">
+                            🎁 Minhas Listas
+                        </a>
+                        <a asp-controller="BabyItems" asp-action="Index" class="btn btn-outline-primary btn-lg btn-modern px-4">
+                            👶 Começar
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center scroll-reveal from-right">
+                    <div class="floating-element parallax-slow">
+                        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Fundo animado -->
+                            <defs>
+                                <radialGradient id="bgGradient" cx="50%" cy="50%">
+                                    <stop offset="0%" style="stop-color:#C8E6C9;stop-opacity:0.3"/>
+                                    <stop offset="70%" style="stop-color:#A5D6A7;stop-opacity:0.2"/>
+                                    <stop offset="100%" style="stop-color:transparent;stop-opacity:0"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="200" cy="200" r="180" fill="url(#bgGradient)"/>
+
+                            <!-- Bebé fofo -->
+                            <circle cx="200" cy="160" r="50" fill="#F8BBD0" opacity="0.9"/>
+                            <circle cx="185" cy="150" r="5" fill="#5D4037"/>
+                            <circle cx="215" cy="150" r="5" fill="#5D4037"/>
+                            <path d="M 185 165 Q 200 172 215 165" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            <circle cx="175" cy="155" r="8" fill="#F48FB1" opacity="0.6"/>
+                            <circle cx="225" cy="155" r="8" fill="#F48FB1" opacity="0.6"/>
+
+                            <!-- Corpo bebé -->
+                            <ellipse cx="200" cy="240" rx="60" ry="70" fill="#FFCCBC" opacity="0.9"/>
+
+                            <!-- Braços -->
+                            <ellipse cx="150" cy="230" rx="15" ry="40" fill="#FFCCBC" opacity="0.8" transform="rotate(-20 150 230)"/>
+                            <ellipse cx="250" cy="230" rx="15" ry="40" fill="#FFCCBC" opacity="0.8" transform="rotate(20 250 230)"/>
+
+                            <!-- Ervilhas decorativas -->
+                            <g class="icon-bounce" style="animation-delay: 0.5s;">
+                                <ellipse cx="320" cy="100" rx="18" ry="28" fill="#C8E6C9"/>
+                                <circle cx="320" cy="90" r="4" fill="#81C784" opacity="0.9"/>
+                                <circle cx="320" cy="100" r="4" fill="#81C784" opacity="0.9"/>
+                                <circle cx="320" cy="110" r="4" fill="#81C784" opacity="0.9"/>
+                            </g>
+
+                            <!-- Coração -->
+                            <g class="icon-bounce" style="animation-delay: 1s;">
+                                <path d="M 92 110 C 86 105 80 109 80 115 C 80 121 92 129 92 129 C 92 129 104 121 104 115 C 104 109 98 105 92 110 Z" fill="#F48FB1" opacity="0.7"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator moderno -->
+        <div class="scroll-down">
+            <div class="scroll-down-icon"></div>
+            <span class="small text-soft">Desliza para descobrir</span>
+        </div>
+    </section>
+
+    <!-- SEÇÃO LISTAS DE DESEJOS -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2 scroll-reveal from-right">
+                    <div class="floating-element parallax-slow">
+                        <div class="feature-card">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="me-3">
+                                    <div class="bg-warning rounded-circle p-3 shadow">
+                                        <span style="font-size: 2rem;">🎁</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 fw-bold">Lista para o Miguel</h5>
+                                    <small class="text-soft">Criada há 2 semanas</small>
+                                </div>
+                            </div>
+                            <div class="progress-modern mb-3">
+                                <div class="progress-bar" style="width: 65%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-soft">15 items</span>
+                                <span class="badge bg-success">65% reservado</span>
+                            </div>
+                            <div class="small text-soft">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>👕 Roupinha</span>
+                                    <span class="text-success">✓ 3 reservados</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>🚗 Carrinho</span>
+                                    <span class="text-warning">⏳ Pendente</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>🧸 Brinquedos</span>
+                                    <span class="text-success">✓ 2 reservados</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1 scroll-reveal from-left">
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark px-3 py-2 fs-6">✨ NOVO!</span>
+                    </div>
+                    <h2 class="display-4 fw-bold mb-4">
+                        Listas de Desejos 
+                        <span class="text-gradient">Partilháveis</span>
+                    </h2>
+                    <p class="lead text-soft mb-4">
+                        Cria listas para o bebé e partilha com família e amigos. Eles podem reservar items como prendas, sem duplicações!
+                    </p>
+
+                    <!-- Botão movido para o meio -->
+                    <div class="section-button">
+                        <a asp-controller="Wishlist" asp-action="Create" class="btn btn-warning btn-lg btn-modern px-5">
+                            Criar Minha Lista 🎉
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6 scroll-reveal stagger-1">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🔗</span>
+                                <div>
+                                    <h6 class="mb-1">Partilha fácil</h6>
+                                    <small class="text-soft">Com código único</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-2">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🔒</span>
+                                <div>
+                                    <h6 class="mb-1">Privacidade total</h6>
+                                    <small class="text-soft">Os pais não veem quem reservou</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-3">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">👨‍👩‍👧‍👦</span>
+                                <div>
+                                    <h6 class="mb-1">Gestão a dois</h6>
+                                    <small class="text-soft">Adiciona o/a parceiro/a</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-4">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📧</span>
+                                <div>
+                                    <h6 class="mb-1">Sem login</h6>
+                                    <small class="text-soft">Convidados reservam com email</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PLANEAMENTO DO BEBÉ -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 scroll-reveal from-left">
+                    <div class="floating-element parallax-slow">
+                        <div class="feature-card text-center">
+                            <div class="mb-4">
+                                <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="icon-bounce">
+                                    <!-- Carrinho de bebé moderno -->
+                                    <defs>
+                                        <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#F8BBD0"/>
+                                            <stop offset="100%" style="stop-color:#F48FB1"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Corpo do carrinho -->
+                                    <path d="M 30 60 Q 30 50 40 50 L 80 50 Q 90 50 90 60 L 90 70 Q 90 80 80 80 L 40 80 Q 30 80 30 70 Z" fill="url(#carGradient)"/>
+                                    <!-- Rodas -->
+                                    <circle cx="45" cy="85" r="8" fill="#666" opacity="0.8"/>
+                                    <circle cx="75" cy="85" r="8" fill="#666" opacity="0.8"/>
+                                    <circle cx="45" cy="85" r="5" fill="#FFCCBC"/>
+                                    <circle cx="75" cy="85" r="5" fill="#FFCCBC"/>
+                                    <!-- Pega -->
+                                    <path d="M 25 60 Q 20 55 25 50" stroke="#666" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                    <!-- Bebé fofo dentro -->
+                                    <circle cx="60" cy="65" r="12" fill="#FFCCBC" opacity="0.9"/>
+                                    <circle cx="57" cy="62" r="1.5" fill="#5D4037"/>
+                                    <circle cx="63" cy="62" r="1.5" fill="#5D4037"/>
+                                    <path d="M 57 67 Q 60 70 63 67" stroke="#5D4037" stroke-width="1.5" fill="none"/>
+                                </svg>
+                            </div>
+                            <h5 class="fw-bold mb-2">Carrinho de Bebé Premium</h5>
+                            <div class="d-flex justify-content-center gap-2 mb-3">
+                                <span class="badge bg-success">Comprado ✓</span>
+                                <span class="badge bg-primary">Alta Prioridade</span>
+                            </div>
+                            <div class="row text-start small">
+                                <div class="col-6">
+                                    <div class="text-soft">Categoria:</div>
+                                    <div class="fw-semibold">Transporte</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-soft">Custo:</div>
+                                    <div class="fw-semibold">€350.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 scroll-reveal from-right">
+                    <h2 class="display-4 fw-bold mb-4">
+                        <span class="text-gradient">Planeamento</span> 
+                        do Bebé
+                    </h2>
+                    <p class="lead text-soft mb-4">
+                        Organiza tudo o que precisas para a chegada do bebé num só lugar. Categoriza por prioridade e mantém todos informados!
+                    </p>
+
+                    <!-- Botão movido para o meio -->
+                    <div class="section-button">
+                        <a asp-controller="BabyItems" asp-action="Index" class="btn btn-primary btn-lg btn-modern px-5">
+                            Ver Artigos do Bebé 👶
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6 scroll-reveal stagger-1">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🏷️</span>
+                                <div>
+                                    <h6 class="mb-1">Categorias personalizadas</h6>
+                                    <small class="text-soft">Roupa, Higiene, Quarto, Transporte...</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-2">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">⭐</span>
+                                <div>
+                                    <h6 class="mb-1">Sistema de prioridades</h6>
+                                    <small class="text-soft">Marca o que é urgente vs opcional</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-3">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">💰</span>
+                                <div>
+                                    <h6 class="mb-1">Controlo de compras</h6>
+                                    <small class="text-soft">Regista quem comprou e quanto custou</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-4">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📝</span>
+                                <div>
+                                    <h6 class="mb-1">Notas e lembretes</h6>
+                                    <small class="text-soft">Nunca te esqueças de nada</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO FINANÇAS -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2 scroll-reveal from-right">
+                    <div class="floating-element parallax-slow">
+                        <div class="feature-card">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="mb-0 fw-bold">Resumo Mensal</h5>
+                                <div class="bg-success rounded-circle p-2">
+                                    <span style="font-size: 1.5rem; color: white;">💰</span>
+                                </div>
+                            </div>
+                            <div class="text-center mb-4">
+                                <div class="text-soft mb-1">Despesas Este Mês</div>
+                                <h3 class="fw-bold text-danger mb-0">-€450.00</h3>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="d-flex align-items-center">
+                                        <span class="me-2">🍼</span>
+                                        <span>Fraldas & Alimentação</span>
+                                    </span>
+                                    <span class="fw-semibold">€120.00</span>
+                                </div>
+                                <div class="progress-modern mb-2">
+                                    <div class="progress-bar" style="width: 27%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="d-flex align-items-center">
+                                        <span class="me-2">👕</span>
+                                        <span>Roupa & Acessórios</span>
+                                    </span>
+                                    <span class="fw-semibold">€85.00</span>
+                                </div>
+                                <div class="progress-modern mb-2">
+                                    <div class="progress-bar" style="width: 19%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="d-flex align-items-center">
+                                        <span class="me-2">🏥</span>
+                                        <span>Consultas & Saúde</span>
+                                    </span>
+                                    <span class="fw-semibold">€245.00</span>
+                                </div>
+                                <div class="progress-modern mb-2">
+                                    <div class="progress-bar" style="width: 54%"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <small class="text-soft">
+                                    <span class="text-success">📈 15% menos que no mês passado</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1 scroll-reveal from-left">
+                    <h2 class="display-4 fw-bold mb-4">
+                        <span class="text-gradient">Finanças</span> 
+                        Sob Controlo
+                    </h2>
+                    <p class="lead text-soft mb-4">
+                        Regista todas as despesas do bebé e família. Gera relatórios detalhados e compreende para onde vai o teu dinheiro!
+                    </p>
+
+                    <!-- Botão movido para o meio -->
+                    <div class="section-button">
+                        <a asp-controller="Expenses" asp-action="Index" class="btn btn-success btn-lg btn-modern px-5">
+                            Ver Despesas 💰
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6 scroll-reveal stagger-1">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🏷️</span>
+                                <div>
+                                    <h6 class="mb-1">Categorização automática</h6>
+                                    <small class="text-soft">Organiza despesas por tipo</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-2">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">💱</span>
+                                <div>
+                                    <h6 class="mb-1">Múltiplas moedas</h6>
+                                    <small class="text-soft">Suporte para € e outras</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-3">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📊</span>
+                                <div>
+                                    <h6 class="mb-1">Relatórios visuais</h6>
+                                    <small class="text-soft">Gráficos bonitos e informativos</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-4">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🎯</span>
+                                <div>
+                                    <h6 class="mb-1">Orçamento familiar</h6>
+                                    <small class="text-soft">Define limites e acompanha</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO IA SCANNER -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 scroll-reveal from-left">
+                    <div class="floating-element parallax-slow">
+                        <div class="feature-card text-center">
+                            <div class="mb-4">
+                                <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="icon-bounce">
+                                    <!-- Smartphone moderno -->
+                                    <defs>
+                                        <linearGradient id="phoneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#C8E6C9"/>
+                                            <stop offset="100%" style="stop-color:#A5D6A7"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Corpo do telefone -->
+                                    <rect x="35" y="20" width="50" height="80" rx="8" fill="url(#phoneGradient)" stroke="#81C784" stroke-width="2"/>
+                                    <!-- Ecrã -->
+                                    <rect x="40" y="30" width="40" height="60" rx="4" fill="white" opacity="0.9"/>
+                                    <!-- Câmara -->
+                                    <circle cx="60" cy="45" r="8" fill="#666" opacity="0.8"/>
+                                    <circle cx="60" cy="45" r="5" fill="#333"/>
+                                    <!-- Fatura fictícia no ecrã -->
+                                    <rect x="45" y="55" width="30" height="2" rx="1" fill="#81C784" opacity="0.6"/>
+                                    <rect x="45" y="60" width="25" height="2" rx="1" fill="#81C784" opacity="0.4"/>
+                                    <rect x="45" y="65" width="20" height="2" rx="1" fill="#81C784" opacity="0.4"/>
+                                    <rect x="45" y="70" width="28" height="2" rx="1" fill="#81C784" opacity="0.6"/>
+                                    <!-- Botão -->
+                                    <circle cx="60" cy="85" r="3" fill="#666" opacity="0.5"/>
+                                    <!-- Raios de scan -->
+                                    <g opacity="0.7">
+                                        <path d="M 30 45 L 35 45" stroke="#81C784" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M 85 45 L 90 45" stroke="#81C784" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M 60 15 L 60 20" stroke="#81C784" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M 60 100 L 60 105" stroke="#81C784" stroke-width="2" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="mb-3">
+                                <div class="badge bg-info text-dark mb-2">🤖 IA Inteligente</div>
+                            </div>
+                            <h5 class="fw-bold mb-2">Fatura_Bebe_Items.pdf</h5>
+                            <div class="d-flex justify-content-center gap-2 mb-3">
+                                <span class="badge bg-success">✓ Processada</span>
+                                <span class="badge bg-primary">€127.50</span>
+                            </div>
+                            <div class="small text-start">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="text-soft">Fornecedor:</div>
+                                        <div class="fw-semibold">Baby Store</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-soft">Data:</div>
+                                        <div class="fw-semibold">15/03/2025</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 scroll-reveal from-right">
+                    <div class="mb-3">
+                        <span class="badge bg-info text-dark px-3 py-2 fs-6">🤖 IA INTELIGENTE</span>
+                    </div>
+                    <h2 class="display-4 fw-bold mb-4">
+                        Scanner de Faturas 
+                        <span class="text-gradient">Inteligente</span>
+                    </h2>
+                    <p class="lead text-soft mb-4">
+                        Tira uma foto às faturas e deixa a IA fazer o resto! Extração automática de dados, categorização inteligente.
+                    </p>
+
+                    <!-- Botão movido para o meio -->
+                    <div class="section-button">
+                        <a asp-controller="Invoices" asp-action="Upload" class="btn btn-info btn-lg btn-modern px-5">
+                            Carregar Fatura 📸
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6 scroll-reveal stagger-1">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📸</span>
+                                <div>
+                                    <h6 class="mb-1">Foto e pronto</h6>
+                                    <small class="text-soft">A IA extrai valor, data, fornecedor</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-2">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🔍</span>
+                                <div>
+                                    <h6 class="mb-1">OCR avançado</h6>
+                                    <small class="text-soft">Tecnologia Azure Computer Vision</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-3">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">✏️</span>
+                                <div>
+                                    <h6 class="mb-1">Revisão fácil</h6>
+                                    <small class="text-soft">Confirma ou edita antes de guardar</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-4">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📚</span>
+                                <div>
+                                    <h6 class="mb-1">Histórico completo</h6>
+                                    <small class="text-soft">Todas as faturas num só lugar</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO RELATÓRIOS -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2 scroll-reveal from-right">
+                    <div class="floating-element parallax-slow">
+                        <div class="feature-card">
+                            <div class="text-center mb-4">
+                                <h5 class="fw-bold mb-3">Análise de Despesas</h5>
+                                <svg width="100%" height="180" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Gráfico de barras moderno -->
+                                    <defs>
+                                        <linearGradient id="bar1" x1="0%" y1="100%" x2="0%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#FFCCBC"/>
+                                            <stop offset="100%" style="stop-color:#FFAB91"/>
+                                        </linearGradient>
+                                        <linearGradient id="bar2" x1="0%" y1="100%" x2="0%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#FF8A65"/>
+                                            <stop offset="100%" style="stop-color:#FF7043"/>
+                                        </linearGradient>
+                                        <linearGradient id="bar3" x1="0%" y1="100%" x2="0%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#D7CCC8"/>
+                                            <stop offset="100%" style="stop-color:#BCAAA4"/>
+                                        </linearGradient>
+                                        <linearGradient id="bar4" x1="0%" y1="100%" x2="0%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#A1887F"/>
+                                            <stop offset="100%" style="stop-color:#8D6E63"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Barras -->
+                                    <rect x="40" y="120" width="25" height="50" rx="4" fill="url(#bar1)" class="stagger-1"/>
+                                    <rect x="90" y="100" width="25" height="70" rx="4" fill="url(#bar2)" class="stagger-2"/>
+                                    <rect x="140" y="110" width="25" height="60" rx="4" fill="url(#bar3)" class="stagger-3"/>
+                                    <rect x="190" y="80" width="25" height="90" rx="4" fill="url(#bar4)" class="stagger-4"/>
+                                    <rect x="240" y="90" width="25" height="80" rx="4" fill="url(#bar1)" class="stagger-1"/>
+
+                                    <!-- Linha de tendência -->
+                                    <path d="M 52 145 Q 102 120, 152 135 T 252 115" stroke="#8D6E63" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8"/>
+                                    <circle cx="52" cy="145" r="3" fill="#8D6E63" opacity="0.8"/>
+                                    <circle cx="102" cy="125" r="3" fill="#8D6E63" opacity="0.8"/>
+                                    <circle cx="152" cy="135" r="3" fill="#8D6E63" opacity="0.8"/>
+                                    <circle cx="202" cy="115" r="3" fill="#8D6E63" opacity="0.8"/>
+                                    <circle cx="252" cy="115" r="3" fill="#8D6E63" opacity="0.8"/>
+
+                                    <!-- Labels -->
+                                    <text x="52" y="185" font-size="10" text-anchor="middle" fill="#666">Jan</text>
+                                    <text x="102" y="185" font-size="10" text-anchor="middle" fill="#666">Fev</text>
+                                    <text x="152" y="185" font-size="10" text-anchor="middle" fill="#666">Mar</text>
+                                    <text x="202" y="185" font-size="10" text-anchor="middle" fill="#666">Abr</text>
+                                    <text x="252" y="185" font-size="10" text-anchor="middle" fill="#666">Mai</text>
+                                </svg>
+                            </div>
+                            <div class="row small">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2" style="width: 12px; height: 12px; background: linear-gradient(135deg, #FFCCBC, #FFAB91); border-radius: 2px;"></div>
+                                        <span>Alimentação</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2" style="width: 12px; height: 12px; background: linear-gradient(135deg, #FF8A65, #FF7043); border-radius: 2px;"></div>
+                                        <span>Roupa</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2" style="width: 12px; height: 12px; background: linear-gradient(135deg, #D7CCC8, #BCAAA4); border-radius: 2px;"></div>
+                                        <span>Saúde</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2" style="width: 12px; height: 12px; background: linear-gradient(135deg, #A1887F, #8D6E63); border-radius: 2px;"></div>
+                                        <span>Brinquedos</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <small class="text-success">
+                                    <span>📈 Tendência: Despesas mais controladas</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1 scroll-reveal from-left">
+                    <h2 class="display-4 fw-bold mb-4">
+                        <span class="text-gradient">Relatórios</span> 
+                        & Análises
+                    </h2>
+                    <p class="lead text-soft mb-4">
+                        Visualiza os teus padrões de despesa com gráficos bonitos e informativos. Toma decisões informadas!
+                    </p>
+
+                    <!-- Botão movido para o meio -->
+                    <div class="section-button">
+                        <a asp-controller="Expenses" asp-action="Reports" class="btn btn-primary btn-lg btn-modern px-5">
+                            Ver Relatórios 📊
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6 scroll-reveal stagger-1">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📊</span>
+                                <div>
+                                    <h6 class="mb-1">Gráficos interativos</h6>
+                                    <small class="text-soft">Barras, linhas, pizza</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-2">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🔍</span>
+                                <div>
+                                    <h6 class="mb-1">Filtros poderosos</h6>
+                                    <small class="text-soft">Por data, categoria, tipo</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-3">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">📁</span>
+                                <div>
+                                    <h6 class="mb-1">Exportação</h6>
+                                    <small class="text-soft">PDF, Excel para partilhar</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 scroll-reveal stagger-4">
+                            <div class="d-flex">
+                                <span class="me-3 fs-4">🧠</span>
+                                <div>
+                                    <h6 class="mb-1">Insights automáticos</h6>
+                                    <small class="text-soft">Tendências e padrões</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO CTA FINAL -->
+    <section class="feature-section" style="background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--baby-peach) 50%, var(--baby-yellow) 100%);">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8 scroll-reveal">
+                    <div class="mb-5">
+                        <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" class="icon-bounce">
+                            <!-- Família de ervilhas -->
+                            <defs>
+                                <radialGradient id="peaGradient" cx="50%" cy="30%">
+                                    <stop offset="0%" style="stop-color:#C8E6C9"/>
+                                    <stop offset="100%" style="stop-color:#A5D6A7"/>
+                                </radialGradient>
+                            </defs>
+
+                            <!-- Ervilha grande (pais) -->
+                            <ellipse cx="75" cy="70" rx="35" ry="45" fill="url(#peaGradient)" opacity="0.9"/>
+                            <circle cx="75" cy="50" r="8" fill="#81C784"/>
+                            <circle cx="75" cy="70" r="8" fill="#81C784"/>
+                            <circle cx="75" cy="90" r="8" fill="#81C784"/>
+                            <path d="M 75 25 Q 70 15 65 20 Q 60 25 65 30" fill="#66BB6A" opacity="0.7"/>
+
+                            <!-- Ervilha pequena (bebé) -->
+                            <ellipse cx="120" cy="85" rx="20" ry="25" fill="url(#peaGradient)" opacity="0.8"/>
+                            <circle cx="120" cy="75" r="5" fill="#81C784"/>
+                            <circle cx="120" cy="85" r="5" fill="#81C784"/>
+                            <circle cx="120" cy="95" r="5" fill="#81C784"/>
+                            <path d="M 120 60 Q 118 55 115 57" fill="#66BB6A" opacity="0.6"/>
+
+                            <!-- Ervilha média -->
+                            <ellipse cx="30" cy="85" rx="25" ry="30" fill="url(#peaGradient)" opacity="0.8"/>
+                            <circle cx="30" cy="70" r="6" fill="#81C784"/>
+                            <circle cx="30" cy="85" r="6" fill="#81C784"/>
+                            <circle cx="30" cy="100" r="6" fill="#81C784"/>
+                            <path d="M 30 55 Q 27 50 24 53" fill="#66BB6A" opacity="0.6"/>
+
+                            <!-- Corações flutuantes -->
+                            <g class="icon-bounce" style="animation-delay: 0.5s;">
+                                <path d="M 90 35 C 87 32 84 34 84 37 C 84 40 90 45 90 45 C 90 45 96 40 96 37 C 96 34 93 32 90 35 Z" fill="#F48FB1" opacity="0.6"/>
+                            </g>
+                            <g class="icon-bounce" style="animation-delay: 1s;">
+                                <path d="M 45 45 C 43 43 41 44 41 46 C 41 48 45 51 45 51 C 45 51 49 48 49 46 C 49 44 47 43 45 45 Z" fill="#F48FB1" opacity="0.5"/>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <h2 class="display-2 fw-bold mb-4">
+                        Pronto para 
+                        <span class="text-gradient">Começar</span>?
+                    </h2>
+                    <p class="lead text-soft mb-5 fs-4">
+                        Junta-te a centenas de famílias que já usam a Ervilhinha para planear a chegada do bebé de forma organizada e tranquila!
+                    </p>
+
+                    <!-- Stats rápidas -->
+                    <div class="row g-3 mb-5">
+                        <div class="col-sm-4 scroll-reveal stagger-1">
+                            <div class="p-3">
+                                <h3 class="fw-bold text-success mb-1">500+</h3>
+                                <small class="text-soft">Famílias ativas</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 scroll-reveal stagger-2">
+                            <div class="p-3">
+                                <h3 class="fw-bold text-success mb-1">2.5k+</h3>
+                                <small class="text-soft">Listas criadas</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 scroll-reveal stagger-3">
+                            <div class="p-3">
+                                <h3 class="fw-bold text-success mb-1">15k+</h3>
+                                <small class="text-soft">Items organizados</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center flex-wrap scroll-reveal">
+                        <a asp-controller="Wishlist" asp-action="Create" class="btn btn-warning btn-lg btn-modern px-5">
+                            🎁 Criar Lista de Desejos
+                        </a>
+                        <a asp-controller="BabyItems" asp-action="Index" class="btn btn-outline-primary btn-lg btn-modern px-5">
+                            👶 Ver Artigos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="container my-4">
+            <div class="alert alert-info">
+                <strong>👑 Acesso de Administrador:</strong> Tens acesso completo para gerir categorias, utilizadores e todo o processamento de faturas.
+            </div>
+        </div>
+    }
+}
+else
+{
+    <!-- ===== LANDING PAGE PROMOCIONAL ===== -->
+
+    <!-- HERO LANDING -->
+    <section class="hero-modern">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start scroll-reveal from-left">
+                    <div class="mb-3">
+                        <span class="badge bg-success text-white px-4 py-2 fs-6">🚀 LANÇAMENTO 2026</span>
+                    </div>
+                    <h1 class="display-2 fw-bold mb-4">
+                        A tua <span class="text-gradient">Ervilhinha</span> 
+                        está a crescer! 🌿
+                    </h1>
+                    <p class="lead text-soft mb-5 fs-4">
+                        Planeia, organiza e gere tudo sobre o bebé numa só app. 
+                        <strong>Milhares de famílias</strong> já confiam na Ervilhinha!
+                    </p>
+
+                    <!-- CTA Principal -->
+                    <div class="mb-5">
+                        <a class="btn btn-success btn-lg btn-modern px-5 py-3 me-3" 
+                           asp-area="Identity" 
+                           asp-page="/Account/Login"
+                           style="font-size: 1.2rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google me-2" viewBox="0 0 16 16">
+                                <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                            </svg>
+                            Começar Gratuitamente
+                        </a>
+                        <p class="small text-soft mt-2">
+                            ✓ Basta login Google &nbsp;•&nbsp; ✓ 100% Grátis
+                        </p>
+                    </div>
+
+                    <!-- Prova Social -->
+                    <div class="row g-3">
+                        <div class="col-4 text-center">
+                            <h4 class="fw-bold text-success mb-1">500+</h4>
+                            <small class="text-soft">Famílias Ativas</small>
+                        </div>
+                        <div class="col-4 text-center">
+                            <h4 class="fw-bold text-success mb-1">2.5k+</h4>
+                            <small class="text-soft">Listas Criadas</small>
+                        </div>
+                        <div class="col-4 text-center">
+                            <h4 class="fw-bold text-success mb-1">15k+</h4>
+                            <small class="text-soft">Items Organizados</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 text-center scroll-reveal from-right">
+                    <div class="position-relative">
+                        <!-- Dashboard Preview Mockup -->
+                        <div class="feature-card p-4" style="transform: rotate(-2deg);">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning rounded-circle p-2 me-3">
+                                    <span style="font-size: 1.5rem;">🎁</span>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Lista para a Ervilhinha</h5>
+                                    <small class="text-soft">15 items • 8 reservados</small>
+                                </div>
+                            </div>
+                            <div class="progress-modern mb-2">
+                                <div class="progress-bar" style="width: 53%"></div>
+                            </div>
+                            <p class="small text-soft mb-0">53% das prendas já reservadas!</p>
+                        </div>
+
+                        <div class="feature-card p-3 mt-3" style="transform: rotate(1deg); margin-left: 30px;">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong class="text-success">Este Mês</strong>
+                                <strong class="text-danger">-€340.50</strong>
+                            </div>
+                            <div class="small">
+                                <div class="d-flex justify-content-between">
+                                    <span>🍼 Alimentação</span><span>€89.20</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>👕 Roupa</span><span>€155.30</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>🏥 Saúde</span><span>€96.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-down">
+            <div class="scroll-down-icon"></div>
+            <span class="small text-soft">Descobre todas as funcionalidades</span>
+        </div>
+    </section>
+
+    <!-- FUNCIONALIDADES PROMOCIONAIS -->
+    <section class="py-5" style="background: var(--bg-soft-white);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">Tudo o que precisas <span class="text-gradient">numa só app</span></h2>
+                <p class="lead text-soft">Simplifica o planeamento do bebé e nunca mais te esqueças de nada importante</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Listas de Desejos -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="mb-3">
+                            <span class="fs-1">🎁</span>
+                        </div>
+                        <h5 class="mb-2">Listas Partilháveis</h5>
+                        <p class="small text-soft mb-3">Cria listas e partilha com família. Eles reservam sem tu veres quem!</p>
+                        <div class="badge bg-warning text-dark">Mais Popular</div>
+                    </div>
+                </div>
+
+                <!-- Planeamento -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="mb-3">
+                            <span class="fs-1">👶</span>
+                        </div>
+                        <h5 class="mb-2">Planeamento Bebé</h5>
+                        <p class="small text-soft mb-3">Organiza por categorias e prioridades. Nunca te esqueças de nada essencial.</p>
+                        <div class="badge bg-success">Essencial</div>
+                    </div>
+                </div>
+
+                <!-- Finanças -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="mb-3">
+                            <span class="fs-1">💰</span>
+                        </div>
+                        <h5 class="mb-2">Controlo Financeiro</h5>
+                        <p class="small text-soft mb-3">Regista despesas e vê relatórios. Mantém o orçamento familiar sob controlo.</p>
+                        <div class="badge bg-primary">Inteligente</div>
+                    </div>
+                </div>
+
+                <!-- IA Scanner -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="mb-3">
+                            <span class="fs-1">📸</span>
+                        </div>
+                        <h5 class="mb-2">Scanner IA</h5>
+                        <p class="small text-soft mb-3">Fotografa faturas e a IA extrai os dados automaticamente. Tecnologia Azure!</p>
+                        <div class="badge bg-info text-dark">IA Powered</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTEMUNHOS / PROVA SOCIAL -->
+    <section class="py-5" style="background: var(--pea-green-light);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h3 class="display-5 fw-bold mb-4">Famílias como a tua <span class="text-gradient">já adoram</span> a Ervilhinha</h3>
+
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="text-warning me-2">⭐⭐⭐⭐⭐</div>
+                            <strong>4.9/5</strong>
+                            <small class="text-soft ms-2">(127 avaliações)</small>
+                        </div>
+                        <blockquote class="border-start border-3 border-success ps-3 mb-3">
+                            <p class="mb-1">"Finalmente uma app que entende as famílias! A lista de desejos poupou-nos muito stress."</p>
+                            <small class="text-soft">— Sofia, mãe de 2</small>
+                        </blockquote>
+                        <blockquote class="border-start border-3 border-success ps-3">
+                            <p class="mb-1">"O scanner de faturas é genial. Poupo 20 minutos por semana só em organização!"</p>
+                            <small class="text-soft">— João, pai do Miguel</small>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 text-center">
+                    <div class="feature-card p-4">
+                        <h5 class="mb-3">Junta-te à comunidade!</h5>
+                        <div class="row g-2 text-center">
+                            <div class="col-4">
+                                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span class="text-white fw-bold">👑</span>
+                                </div>
+                                <p class="small mb-0 mt-1"><strong>Premium</strong><br>Famílias</p>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span class="text-dark fw-bold">🎯</span>
+                                </div>
+                                <p class="small mb-0 mt-1"><strong>Organizadas</strong><br>e Felizes</p>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span class="text-dark fw-bold">💡</span>
+                                </div>
+                                <p class="small mb-0 mt-1"><strong>Stress-Free</strong><br>Planeamento</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL PROMOCIONAL -->
+    <section class="py-5" style="background: linear-gradient(135deg, var(--pea-green) 0%, var(--baby-peach) 100%);">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="display-3 fw-bold text-white mb-4">Pronta/o para começar?</h2>
+                    <p class="lead text-white mb-5 opacity-90">
+                        Junta-te a <strong>500+ famílias</strong> que já organizam o bebé e as finanças familiares sem stress. 
+                        É grátis e demoras 2 minutos a criar a tua primeira lista de desejos!
+                    </p>
+
+                    <div class="d-flex gap-3 justify-content-center flex-wrap mb-4">
+                        <a class="btn btn-light btn-lg btn-modern px-5 py-3" 
+                           asp-area="Identity" 
+                           asp-page="/Account/Login"
+                           style="font-size: 1.2rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google me-2" viewBox="0 0 16 16">
+                                <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                            </svg>
+                            Começar Agora!
+                        </a>
+                    </div>
+
+                    <div class="row g-2 justify-content-center text-white small opacity-75">
+                        <div class="col-auto">✓ Sem complicações</div>
+                        <div class="col-auto">✓ Participa para ajudar a melhorar</div>
+                        <div class="col-auto">✓ Segurança máxima</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<!-- JavaScript para Scroll Reveal e Animações -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Scroll Reveal Animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all scroll-reveal elements
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Parallax effect for floating elements
+    let ticking = false;
+
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelectorAll('.parallax-slow');
+        const speed = 0.05;
+
+        parallax.forEach(element => {
+            const yPos = -(scrolled * speed);
+            element.style.transform = `translateY(${yPos}px)`;
+        });
+
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', requestTick);
+
+    // Progress bars animation when visible
+    const progressObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progressBars = entry.target.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 200);
+                });
+                progressObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.progress-modern').forEach(progress => {
+        progressObserver.observe(progress.parentElement);
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add hover effect to feature cards
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-15px) scale(1.02)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Enhanced button hover effects
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>

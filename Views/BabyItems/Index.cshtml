@@ -1,0 +1,110 @@
+@model IEnumerable<Ervilhinha.Models.BabyItem>
+
+@{
+    ViewData["Title"] = "Artigos do Bebé";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>👶 Artigos do Bebé</h1>
+    <a asp-action="Create" class="btn btn-primary">➕ Adicionar Novo Artigo</a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="get" class="d-flex gap-2">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value="All">Todas as Categorias</option>
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat" selected="@(Context.Request.Query["category"] == cat)">@cat</option>
+                }
+            </select>
+            <select name="sortBy" class="form-select" onchange="this.form.submit()">
+                <option value="Priority" selected="@(Context.Request.Query["sortBy"] == "Priority")">Ordenar por Prioridade</option>
+                <option value="Name" selected="@(Context.Request.Query["sortBy"] == "Name")">Ordenar por Nome</option>
+                <option value="Status" selected="@(Context.Request.Query["sortBy"] == "Status")">Ordenar por Estado</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model.Any())
+    {
+        <div class="col-md-6">
+            <h4>🔴 Por Comprar</h4>
+            @foreach (var item in Model.Where(i => !i.IsPurchased))
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">
+                            <span class="badge bg-info">@item.Category</span>
+                            <span class="badge bg-warning">Prioridade: @item.Priority</span>
+                        </p>
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            <p class="card-text">@item.Description</p>
+                        }
+                        @if (item.EstimatedCost.HasValue)
+                        {
+                            <p class="card-text"><strong>Custo Estimado:</strong> €@item.EstimatedCost.Value.ToString("N2")</p>
+                        }
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <form asp-action="MarkAsPurchased" asp-route-id="@item.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success">✓ Marcar como Comprado</button>
+                            </form>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <h4>✅ Comprados</h4>
+            @foreach (var item in Model.Where(i => i.IsPurchased))
+            {
+                <div class="card mb-3 bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">
+                            <span class="badge bg-info">@item.Category</span>
+                            <span class="badge bg-success">Comprado</span>
+                        </p>
+                        @if (item.ActualCost.HasValue)
+                        {
+                            <p class="card-text"><strong>Custo Real:</strong> €@item.ActualCost.Value.ToString("N2")</p>
+                        }
+                        @if (!string.IsNullOrEmpty(item.PurchasedBy))
+                        {
+                            <p class="card-text"><small>Comprado por: @item.PurchasedBy em @item.PurchasedDate?.ToShortDateString()</small></p>
+                        }
+                        <div class="btn-group">
+                            <form asp-action="MarkAsPurchased" asp-route-id="@item.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-secondary">↶ Marcar como Por Comprar</button>
+                            </form>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info">
+                Não foram encontrados artigos do bebé. <a asp-action="Create">Adiciona o teu primeiro artigo!</a>
+            </div>
+        </div>
+    }
+</div>

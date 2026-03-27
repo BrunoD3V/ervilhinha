@@ -1,0 +1,164 @@
+@model Ervilhinha.Models.Invoice
+
+@{
+    ViewData["Title"] = "Rever Fatura";
+}
+
+<h1>📝 Rever Fatura</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header @(Model.HasErrors ? "bg-warning" : "bg-success text-white")">
+                <h4>
+                    @if (Model.HasErrors)
+                    {
+                        <span>⚠️ Fatura Precisa de Revisão</span>
+                    }
+                    else if (Model.IsReviewed)
+                    {
+                        <span>✓ Fatura Revista</span>
+                    }
+                    else
+                    {
+                        <span>Dados Extraídos pela IA</span>
+                    }
+                </h4>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-warning">
+                        <strong>Nota de Processamento:</strong> @Model.ErrorMessage
+                    </div>
+                }
+
+                <form asp-action="Review" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="VendorName" class="form-label">Nome do Fornecedor</label>
+                            <input asp-for="VendorName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TotalAmount" class="form-label">Montante Total (€)</label>
+                            <input asp-for="TotalAmount" class="form-control" type="number" step="0.01" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="InvoiceDate" class="form-label">Data da Fatura</label>
+                            <input asp-for="InvoiceDate" class="form-control" type="date" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Categoria da Despesa</label>
+                            <select name="expenseCategoryId" class="form-select" required>
+                                <option value="">-- Seleciona Categoria --</option>
+                                @foreach (var cat in ViewBag.Categories)
+                                {
+                                    var selected = Model.Expense?.ExpenseCategoryId == cat.Id;
+                                    <option value="@cat.Id" selected="@selected">@cat.Name</option>
+                                }
+                            </select>
+                            <div class="form-text">Será aplicada à despesa criada</div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.RawOcrText))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Texto OCR Original</label>
+                            <textarea class="form-control" rows="4" readonly>@Model.RawOcrText</textarea>
+                            <div class="form-text">Texto bruto extraído da fatura</div>
+                        </div>
+                    }
+
+                    <div class="alert alert-info">
+                        @if (Model.Expense != null)
+                        {
+                            <strong>Estado da Despesa:</strong> <text>Uma despesa já foi criada. Atualizar este formulário atualizará a despesa existente.</text>
+                        }
+                        else
+                        {
+                            <strong>Criação de Despesa:</strong> <text>Uma nova despesa será criada ao guardares esta revisão.</text>
+                        }
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            ✓ Aprovar e Guardar
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar às Faturas</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.IsReviewed)
+        {
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5>Histórico de Revisão</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Revisto Por:</dt>
+                        <dd class="col-sm-8">@Model.ReviewedBy</dd>
+
+                        <dt class="col-sm-4">Data de Revisão:</dt>
+                        <dd class="col-sm-8">@Model.ReviewedDate?.ToLocalTime().ToString("g")</dd>
+
+                        <dt class="col-sm-4">Carregado Por:</dt>
+                        <dd class="col-sm-8">@Model.UploadedBy</dd>
+
+                        <dt class="col-sm-4">Data de Carregamento:</dt>
+                        <dd class="col-sm-8">@Model.UploadDate.ToLocalTime().ToString("g")</dd>
+                    </dl>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Imagem da Fatura</h5>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.FilePath))
+                {
+                    <a href="@Model.FilePath" target="_blank">
+                        <img src="@Model.FilePath" alt="Fatura" class="img-fluid" />
+                    </a>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="@Model.FilePath" target="_blank" class="btn btn-outline-primary">
+                            🔍 Ver Tamanho Completo
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model.Expense != null)
+        {
+            <div class="card mt-3">
+                <div class="card-header bg-success text-white">
+                    <h5>Despesa Criada</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Montante:</strong> €@Model.Expense.Amount.ToString("N2")</p>
+                    <p><strong>Data:</strong> @Model.Expense.Date.ToShortDateString()</p>
+                    <p><strong>Categoria:</strong> @Model.Expense.ExpenseCategory?.Name</p>
+                    <a asp-controller="Expenses" asp-action="Index" class="btn btn-sm btn-outline-success">
+                        Ver Despesas
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

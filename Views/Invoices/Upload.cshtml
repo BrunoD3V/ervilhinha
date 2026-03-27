@@ -1,0 +1,117 @@
+@{
+    ViewData["Title"] = "Carregar Fatura";
+}
+
+<h1>📸 Carregar Fatura</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Scanner de Faturas IA</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h5>📷 Como funciona:</h5>
+                    <ol>
+                        <li>Tira uma foto à fatura ou carrega um PDF</li>
+                        <li>A IA extrai automaticamente o fornecedor, data e montante</li>
+                        <li>Revê os dados extraídos</li>
+                        <li>A despesa é criada automaticamente!</li>
+                    </ol>
+                </div>
+
+                <form asp-action="Upload" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Seleciona Imagem ou PDF da Fatura</label>
+                        <input type="file" 
+                               name="file" 
+                               id="file" 
+                               class="form-control" 
+                               accept="image/*,application/pdf"
+                               capture="environment"
+                               required />
+                        <div class="form-text">
+                            Formatos suportados: JPG, PNG, PDF. Podes usar a tua câmara para tirar uma foto!
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div id="preview" class="mt-3"></div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            🤖 Carregar & Processar com IA
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>✨ Dicas para Melhores Resultados</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">✓ Garante boa iluminação</li>
+                    <li class="mb-2">✓ Captura a fatura inteira</li>
+                    <li class="mb-2">✓ Mantém a fatura plana</li>
+                    <li class="mb-2">✓ Evita sombras e reflexos</li>
+                    <li class="mb-2">✓ Certifica-te que o texto está legível</li>
+                </ul>
+
+                <hr />
+
+                <h6>🔒 Privacidade & Segurança</h6>
+                <p class="small text-muted">
+                    As tuas faturas são processadas de forma segura e armazenadas apenas na tua conta.
+                    @if (string.IsNullOrEmpty(ViewBag.AzureConfigured))
+                    {
+                        <br /><br />
+                        <strong>Nota:</strong> <text>Azure Form Recognizer não está configurado. O sistema usará dados de demonstração.</text>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('preview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (file.type.startsWith('image/')) {
+                        preview.innerHTML = `
+                            <div class="card">
+                                <div class="card-header">Pré-visualização</div>
+                                <div class="card-body text-center">
+                                    <img src="${e.target.result}" class="img-fluid" style="max-height: 400px;" />
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        preview.innerHTML = `
+                            <div class="alert alert-success">
+                                <strong>📄 Ficheiro PDF selecionado:</strong> ${file.name}
+                            </div>
+                        `;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

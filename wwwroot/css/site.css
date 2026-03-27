@@ -1,0 +1,929 @@
+/* ========================================
+   🌿 ERVILHINHA - TEMA PASTEL COZY 
+   Cores inspiradas em "Little Pea" e bebés
+   ======================================== */
+
+:root {
+  /* Cores Principais Pastel */
+  --pea-green-light: #E8F5E9;
+  --pea-green: #C8E6C9;
+  --pea-green-soft: #A5D6A7;
+  --baby-pink: #F8BBD0;
+  --baby-blue: #BBDEFB;
+  --baby-yellow: #FFF9C4;
+  --baby-peach: #FFCCBC;
+  --baby-lavender: #E1BEE7;
+
+  /* Cores de Texto */
+  --text-dark: #5D4037;
+  --text-soft: #8D6E63;
+  --text-muted: #A1887F;
+
+  /* Fundos */
+  --bg-cream: #FFFEF7;
+  --bg-soft-white: #FAFAFA;
+}
+
+html {
+  font-size: 14px;
+  background: linear-gradient(135deg, var(--bg-cream) 0%, var(--pea-green-light) 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin-bottom: 0;
+  padding-bottom: 80px;
+  color: var(--text-dark);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: transparent;
+  min-height: 100vh;
+}
+
+/* Tipografia Suave */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.display-3, .display-4 {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* ========================================
+   🎨 CARDS PASTEL FOFOS
+   ======================================== */
+
+.card {
+  border: none;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Cards com cores pastel diferentes */
+.card.card-pea {
+  background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--pea-green) 100%);
+}
+
+.card.card-pink {
+  background: linear-gradient(135deg, #FFF 0%, var(--baby-pink) 100%);
+}
+
+.card.card-blue {
+  background: linear-gradient(135deg, #FFF 0%, var(--baby-blue) 100%);
+}
+
+.card.card-yellow {
+  background: linear-gradient(135deg, #FFF 0%, var(--baby-yellow) 100%);
+}
+
+.card.card-peach {
+  background: linear-gradient(135deg, #FFF 0%, var(--baby-peach) 100%);
+}
+
+.card.card-lavender {
+  background: linear-gradient(135deg, #FFF 0%, var(--baby-lavender) 100%);
+}
+
+/* ========================================
+   🔘 BOTÕES PASTEL FOFOS
+   ======================================== */
+
+.btn {
+  border-radius: 25px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--pea-green-soft) 0%, var(--pea-green) 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--pea-green) 0%, #81C784 100%) !important;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--pea-green) 0%, #81C784 100%) !important;
+  color: white !important;
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%) !important;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--baby-peach) 0%, #FFAB91 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #FFAB91 0%, #FF8A65 100%) !important;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--pea-green-soft) 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, var(--pea-green-soft) 0%, #81C784 100%) !important;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-lg {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 30px;
+}
+
+/* ========================================
+   🎯 NAVEGAÇÃO SUAVE
+   ======================================== */
+
+.navbar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  border-bottom: 2px solid var(--pea-green-light);
+  padding: 0.5rem 1rem;
+  min-height: 56px;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  color: var(--text-dark) !important;
+  font-size: 1.25rem;
+  padding: 0.5rem 0;
+}
+
+.nav-link {
+  color: var(--text-soft) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  margin: 0 0.2rem;
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  color: var(--text-dark) !important;
+  background: var(--pea-green-light);
+}
+
+/* Botão de Login - Destaque Verde Suave */
+.navbar-nav .btn-success {
+  min-width: 160px;
+  font-weight: 500;
+  box-shadow: 0 3px 10px rgba(129, 199, 132, 0.3);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+.navbar-nav .btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(129, 199, 132, 0.4);
+}
+
+/* ========================================
+   ⚠️ ALERTAS PASTEL
+   ======================================== */
+
+.alert {
+  border: none;
+  border-radius: 15px;
+  border-left: 4px solid;
+}
+
+.alert-info {
+  background: var(--baby-blue);
+  color: var(--text-dark);
+  border-left-color: #64B5F6;
+}
+
+.alert-success {
+  background: var(--pea-green-light);
+  color: var(--text-dark);
+  border-left-color: var(--pea-green-soft);
+}
+
+.alert-warning {
+  background: var(--baby-yellow);
+  color: var(--text-dark);
+  border-left-color: #FFD54F;
+}
+
+.alert-danger {
+  background: #FFCDD2;
+  color: var(--text-dark);
+  border-left-color: #EF9A9A;
+}
+
+/* ========================================
+   📝 FORMULÁRIOS SUAVES
+   ======================================== */
+
+.form-control, .form-select {
+  border-radius: 15px;
+  border: 2px solid var(--pea-green-light);
+  padding: 0.7rem 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--pea-green-soft);
+  box-shadow: 0 0 0 0.2rem rgba(165, 214, 167, 0.25);
+  background: var(--bg-cream);
+}
+
+.form-label {
+  color: var(--text-soft);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   📊 TABELAS SUAVES
+   ======================================== */
+
+.table {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table thead {
+  background: var(--pea-green-light);
+  color: var(--text-dark);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background: var(--bg-cream);
+}
+
+.table-hover tbody tr:hover {
+  background: var(--pea-green-light);
+}
+
+/* ========================================
+   🎨 BADGES PASTEL
+   ======================================== */
+
+.badge {
+  border-radius: 20px;
+  padding: 0.4rem 0.8rem;
+  font-weight: 500;
+}
+
+.bg-success {
+  background: var(--pea-green-soft) !important;
+  color: white !important;
+}
+
+.bg-info {
+  background: var(--pea-green-light) !important;
+  color: var(--text-dark) !important;
+}
+
+.bg-warning {
+  background: var(--baby-peach) !important;
+  color: var(--text-dark) !important;
+}
+
+.bg-danger {
+  background: #FFCDD2 !important;
+  color: var(--text-dark) !important;
+}
+
+/* ========================================
+   ✨ ANIMAÇÕES SUAVES
+   ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ========================================
+   🎯 SOMBRAS SUAVES
+   ======================================== */
+
+.shadow-sm {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.shadow {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ========================================
+   🌿 ELEMENTOS ESPECIAIS
+   ======================================== */
+
+/* Container principal com padding respirável */
+.container, .container-fluid {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+main {
+  padding-bottom: 2rem;
+}
+
+/* Links suaves */
+a {
+  color: var(--pea-green-soft);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: #66BB6A;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Footer suave */
+footer {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid var(--pea-green-light);
+  color: var(--text-soft);
+  position: relative;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+footer .container {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* ========================================
+   📱 RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 80px;
+  }
+
+  .container {
+    padding-bottom: 1rem;
+  }
+
+  main {
+    margin-bottom: 1rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .btn-lg {
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  footer {
+    margin-top: 1.5rem;
+    padding: 0.75rem 0;
+  }
+}
+
+/* ========================================
+   🎨 CLASSES UTILITÁRIAS EXTRAS
+   ======================================== */
+
+.text-soft {
+  color: var(--text-soft) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.bg-cream {
+  background: var(--bg-cream) !important;
+}
+
+.border-pea {
+  border-color: var(--pea-green) !important;
+}
+
+.rounded-xl {
+  border-radius: 20px !important;
+}
+
+.rounded-xxl {
+  border-radius: 30px !important;
+}
+
+/* ========================================
+   ✨ SCROLL REVEAL ANIMATIONS & MODERN LAYOUT
+   ======================================== */
+
+/* Scroll reveal base styles */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal.from-left {
+  transform: translateX(-50px) translateY(20px);
+}
+
+.scroll-reveal.from-left.revealed {
+  transform: translateX(0) translateY(0);
+}
+
+.scroll-reveal.from-right {
+  transform: translateX(50px) translateY(20px);
+}
+
+.scroll-reveal.from-right.revealed {
+  transform: translateX(0) translateY(0);
+}
+
+/* Modern hero section */
+.hero-modern {
+  background: linear-gradient(135deg, var(--bg-cream) 0%, var(--pea-green-light) 50%, var(--baby-pink) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-modern::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(200, 230, 201, 0.1) 0%, transparent 70%);
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateX(10px) translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateX(-5px) translateY(10px) rotate(-1deg);
+  }
+}
+
+/* Scroll indicator */
+.scroll-down {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.7;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+.scroll-down-icon {
+  width: 30px;
+  height: 50px;
+  border: 2px solid var(--text-soft);
+  border-radius: 15px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.scroll-down-icon::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--text-soft);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  animation: scroll-wheel 2s infinite;
+}
+
+@keyframes scroll-wheel {
+  0% {
+    opacity: 1;
+    top: 8px;
+  }
+  50% {
+    opacity: 0.5;
+    top: 20px;
+  }
+  100% {
+    opacity: 0;
+    top: 28px;
+  }
+}
+
+/* Feature sections with optimized spacing and consistent width */
+.feature-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 60px 0;
+  width: 100%;
+}
+
+.feature-section:first-child {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-cream) 0%, var(--pea-green-light) 30%, var(--baby-pink) 70%, var(--baby-peach) 100%);
+}
+
+.feature-section:nth-child(even) {
+  background: linear-gradient(135deg, var(--bg-cream) 0%, var(--pea-green-light) 50%, rgba(248, 187, 208, 0.1) 100%);
+}
+
+.feature-section:nth-child(odd) {
+  background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--bg-cream) 50%, rgba(255, 204, 188, 0.1) 100%);
+}
+
+/* Seção específica para CTA final */
+.feature-section:last-of-type {
+  min-height: 80vh;
+  background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--baby-peach) 40%, var(--baby-yellow) 100%) !important;
+}
+
+/* ===== LAYOUT CONSISTENCY FOR ALL PAGES ===== */
+
+/* Ensure all main content areas use consistent width */
+main {
+  width: 100%;
+}
+
+/* Navbar consistency */
+.navbar .container {
+  max-width: 1600px !important;
+}
+
+/* Form pages consistency */
+.card, .card-pea, .card-yellow, .card-peach, .card-lavender {
+  margin: 0 auto;
+  max-width: 800px; /* Reasonable max width for forms */
+}
+
+/* Wide cards for tables and lists */
+.card-wide {
+  max-width: 1200px !important;
+}
+
+/* Table responsiveness with consistent width */
+.table-responsive {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Ensure admin and other pages follow same width rules */
+.container-fluid {
+  max-width: 1600px !important;
+  margin: 0 auto;
+}
+
+/* Alert and notification consistency */
+.alert {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+}
+
+/* Form layouts should be centered and not too wide */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Lists and index pages can be wider */
+.list-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Dashboard layouts */
+.dashboard-container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+/* Container system para larguras consistentes */
+.container {
+  max-width: 1600px !important;
+  margin: 0 auto;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.container-fluid {
+  max-width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* Larguras específicas por breakpoint */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1600px !important;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 1200px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 960px !important;
+  }
+}
+
+/* Mobile: largura quase total com margem mínima */
+@media (max-width: 767px) {
+  .container {
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Button positioning improvements */
+.section-button {
+  margin: 2rem 0 1rem 0;
+}
+
+/* Mobile optimizations with consistent width system */
+@media (max-width: 768px) {
+  .feature-section {
+    min-height: auto;
+    padding: 40px 0;
+  }
+
+  .feature-section:first-child {
+    min-height: 80vh;
+  }
+
+  .section-button {
+    margin: 1.5rem 0 0.5rem 0;
+  }
+
+  /* Ensure mobile takes full width */
+  .container {
+    max-width: 100% !important;
+    padding: 0 15px !important;
+  }
+
+  /* Mobile hero adjustments */
+  .hero-modern {
+    padding: 20px 0;
+  }
+
+  .display-2 {
+    font-size: 2.5rem !important;
+  }
+
+  .display-3 {
+    font-size: 2rem !important;
+  }
+
+  .display-4 {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* Floating cards with modern effects */
+.floating-element {
+  position: relative;
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.floating-element:hover {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-10px);
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Modern text effects */
+.text-gradient {
+  background: linear-gradient(135deg, var(--pea-green-soft) 0%, #81C784 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Stagger animations */
+.stagger-1 {
+  transition-delay: 0.1s;
+}
+
+.stagger-2 {
+  transition-delay: 0.2s;
+}
+
+.stagger-3 {
+  transition-delay: 0.3s;
+}
+
+.stagger-4 {
+  transition-delay: 0.4s;
+}
+
+/* Progress indicators */
+.progress-modern {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-modern .progress-bar {
+  background: linear-gradient(90deg, var(--pea-green-soft) 0%, #81C784 100%);
+  border-radius: 10px;
+  transition: width 2s ease-in-out;
+}
+
+/* Icon animations */
+.icon-bounce {
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.05);
+  }
+}
+
+/* Subtle parallax effect */
+.parallax-slow {
+  transform: translateY(0);
+  transition: transform 0.1s ease-out;
+}
+
+/* Modern buttons with enhanced hover */
+.btn-modern {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.btn-modern:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .hero-modern {
+    min-height: 80vh;
+  }
+
+  .feature-section {
+    min-height: auto;
+    padding: 60px 0;
+  }
+
+  .floating-element {
+    transform: none;
+  }
+
+  .scroll-reveal {
+    transform: translateY(30px);
+  }
+}

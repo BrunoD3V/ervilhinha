@@ -1,0 +1,81 @@
+@model Ervilhinha.Models.BabyWishlist
+
+@{
+    ViewData["Title"] = "Criar Lista de Desejos";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-pea shadow">
+            <div class="card-body p-4">
+                <h1 class="display-5 mb-2">🎁 Criar Lista de Desejos</h1>
+                <p class="text-soft mb-4">Cria uma lista para partilhar com família e amigos</p>
+
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Nome da Lista *</label>
+                        <input asp-for="Name" class="form-control" placeholder="Ex: Lista para o/a Miguel/Maria" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BabyName" class="form-label">Nome do Bebé</label>
+                        <input asp-for="BabyName" class="form-control" placeholder="Ex: Miguel, Maria (opcional)" />
+                        <span asp-validation-for="BabyName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ExpectedDate" class="form-label">Data Prevista de Nascimento</label>
+                        <input asp-for="ExpectedDate" type="date" class="form-control" />
+                        <span asp-validation-for="ExpectedDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Descrição</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Adiciona uma mensagem pessoal ou descrição da lista..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h5 class="mb-3">👥 Co-Gestor (Opcional)</h5>
+                    <p class="text-soft small mb-3">Adiciona outro gestor para gerir a lista contigo (ex: parceiro/a)</p>
+
+                    <div class="mb-4">
+                        <label for="coManagerEmail" class="form-label">Email do Co-Gestor</label>
+                        <input type="email" name="coManagerEmail" id="coManagerEmail" class="form-control" placeholder="exemplo@email.com" />
+                        <small class="text-soft">Esta pessoa também poderá adicionar, editar e gerir items da lista</small>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="IsPublic" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsPublic" class="form-check-label">
+                            Tornar lista pública (qualquer pessoa com o código pode ver)
+                        </label>
+                        <div class="small text-soft">Se não for pública, apenas pessoas convidadas poderão ver a lista</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            ✨ Criar Lista de Desejos
+                        </button>
+                        <a asp-action="MyLists" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-blue shadow mt-4">
+            <div class="card-body">
+                <h5>💡 Dica</h5>
+                <p class="mb-0 small">Depois de criar a lista, receberás um <strong>código de partilha único</strong> que poderás enviar a familiares e amigos para que possam ver e reservar items!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

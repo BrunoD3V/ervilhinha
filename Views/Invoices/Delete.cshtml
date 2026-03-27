@@ -1,0 +1,86 @@
+@model Ervilhinha.Models.Invoice
+
+@{
+    ViewData["Title"] = "Eliminar Fatura";
+}
+
+<h1>🗑️ Eliminar Fatura</h1>
+
+<div class="alert alert-danger">
+    <h4>⚠ Tens a certeza que queres eliminar esta fatura?</h4>
+    <p>Esta ação não pode ser revertida.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Detalhes da Fatura</h5>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.FilePath))
+                {
+                    <div class="text-center mb-3">
+                        <img src="@Model.FilePath" alt="Fatura" class="img-fluid" style="max-height: 300px;" />
+                    </div>
+                }
+
+                <dl class="row">
+                    <dt class="col-sm-4">Fornecedor:</dt>
+                    <dd class="col-sm-8">@(Model.VendorName ?? "Desconhecido")</dd>
+
+                    <dt class="col-sm-4">Montante:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.TotalAmount.HasValue)
+                        {
+                            <strong>€@Model.TotalAmount.Value.ToString("N2")</strong>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Não especificado</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Data:</dt>
+                    <dd class="col-sm-8">@(Model.InvoiceDate?.ToShortDateString() ?? "Não especificada")</dd>
+
+                    <dt class="col-sm-4">Ficheiro:</dt>
+                    <dd class="col-sm-8">@Model.FileName</dd>
+
+                    <dt class="col-sm-4">Carregado:</dt>
+                    <dd class="col-sm-8">@Model.UploadDate.ToLocalTime().ToString("g") por @Model.UploadedBy</dd>
+
+                    <dt class="col-sm-4">Estado:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsReviewed)
+                        {
+                            <span class="badge bg-success">Revisto</span>
+                        }
+                        else if (Model.IsProcessed)
+                        {
+                            <span class="badge bg-info">Processado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pendente</span>
+                        }
+                    </dd>
+                </dl>
+
+                @if (Model.Expense != null)
+                {
+                    <div class="alert alert-warning">
+                        <strong>⚠ Nota:</strong> Esta fatura tem uma despesa associada. Eliminar a fatura NÃO eliminará a despesa.
+                    </div>
+                }
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">Eliminar Fatura</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

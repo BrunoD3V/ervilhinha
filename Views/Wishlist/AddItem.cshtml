@@ -1,0 +1,123 @@
+@model Ervilhinha.Models.WishlistItem
+
+@{
+    ViewData["Title"] = "Adicionar Item";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-pea shadow">
+            <div class="card-body p-4">
+                <h1 class="display-6 mb-2">➕ Adicionar Item à Lista</h1>
+                <p class="text-soft mb-4">Lista: <strong>@ViewBag.WishlistName</strong></p>
+
+                <form asp-action="AddItem" method="post">
+                    <input type="hidden" asp-for="WishlistId" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="Name" class="form-label">Nome do Item *</label>
+                            <input asp-for="Name" class="form-control" placeholder="Ex: Carrinho de bebé, Body branco 3 meses" autofocus />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Quantity" class="form-label">Quantidade *</label>
+                            <input asp-for="Quantity" type="number" min="1" class="form-control" value="1" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Descrição</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Detalhes adicionais sobre o item..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Category" class="form-label">Categoria</label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="">-- Seleciona --</option>
+                                <option value="Roupa">👕 Roupa</option>
+                                <option value="Higiene">🧴 Higiene</option>
+                                <option value="Quarto">🛏️ Quarto</option>
+                                <option value="Transporte">🚗 Transporte</option>
+                                <option value="Alimentação">🍼 Alimentação</option>
+                                <option value="Brinquedos">🧸 Brinquedos</option>
+                                <option value="Livros">📚 Livros</option>
+                                <option value="Saúde">💊 Saúde</option>
+                                <option value="Passeio">🌳 Passeio</option>
+                                <option value="Outro">🔹 Outro</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Priority" class="form-label">Prioridade *</label>
+                            <select asp-for="Priority" class="form-select">
+                                <option value="1">Baixa (pode esperar)</option>
+                                <option value="2" selected>Média (desejável)</option>
+                                <option value="3">Alta (necessário)</option>
+                            </select>
+                            <span asp-validation-for="Priority" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="EstimatedPrice" class="form-label">Preço Estimado (€)</label>
+                        <input asp-for="EstimatedPrice" type="number" step="0.01" min="0" class="form-control" placeholder="0.00" />
+                        <span asp-validation-for="EstimatedPrice" class="text-danger"></span>
+                        <small class="text-soft">Valor aproximado para ajudar quem vai oferecer</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProductUrl" class="form-label">Link do Produto</label>
+                        <input asp-for="ProductUrl" type="url" class="form-control" placeholder="https://..." />
+                        <span asp-validation-for="ProductUrl" class="text-danger"></span>
+                        <small class="text-soft">Link para loja online onde o produto pode ser comprado</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ImageUrl" class="form-label">Link da Imagem</label>
+                        <input asp-for="ImageUrl" type="url" class="form-control" placeholder="https://..." />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        <small class="text-soft">URL de uma imagem do produto</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Notes" class="form-label">Notas Adicionais</label>
+                        <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Ex: Preferência de cor, tamanho, marca..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            ✅ Adicionar Item
+                        </button>
+                        <a asp-action="Manage" asp-route-id="@Model.WishlistId" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-blue shadow mt-3">
+            <div class="card-body">
+                <h6>💡 Dicas para Adicionar Items</h6>
+                <ul class="mb-0 small">
+                    <li>Sê específico no nome (ex: "Body branco manga curta 3 meses" em vez de "Body")</li>
+                    <li>Adiciona links para produtos específicos que gostas</li>
+                    <li>Indica preferências nas notas (cor, marca, tamanho)</li>
+                    <li>Define prioridades para ajudar familiares a escolher</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Acesso Negado";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-yellow shadow text-center p-5">
+            <div class="card-body">
+                <div class="mb-4">
+                    <svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#f4d19b" opacity="0.3"/>
+                        <text x="50" y="70" font-size="60" text-anchor="middle">⛔</text>
+                    </svg>
+                </div>
+
+                <h1 class="display-4 mb-3">Acesso Negado</h1>
+                <p class="lead mb-4">@ViewBag.ErrorMessage</p>
+
+                <div class="alert alert-warning text-start">
+                    <h6>⚠️ Não Tens Permissão</h6>
+                    <p class="mb-2">Esta lista é privada e não tens acesso autorizado.</p>
+                    <p class="mb-0">Apenas gestores e pessoas convidadas podem visualizar esta lista.</p>
+                </div>
+
+                <h5 class="mt-4 mb-3">Como Obter Acesso?</h5>
+                <div class="row text-start mb-4">
+                    <div class="col-md-6">
+                        <div class="card card-blue mb-3">
+                            <div class="card-body">
+                                <h6>📧 Pede Convite</h6>
+                                <p class="small mb-0">Contacta os criadores da lista e pede para te enviarem um convite por email.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-pea mb-3">
+                            <div class="card-body">
+                                <h6>🔓 Lista Pública</h6>
+                                <p class="small mb-0">Pede aos criadores para tornarem a lista pública se apropriado.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info text-start">
+                    <strong>💡 Dica:</strong> Se recebeste um link, certifica-te que estás a usar o email correto para aceder. Alguns convites são específicos para determinados emails.
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">
+                        🔑 Tentar com Outra Conta
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        🏠 Voltar à Página Inicial
+                    </a>
+                    <a asp-controller="Wishlist" asp-action="MyLists" class="btn btn-outline-info">
+                        Criar Minha Própria Lista
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

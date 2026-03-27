@@ -1,0 +1,126 @@
+@model Ervilhinha.Models.WishlistReservation
+
+@{
+    ViewData["Title"] = "Reserva Confirmada";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-pea shadow text-center p-5">
+            <div class="card-body">
+                <div class="mb-4">
+                    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#a8d5a4" opacity="0.3"/>
+                        <path d="M30 50 L45 65 L70 35" stroke="#6b9f6a" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <h1 class="display-4 mb-3">🎉 Reserva Confirmada!</h1>
+                <p class="lead mb-4">Obrigado por contribuíres para a felicidade dos futuros pais!</p>
+
+                <div class="card card-blue mb-4">
+                    <div class="card-body text-start">
+                        <h5>📋 Detalhes da Reserva</h5>
+                        <hr />
+                        <div class="row mb-2">
+                            <div class="col-4 text-soft">Item:</div>
+                            <div class="col-8"><strong>@Model.WishlistItem.Name</strong></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 text-soft">Quantidade:</div>
+                            <div class="col-8"><strong>@Model.Quantity</strong></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 text-soft">Reservado por:</div>
+                            <div class="col-8"><strong>@Model.ReservedByName</strong></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 text-soft">Email:</div>
+                            <div class="col-8">@Model.ReservedBy</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 text-soft">Data:</div>
+                            <div class="col-8">@Model.ReservedDate.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div class="row">
+                                <div class="col-4 text-soft">Mensagem:</div>
+                                <div class="col-8"><em>"@Model.Message"</em></div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="alert alert-info text-start">
+                    <h6>📧 Email de Confirmação</h6>
+                    <p class="mb-0 small">Enviámos uma confirmação para <strong>@Model.ReservedBy</strong> com todos os detalhes da reserva.</p>
+                </div>
+
+                <div class="alert alert-success text-start">
+                    <h6>🎁 Próximos Passos</h6>
+                    <ol class="mb-0 small">
+                        <li>Compra o item quando for conveniente para ti</li>
+                        <li>Guarda a confirmação de reserva (email)</li>
+                        <li>Podes consultar tuas reservas a qualquer momento usando teu email</li>
+                        <li>Entrega aos pais quando o bebé nascer! 🍼</li>
+                    </ol>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.WishlistItem.ProductUrl))
+                {
+                    <div class="mt-3">
+                        <a href="@Model.WishlistItem.ProductUrl" target="_blank" class="btn btn-info">
+                            🛒 Ir Comprar Agora
+                        </a>
+                    </div>
+                }
+
+                <hr class="my-4" />
+
+                <div class="d-grid gap-2">
+                    <a asp-controller="WishlistPublic" asp-action="View" asp-route-code="@Model.WishlistItem.Wishlist.ShareCode" class="btn btn-primary">
+                        Voltar à Lista (oferecer mais items)
+                    </a>
+                    <a asp-controller="WishlistPublic" asp-action="MyReservations" asp-route-email="@Model.ReservedBy" class="btn btn-outline-secondary">
+                        Ver Todas as Minhas Reservas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-pink shadow mt-4">
+            <div class="card-body text-center">
+                <h5>💝 Partilha a Alegria</h5>
+                <p class="mb-3">Conheces mais alguém que queira oferecer algo? Partilha a lista!</p>
+                <div class="d-grid">
+                    <button class="btn btn-outline-primary" onclick="shareList()">
+                        📤 Partilhar Lista
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function shareList() {
+            const code = '@Model.WishlistItem.Wishlist.ShareCode';
+            const url = '@(Url.Action("View", "WishlistPublic", new { code = Model.WishlistItem.Wishlist.ShareCode }, Context.Request.Scheme) ?? "")';
+            const text = `Olá! Os futuros pais do/a @(Model.WishlistItem.Wishlist.BabyName ?? "bebé") criaram uma lista de desejos. Podes ver aqui: ${url}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Lista de Desejos para Bebé',
+                    text: text,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('✅ Link copiado! Podes partilhar com amigos e família.');
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Lista Privada";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-pink shadow text-center p-5">
+            <div class="card-body">
+                <div class="mb-4">
+                    <svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#f4b6c9" opacity="0.3"/>
+                        <text x="50" y="70" font-size="60" text-anchor="middle">🔒</text>
+                    </svg>
+                </div>
+
+                <h1 class="display-4 mb-3">Lista Privada</h1>
+                <p class="lead mb-4">@ViewBag.ErrorMessage</p>
+
+                <div class="alert alert-info text-start">
+                    <h6>ℹ️ O que significa isto?</h6>
+                    <p class="mb-2">Esta lista foi configurada como <strong>privada</strong> pelos criadores.</p>
+                    <p class="mb-0">Apenas pessoas especificamente convidadas podem aceder.</p>
+                </div>
+
+                <h5 class="mt-4 mb-3">O que podes fazer?</h5>
+                <div class="card card-blue text-start mb-4">
+                    <div class="card-body">
+                        <ol class="mb-0">
+                            <li class="mb-2">
+                                <strong>Faz login</strong> se tiveres conta<br />
+                                <small class="text-soft">Se foste convidado, faz login com o email do convite</small>
+                            </li>
+                            <li class="mb-2">
+                                <strong>Pede acesso aos criadores</strong><br />
+                                <small class="text-soft">Contacta quem te enviou o link e pede para te convidar</small>
+                            </li>
+                            <li>
+                                <strong>Aguarda convite por email</strong><br />
+                                <small class="text-soft">Os criadores podem enviar-te um convite direto</small>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg">
+                        🔑 Fazer Login
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        🏠 Voltar à Página Inicial
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

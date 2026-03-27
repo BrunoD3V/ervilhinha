@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Fundo circular verde claro -->
+  <circle cx="50" cy="50" r="50" fill="#E8F5E9"/>
+  
+  <!-- Vagem da ervilha -->
+  <ellipse cx="50" cy="50" rx="20" ry="30" fill="#C8E6C9"/>
+  
+  <!-- Sombra da vagem -->
+  <ellipse cx="50" cy="50" rx="24" ry="34" fill="#A5D6A7" opacity="0.3"/>
+  
+  <!-- Ervilhas dentro -->
+  <circle cx="50" cy="35" r="6" fill="#81C784" opacity="0.9"/>
+  <circle cx="50" cy="50" r="6" fill="#81C784" opacity="0.9"/>
+  <circle cx="50" cy="65" r="6" fill="#81C784" opacity="0.9"/>
+  
+  <!-- Brilhos nas ervilhas -->
+  <circle cx="48" cy="33" r="1.5" fill="#FFF" opacity="0.8"/>
+  <circle cx="48" cy="48" r="1.5" fill="#FFF" opacity="0.8"/>
+  <circle cx="48" cy="63" r="1.5" fill="#FFF" opacity="0.8"/>
+  
+  <!-- Folha/caule -->
+  <path d="M 50 15 Q 45 8 40 12 Q 35 16 40 22" fill="#66BB6A" opacity="0.7"/>
+  
+  <!-- Contorno suave -->
+  <ellipse cx="50" cy="50" rx="20" ry="30" fill="none" stroke="#81C784" stroke-width="1" opacity="0.5"/>
+</svg>

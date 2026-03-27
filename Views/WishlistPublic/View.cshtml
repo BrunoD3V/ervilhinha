@@ -1,0 +1,206 @@
+@model Ervilhinha.Models.BabyWishlist
+
+@{
+    ViewData["Title"] = $"Lista: {Model.Name}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItems = ViewBag.TotalItems as int? ?? 0;
+    var availableItems = ViewBag.AvailableItems as int? ?? 0;
+    var reservedItems = ViewBag.ReservedItems as int? ?? 0;
+    var acquiredItems = ViewBag.AcquiredItems as int? ?? 0;
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4">🎁 @Model.Name</h1>
+    @if (!string.IsNullOrEmpty(Model.BabyName))
+    {
+        <p class="lead">👶 Para: <strong>@Model.BabyName</strong></p>
+    }
+    @if (Model.ExpectedDate.HasValue)
+    {
+        <p class="text-soft">📅 Data Prevista: <strong>@Model.ExpectedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("pt-PT"))</strong></p>
+    }
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <p class="text-muted">@Model.Description</p>
+    }
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-pea shadow text-center">
+            <div class="card-body">
+                <h3 class="mb-0">@totalItems</h3>
+                <small class="text-soft">Items Total</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-blue shadow text-center">
+            <div class="card-body">
+                <h3 class="mb-0 text-success">@availableItems</h3>
+                <small class="text-soft">Disponíveis</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-yellow shadow text-center">
+            <div class="card-body">
+                <h3 class="mb-0 text-warning">@reservedItems</h3>
+                <small class="text-soft">Reservados</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-pink shadow text-center">
+            <div class="card-body">
+                <h3 class="mb-0 text-info">@acquiredItems</h3>
+                <small class="text-soft">Adquiridos</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Items.Any())
+{
+    <div class="card card-yellow shadow text-center p-5">
+        <h3>🌿 Esta lista ainda está vazia</h3>
+        <p class="mb-0">Os futuros pais estão a preparar a lista. Volta em breve!</p>
+    </div>
+}
+else
+{
+    <div class="mb-3">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary active" onclick="filterCategory('all')">Todos (@Model.Items.Count)</button>
+            <button type="button" class="btn btn-outline-primary" onclick="filterCategory('available')">Disponíveis (@availableItems)</button>
+            <button type="button" class="btn btn-outline-success" onclick="filterPriority(3)">Alta Prioridade</button>
+        </div>
+    </div>
+
+    <div class="row" id="itemsContainer">
+        @foreach (var item in Model.Items.OrderByDescending(i => i.Priority).ThenBy(i => i.Name))
+        {
+            var isAvailable = item.AvailableQuantity > 0;
+            var priorityClass = item.Priority switch
+            {
+                3 => "border-danger",
+                2 => "border-warning",
+                _ => "border-info"
+            };
+            var priorityBadge = item.Priority switch
+            {
+                3 => "<span class='badge bg-danger'>Alta Prioridade</span>",
+                2 => "<span class='badge bg-warning text-dark'>Prioridade Média</span>",
+                _ => "<span class='badge bg-info'>Prioridade Baixa</span>"
+            };
+
+            <div class="col-md-6 col-lg-4 mb-4 item-card" data-available="@(isAvailable ? "true" : "false")" data-priority="@item.Priority">
+                <div class="card h-100 shadow @priorityClass @(!isAvailable ? "opacity-75" : "")">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">@item.Name</h5>
+                            @if (!string.IsNullOrEmpty(item.Category))
+                            {
+                                <span class="badge bg-secondary">@item.Category</span>
+                            }
+                        </div>
+
+                        @Html.Raw(priorityBadge)
+
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            <p class="card-text text-soft mt-2">@item.Description</p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(item.Notes))
+                        {
+                            <p class="small text-muted"><strong>Notas:</strong> @item.Notes</p>
+                        }
+
+                        <hr />
+
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <small class="text-soft">Quantidade</small>
+                                <div><strong>@item.Quantity</strong></div>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-soft">Reservado</small>
+                                <div class="text-warning"><strong>@item.ReservedQuantity</strong></div>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-soft">Disponível</small>
+                                <div class="text-success"><strong>@item.AvailableQuantity</strong></div>
+                            </div>
+                        </div>
+
+                        @if (item.EstimatedPrice.HasValue)
+                        {
+                            <div class="text-center mb-3">
+                                <small class="text-soft">Preço Estimado:</small>
+                                <h5 class="mb-0">@item.EstimatedPrice.Value.ToString("C")</h5>
+                            </div>
+                        }
+
+                        @if (isAvailable)
+                        {
+                            <div class="d-grid gap-2">
+                                <a asp-controller="WishlistPublic" asp-action="Reserve" asp-route-id="@item.Id" class="btn btn-primary">
+                                    🎁 Quero Oferecer
+                                </a>
+                                @if (!string.IsNullOrEmpty(item.ProductUrl))
+                                {
+                                    <a href="@item.ProductUrl" target="_blank" class="btn btn-outline-info btn-sm">
+                                        🛒 Ver Produto
+                                    </a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-secondary text-center mb-0">
+                                <strong>✅ Totalmente Reservado</strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<div class="card card-blue shadow mt-4">
+    <div class="card-body text-center">
+        <h5>💌 Já Ofereceste Algo?</h5>
+        <p class="mb-3">Consulta as tuas reservas usando o teu email</p>
+        <a asp-controller="WishlistPublic" asp-action="MyReservations" class="btn btn-primary">
+            Ver Minhas Reservas
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterCategory(filter) {
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else if (filter === 'available') {
+                    card.style.display = card.dataset.available === 'true' ? 'block' : 'none';
+                }
+            });
+        }
+
+        function filterPriority(priority) {
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                card.style.display = card.dataset.priority == priority ? 'block' : 'none';
+            });
+        }
+    </script>
+}

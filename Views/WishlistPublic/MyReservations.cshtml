@@ -1,0 +1,152 @@
+@model IEnumerable<Ervilhinha.Models.WishlistReservation>
+
+@{
+    ViewData["Title"] = "Minhas Reservas";
+    var email = ViewBag.Email as string;
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-5">🎁 Minhas Reservas</h1>
+    <p class="text-soft">Reservas feitas com o email: <strong>@email</strong></p>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card card-yellow shadow text-center p-5">
+                <div class="card-body">
+                    <h3>🌿 Ainda não tens reservas</h3>
+                    <p class="mb-4">Não encontrámos nenhuma reserva com este email.</p>
+                    <p class="text-soft small">Se já fizeste uma reserva, verifica se usaste o email correto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var reservation in Model)
+        {
+            var item = reservation.WishlistItem;
+            var wishlist = item.Wishlist;
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-pea shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="mb-0">@item.Name</h5>
+                            @if (reservation.IsDelivered)
+                            {
+                                <span class="badge bg-success">✅ Entregue</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">⏳ Pendente</span>
+                            }
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" class="img-fluid rounded mb-3" alt="@item.Name" style="max-height: 150px; object-fit: cover; width: 100%;" />
+                        }
+
+                        <div class="mb-2">
+                            <small class="text-soft">Lista:</small>
+                            <div><strong>@wishlist.Name</strong></div>
+                            @if (!string.IsNullOrEmpty(wishlist.BabyName))
+                            {
+                                <small class="text-soft">Para: @wishlist.BabyName</small>
+                            }
+                        </div>
+
+                        <hr />
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small class="text-soft">Quantidade</small>
+                                <div><strong>@reservation.Quantity</strong></div>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-soft">Reservado em</small>
+                                <div class="small">@reservation.ReservedDate.ToString("dd/MM/yyyy")</div>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(reservation.Message))
+                        {
+                            <div class="alert alert-info small mb-2">
+                                <strong>Tua mensagem:</strong><br />
+                                <em>"@reservation.Message"</em>
+                            </div>
+                        }
+
+                        @if (item.EstimatedPrice.HasValue)
+                        {
+                            <div class="mb-2">
+                                <small class="text-soft">Preço Estimado:</small>
+                                <div><strong>@item.EstimatedPrice.Value.ToString("C")</strong></div>
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2 mt-3">
+                            @if (!string.IsNullOrEmpty(item.ProductUrl))
+                            {
+                                <a href="@item.ProductUrl" target="_blank" class="btn btn-info btn-sm">
+                                    🛒 Ver Produto
+                                </a>
+                            }
+
+                            @if (!reservation.IsDelivered)
+                            {
+                                <form asp-controller="WishlistPublic" asp-action="CancelReservation" method="post">
+                                    <input type="hidden" name="id" value="@reservation.Id" />
+                                    <input type="hidden" name="email" value="@email" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Tens a certeza que queres cancelar esta reserva?')">
+                                        ❌ Cancelar Reserva
+                                    </button>
+                                </form>
+                            }
+                            else if (reservation.DeliveredDate.HasValue)
+                            {
+                                <div class="text-success small text-center">
+                                    ✅ Entregue em @reservation.DeliveredDate.Value.ToString("dd/MM/yyyy")
+                                </div>
+                            }
+
+                            <a asp-controller="WishlistPublic" asp-action="View" asp-route-code="@wishlist.ShareCode" class="btn btn-outline-secondary btn-sm">
+                                Ver Lista Completa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card card-blue shadow mt-4">
+        <div class="card-body">
+            <h5>💡 Sobre as Tuas Reservas</h5>
+            <ul class="mb-0">
+                <li>Podes cancelar reservas a qualquer momento (até serem entregues)</li>
+                <li>Os pais <strong>não veem</strong> quem reservou cada item (é surpresa!)</li>
+                <li>Recebes email de confirmação para cada reserva</li>
+                <li>Guarda este link para consultares tuas reservas facilmente</li>
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="text-center mt-4">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+        🏠 Voltar à Página Inicial
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        // Guardar email no localStorage para facilitar consultas futuras
+        localStorage.setItem('reservationEmail', '@email');
+    </script>
+}

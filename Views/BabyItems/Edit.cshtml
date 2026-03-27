@@ -1,0 +1,102 @@
+@model Ervilhinha.Models.BabyItem
+
+@{
+    ViewData["Title"] = "Editar Artigo do Bebé";
+}
+
+<h1>✏️ Editar Artigo do Bebé</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedDate" />
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Category" class="form-label"></label>
+                    <input asp-for="Category" class="form-control" list="categoryList" />
+                    <datalist id="categoryList">
+                        <option value="Clothing"></option>
+                        <option value="Nursery"></option>
+                        <option value="Feeding"></option>
+                        <option value="Bathing"></option>
+                        <option value="Diapers"></option>
+                        <option value="Toys"></option>
+                        <option value="Safety"></option>
+                        <option value="Travel"></option>
+                    </datalist>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Priority" class="form-label"></label>
+                    <select asp-for="Priority" class="form-select">
+                        <option value="1">1 - Highest</option>
+                        <option value="2">2 - High</option>
+                        <option value="3">3 - Medium</option>
+                        <option value="4">4 - Low</option>
+                        <option value="5">5 - Lowest</option>
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EstimatedCost" class="form-label"></label>
+                    <input asp-for="EstimatedCost" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="EstimatedCost" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ActualCost" class="form-label"></label>
+                    <input asp-for="ActualCost" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="ActualCost" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="form-check">
+                    <input asp-for="IsPurchased" class="form-check-input" />
+                    <label asp-for="IsPurchased" class="form-check-label"></label>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="PurchasedBy" class="form-label"></label>
+                <input asp-for="PurchasedBy" class="form-control" />
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

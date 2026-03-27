@@ -1,0 +1,190 @@
+@model Ervilhinha.Models.BabyWishlist
+
+@{
+    ViewData["Title"] = $"Partilhar: {Model.Name}";
+    var shareUrl = ViewBag.ShareUrl as string;
+}
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5">🔗 Partilhar Lista</h1>
+            <p class="text-soft mb-0"><strong>@Model.Name</strong></p>
+        </div>
+        <a asp-action="Manage" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+            ← Voltar à Gestão
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-pea shadow mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">📋 Código de Partilha</h4>
+                <p class="text-soft">Partilha este código com família e amigos</p>
+                
+                <div class="alert alert-success text-center py-4">
+                    <h2 class="display-4 mb-0 font-monospace">@Model.ShareCode</h2>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <button class="btn btn-primary btn-lg" onclick="copyCode()">
+                        📋 Copiar Código
+                    </button>
+                    <button class="btn btn-outline-info" onclick="copyLink()">
+                        🔗 Copiar Link Completo
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small text-soft">Link de Acesso Direto:</label>
+                    <input type="text" class="form-control form-control-sm" value="@shareUrl" readonly id="fullLink" />
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="isPublic" @(Model.IsPublic ? "checked" : "") disabled />
+                    <label class="form-check-label" for="isPublic">
+                        Lista @(Model.IsPublic ? "Pública" : "Privada")
+                    </label>
+                </div>
+                <small class="text-soft">
+                    @if (Model.IsPublic)
+                    {
+                        <span>✅ Qualquer pessoa com o código pode ver a lista</span>
+                    }
+                    else
+                    {
+                        <span>🔒 Apenas pessoas convidadas podem ver a lista</span>
+                    }
+                </small>
+
+                <hr class="my-3" />
+
+                <form asp-action="TogglePublic" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    @if (Model.IsPublic)
+                    {
+                        <button type="submit" class="btn btn-warning w-100">
+                            🔒 Tornar Lista Privada
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success w-100">
+                            🔓 Tornar Lista Pública
+                        </button>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card card-blue shadow mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">✉️ Convidar por Email</h4>
+                <p class="text-soft">Envia um convite direto por email</p>
+
+                <form asp-action="InviteByEmail" method="post">
+                    <input type="hidden" name="wishlistId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="exemplo@email.com" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome (opcional)</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Nome da pessoa" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Mensagem Personalizada (opcional)</label>
+                        <textarea name="message" id="message" class="form-control" rows="3" placeholder="Olá! Criámos uma lista de desejos para o nosso bebé. Podes ver aqui!"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        📧 Enviar Convite
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-pink shadow">
+            <div class="card-body">
+                <h5 class="mb-3">👥 Pessoas Convidadas</h5>
+                
+                @if (!Model.Shares.Any())
+                {
+                    <p class="text-soft mb-0">Ainda não enviaste convites por email.</p>
+                }
+                else
+                {
+                    <div class="list-group">
+                        @foreach (var share in Model.Shares.OrderByDescending(s => s.SharedDate))
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>@(share.SharedWithName ?? share.SharedWithEmail)</strong>
+                                        <br /><small class="text-soft">@share.SharedWithEmail</small>
+                                        <br /><small class="text-muted">Enviado: @share.SharedDate.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <div>
+                                        @if (share.IsAccepted)
+                                        {
+                                            <span class="badge bg-success">✅ Visto</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">⏳ Pendente</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-yellow shadow mt-4">
+    <div class="card-body">
+        <h5 class="mb-3">💡 Como Partilhar a Lista</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <h6>1️⃣ Por Código</h6>
+                <p class="small">Partilha o código <strong>@Model.ShareCode</strong> com familiares. Eles podem aceder em <strong>ervilhinha.com</strong> e inserir o código.</p>
+            </div>
+            <div class="col-md-4">
+                <h6>2️⃣ Por Link</h6>
+                <p class="small">Copia o link completo e envia por WhatsApp, SMS ou redes sociais. O acesso é imediato.</p>
+            </div>
+            <div class="col-md-4">
+                <h6>3️⃣ Por Email</h6>
+                <p class="small">Usa o formulário ao lado para enviar convites personalizados diretamente por email.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyCode() {
+            const code = '@Model.ShareCode';
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Código copiado: ' + code);
+            });
+        }
+
+        function copyLink() {
+            const link = document.getElementById('fullLink').value;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('✅ Link copiado para a área de transferência!');
+            });
+        }
+    </script>
+}

@@ -1,0 +1,136 @@
+@model Ervilhinha.Models.WishlistItem
+
+@{
+    ViewData["Title"] = $"Reservar: {Model.Name}";
+    var maxQty = ViewBag.MaxQuantity as int? ?? 1;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-pea shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h1 class="display-5">🎁 Quero Oferecer!</h1>
+                    <p class="lead text-soft">Estás a reservar este item para os futuros pais</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="text-center mb-4">
+                        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 300px;" />
+                    </div>
+                }
+
+                <div class="card card-blue mb-4">
+                    <div class="card-body">
+                        <h4>@Model.Name</h4>
+                        @if (!string.IsNullOrEmpty(Model.Category))
+                        {
+                            <span class="badge bg-secondary">@Model.Category</span>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="mt-2 mb-0">@Model.Description</p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Notes))
+                        {
+                            <div class="alert alert-info mt-3 mb-0">
+                                <strong>📝 Notas dos Pais:</strong> @Model.Notes
+                            </div>
+                        }
+
+                        @if (Model.EstimatedPrice.HasValue)
+                        {
+                            <div class="mt-3">
+                                <strong>💰 Preço Estimado:</strong> @Model.EstimatedPrice.Value.ToString("C")
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.ProductUrl))
+                        {
+                            <div class="mt-3">
+                                <a href="@Model.ProductUrl" target="_blank" class="btn btn-outline-info btn-sm">
+                                    🛒 Ver Produto na Loja
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>✅ Disponível:</strong> @maxQty unidade(s) para reservar
+                </div>
+
+                <form asp-controller="WishlistPublic" asp-action="Reserve" method="post">
+                    <input type="hidden" name="itemId" value="@Model.Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <h5 class="mb-3">📝 Dados da Reserva</h5>
+
+                    <div class="mb-3">
+                        <label for="reservedByName" class="form-label">Teu Nome *</label>
+                        <input type="text" name="reservedByName" id="reservedByName" class="form-control" placeholder="Ex: Maria Silva" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="reservedByEmail" class="form-label">Teu Email *</label>
+                        <input type="email" name="reservedByEmail" id="reservedByEmail" class="form-control" placeholder="exemplo@email.com" required />
+                        <small class="text-soft">Vais receber confirmação e poderás consultar tuas reservas com este email</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantidade a Oferecer *</label>
+                        <select name="quantity" id="quantity" class="form-select" required>
+                            @for (int i = 1; i <= maxQty; i++)
+                            {
+                                <option value="@i">@i unidade@(i > 1 ? "s" : "")</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="message" class="form-label">Mensagem para os Pais (Opcional)</label>
+                        <textarea name="message" id="message" class="form-control" rows="3" placeholder="Deixa uma mensagem carinhosa..."></textarea>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Importante:</strong>
+                        <ul class="mb-0 small">
+                            <li>Ao reservar, o item ficará marcado como "reservado" na lista</li>
+                            <li>Os pais <strong>NÃO</strong> verão quem reservou (é surpresa! 🎉)</li>
+                            <li>Podes cancelar a reserva até à data de nascimento</li>
+                            <li>Receberás um email de confirmação</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            ✨ Confirmar Reserva
+                        </button>
+                        <a asp-controller="WishlistPublic" asp-action="View" asp-route-code="@ViewBag.WishlistCode" class="btn btn-outline-secondary">
+                            Voltar à Lista
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-yellow shadow mt-3">
+            <div class="card-body">
+                <h6>💡 Como Funciona</h6>
+                <ol class="mb-0 small">
+                    <li>Reservas o item com teu nome e email</li>
+                    <li>Recebes confirmação por email</li>
+                    <li>Compras o item quando quiseres</li>
+                    <li>Entregas aos pais quando o bebé nascer! 🎉</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
