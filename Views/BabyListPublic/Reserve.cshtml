@@ -1,0 +1,75 @@
+@model Ervilhinha.Models.BabyListItem
+
+@{
+    ViewData["Title"] = "Reservar Item";
+    Layout = "~/Views/Shared/_LayoutFullWidth.cshtml";
+    var shareCode = ViewBag.ShareCode as string;
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="mb-4 text-center">🎁 Reservar Item</h3>
+
+                    <div class="mb-4 text-center">
+                        <h5>@Model.Name</h5>
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="text-muted">@Model.Description</p>
+                        }
+                        <p class="text-soft">
+                            Disponível: <strong>@Model.AvailableQuantity unidades</strong>
+                        </p>
+                    </div>
+
+                    <form asp-controller="BabyListPublic" asp-action="Reserve" method="post">
+                        <input type="hidden" name="code" value="@shareCode" />
+                        <input type="hidden" name="itemId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label for="reservedByName" class="form-label">O teu nome *</label>
+                            <input type="text" name="reservedByName" id="reservedByName" class="form-control" required placeholder="Nome completo" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reservedBy" class="form-label">O teu email *</label>
+                            <input type="email" name="reservedBy" id="reservedBy" class="form-control" required placeholder="email@exemplo.com" />
+                            <small class="text-soft">Para os pais poderem entrar em contacto</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantidade *</label>
+                            <input type="number" name="quantity" id="quantity" class="form-control" min="1" max="@Model.AvailableQuantity" value="1" required />
+                            <small class="text-soft">Máximo: @Model.AvailableQuantity</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mensagem (opcional)</label>
+                            <textarea name="message" id="message" class="form-control" rows="3" placeholder="Deixa uma mensagem para os pais..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                ✅ Confirmar Reserva
+                            </button>
+                            <a asp-controller="BabyListPublic" asp-action="ViewList" asp-route-code="@shareCode" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <h6>ℹ️ Como funciona?</h6>
+                <ul class="mb-0 small">
+                    <li>A tua reserva garante que ninguém mais oferece o mesmo presente</li>
+                    <li>Os pais vão receber uma notificação da tua reserva</li>
+                    <li>Podes cancelar a reserva enviando email aos pais</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

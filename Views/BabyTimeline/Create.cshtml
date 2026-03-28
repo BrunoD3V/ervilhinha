@@ -1,0 +1,243 @@
+@model Ervilhinha.Models.BabyTimeline
+
+@{
+    ViewData["Title"] = "Adicionar Evento à Timeline";
+}
+
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Início</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Timeline</a></li>
+            <li class="breadcrumb-item active">Adicionar</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">📅 Adicionar Evento à Timeline</h1>
+    <p class="text-soft mb-0"><i class="bi bi-info-circle"></i> Regista momentos importantes da gravidez e primeiros tempos do bebé</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <form asp-action="Create" method="post" id="createTimelineForm">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header" style="background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);">
+                            <h5 class="mb-0">📝 Informações do Evento</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label asp-for="Title" class="form-label fw-semibold">
+                                        Título do Evento <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Title" class="form-control form-control-lg" 
+                                           placeholder="Ex: Consulta com Dr. Silva, Ecografia 20 semanas..." 
+                                           autofocus required maxlength="200" id="titleInput" />
+                                    <span asp-validation-for="Title" class="text-danger small"></span>
+                                    <small class="text-muted"><span id="titleCharCount">0</span> / 200 caracteres</small>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="EventDate" class="form-label fw-semibold">
+                                        Data <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="EventDate" type="date" class="form-control form-control-lg" 
+                                           value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                    <span asp-validation-for="EventDate" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Type" class="form-label fw-semibold">
+                                Tipo de Evento <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Type" asp-items="Html.GetEnumSelectList<Ervilhinha.Models.TimelineEventType>()" 
+                                    class="form-select form-select-lg" required>
+                                <option value="">-- Selecione o tipo --</option>
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Phase" class="form-label fw-semibold">
+                                Fase <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Phase" asp-items="Html.GetEnumSelectList<Ervilhinha.Models.BabyPhase>()" 
+                                    class="form-select form-select-lg" required>
+                                <option value="">-- Selecione a fase --</option>
+                            </select>
+                            <span asp-validation-for="Phase" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);">
+                            <h5 class="mb-0">🏷️ Detalhes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="Priority" class="form-label fw-semibold">Prioridade</label>
+                                    <select asp-for="Priority" asp-items="Html.GetEnumSelectList<Ervilhinha.Models.TimelinePriority>()" 
+                                            class="form-select form-select-lg">
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="PregnancyWeek" class="form-label fw-semibold">
+                                        Semana de Gravidez <span class="text-muted small">(opcional)</span>
+                                    </label>
+                                    <input asp-for="PregnancyWeek" type="number" min="0" max="42" 
+                                           class="form-control form-control-lg" placeholder="1-42" />
+                                    <span asp-validation-for="PregnancyWeek" class="text-danger small"></span>
+                                    <small class="text-muted">Se aplicável (0-42)</small>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="BabyMonthAge" class="form-label fw-semibold">
+                                        Mês de Vida <span class="text-muted small">(opcional)</span>
+                                    </label>
+                                    <input asp-for="BabyMonthAge" type="number" min="0" max="12" 
+                                           class="form-control form-control-lg" placeholder="0-12" />
+                                    <span asp-validation-for="BabyMonthAge" class="text-danger small"></span>
+                                    <small class="text-muted">Se já nasceu (0-12)</small>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    Descrição <span class="text-muted small">(opcional)</span>
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="3" 
+                                          maxlength="1000" id="descriptionInput"
+                                          placeholder="Descreve o evento, consulta ou momento especial..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                                <small class="text-muted">Máximo 1000 caracteres • <span id="descCharCount">0</span> usados</small>
+                            </div>
+                        </div>
+                    </div>
+
+                                <div class="card shadow mb-4">
+                                    <div class="card-header" style="background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);">
+                                        <h5 class="mb-0">💰 Custo e Lembretes</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3 mb-md-0">
+                                                <label asp-for="EstimatedCost" class="form-label fw-semibold">
+                                                    Custo Estimado <span class="text-muted small">(opcional)</span>
+                                                </label>
+                                                <div class="input-group input-group-lg">
+                                                    <span class="input-group-text bg-success text-white fw-bold">€</span>
+                                                    <input asp-for="EstimatedCost" type="number" class="form-control" 
+                                                           step="0.01" min="0" max="10000" placeholder="0.00" id="costInput" />
+                                                </div>
+                                                <span asp-validation-for="EstimatedCost" class="text-danger small"></span>
+                                                <small class="text-muted">Se tiver custo associado</small>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label asp-for="ReminderDaysBefore" class="form-label fw-semibold">
+                                                    Lembrar X dias antes <span class="text-muted small">(opcional)</span>
+                                                </label>
+                                                <input asp-for="ReminderDaysBefore" type="number" min="0" max="365" 
+                                                       class="form-control form-control-lg" placeholder="Ex: 7" />
+                                                <small class="text-muted">Notificação antes do evento</small>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3 mb-md-0">
+                                                <div class="form-check form-switch form-switch-lg">
+                                                    <input asp-for="HasReminder" class="form-check-input" 
+                                                           type="checkbox" role="switch" id="reminderToggle" />
+                                                    <label class="form-check-label fw-semibold" for="reminderToggle">
+                                                        <span class="fs-5">🔔</span> Ativar Lembrete
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted d-block ms-5">Receber notificação</small>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-check form-switch form-switch-lg">
+                                                    <input asp-for="IsCompleted" class="form-check-input" 
+                                                           type="checkbox" role="switch" id="completedToggle" />
+                                                    <label class="form-check-label fw-semibold" for="completedToggle">
+                                                        <span class="fs-5">✅</span> Marcar como Concluído
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted d-block ms-5">Evento já aconteceu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2 justify-content-between">
+                                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                                        <i class="bi bi-x-circle"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                                        <i class="bi bi-check-circle-fill"></i> Guardar Evento
+                                    </button>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <small class="text-muted"><i class="bi bi-info-circle"></i> O evento aparecerá na tua timeline</small>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        const titleInput = document.getElementById('titleInput');
+        const titleCount = document.getElementById('titleCharCount');
+        const descInput = document.getElementById('descriptionInput');
+        const descCount = document.getElementById('descCharCount');
+        const costInput = document.getElementById('costInput');
+
+        titleInput.addEventListener('input', () => titleCount.textContent = titleInput.value.length);
+
+        descInput.addEventListener('input', function() {
+            descCount.textContent = this.value.length;
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        costInput.addEventListener('blur', function() {
+            if (this.value) this.value = parseFloat(this.value).toFixed(2);
+        });
+
+        const form = document.getElementById('createTimelineForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        cancelBtn.addEventListener('click', function(e) {
+            if (titleInput.value.trim() !== '' && !confirm('Tens dados não guardados. Tens a certeza?')) {
+                e.preventDefault();
+            }
+        });
+
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A guardar...';
+            }
+        });
+    </script>
+
+    <style>
+        .form-switch-lg .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+    </style>
+}

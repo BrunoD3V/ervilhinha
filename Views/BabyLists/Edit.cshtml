@@ -1,0 +1,237 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    ViewData["Title"] = "Editar Lista";
+}
+
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Minhas Listas</a></li>
+            <li class="breadcrumb-item"><a asp-action="Manage" asp-route-id="@Model.Id">@Model.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Editar</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">✏️ Editar Lista do Bebé</h1>
+    <p class="text-soft mb-0">
+        <i class="bi bi-info-circle"></i> Atualiza as informações da lista <strong>@Model.Name</strong>
+    </p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <form asp-action="Edit" method="post" id="editListForm">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="IsShared" />
+            <input type="hidden" asp-for="ShareCode" />
+            <input type="hidden" asp-for="IsPublic" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <!-- ========== GRUPO 1: Informações Básicas ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pea">
+                    <h5 class="mb-0">📝 Informações Básicas</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Nome da Lista -->
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold">
+                            Nome da Lista <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg" 
+                               placeholder="Ex: Enxoval da Maria, Lista de Presentes para o João..." 
+                               autofocus required maxlength="100" id="nameInput" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            <span id="nameCharCount">@(Model.Name?.Length ?? 0)</span> / 100 caracteres
+                        </small>
+                    </div>
+
+                    <!-- Tipo de Lista -->
+                    <div class="mb-4">
+                        <label asp-for="Type" class="form-label fw-semibold">
+                            Tipo de Lista <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="Type" class="form-select form-select-lg" required disabled>
+                            <option value="1">🛒 Enxoval (Planeamento Pessoal)</option>
+                            <option value="2">🎁 Lista de Presentes (Partilhável)</option>
+                            <option value="3">📋 Lista Geral</option>
+                        </select>
+                        <input type="hidden" asp-for="Type" />
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-lock-fill"></i> O tipo de lista não pode ser alterado após criação
+                        </small>
+                    </div>
+
+                    <!-- Descrição -->
+                    <div class="mb-0">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Descrição <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="3" 
+                                  maxlength="500" id="descriptionInput"
+                                  placeholder="Ex: Lista de items essenciais para os primeiros meses do bebé..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            Máximo 500 caracteres • <span id="descCharCount">@(Model.Description?.Length ?? 0)</span> usados
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 2: Informações do Bebé ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pink">
+                    <h5 class="mb-0">👶 Informações do Bebé</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Nome do Bebé -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="BabyName" class="form-label fw-semibold">
+                                Nome do Bebé <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input asp-for="BabyName" class="form-control" 
+                                   maxlength="100"
+                                   placeholder="Ex: Maria, João..." />
+                            <span asp-validation-for="BabyName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Data Prevista -->
+                        <div class="col-md-6">
+                            <label asp-for="ExpectedDate" class="form-label fw-semibold">
+                                Data Prevista <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input asp-for="ExpectedDate" type="date" class="form-control" 
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="ExpectedDate" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Data prevista de nascimento</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== INFO: Status de Partilha ========== -->
+            @if (Model.IsShared)
+            {
+                <div class="card shadow mb-4 border-info">
+                    <div class="card-header bg-info bg-opacity-10">
+                        <h5 class="mb-0 text-info">
+                            <i class="bi bi-info-circle-fill"></i> Lista Partilhada
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info mb-0">
+                            <strong>Esta lista está a ser partilhada!</strong>
+                            <p class="mb-2 mt-2">
+                                <strong>Código:</strong> <code class="fs-5">@Model.ShareCode</code><br>
+                                <strong>Visibilidade:</strong> 
+                                @if (Model.IsPublic)
+                                {
+                                    <span class="badge bg-success">🔓 Pública</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">🔒 Privada</span>
+                                }
+                            </p>
+                            <a asp-action="Share" asp-route-id="@Model.Id" class="btn btn-sm btn-info">
+                                <i class="bi bi-share-fill"></i> Gerir Partilha
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- ========== BOTÕES DE AÇÃO ========== -->
+            <div class="d-flex gap-2 justify-content-between align-items-center">
+                <a asp-action="Manage" asp-route-id="@Model.Id" 
+                   class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Alterações
+                </button>
+            </div>
+
+            <!-- Helper Text -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i> As alterações serão aplicadas imediatamente
+                </small>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Character counters
+        const nameInput = document.getElementById('nameInput');
+        const nameCount = document.getElementById('nameCharCount');
+        const descInput = document.getElementById('descriptionInput');
+        const descCount = document.getElementById('descCharCount');
+
+        nameInput.addEventListener('input', function() {
+            nameCount.textContent = this.value.length;
+        });
+
+        descInput.addEventListener('input', function() {
+            descCount.textContent = this.value.length;
+        });
+
+        // Auto-resize textarea
+        descInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // Confirm cancel if form was modified
+        const form = document.getElementById('editListForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const originalData = new FormData(form);
+
+        cancelBtn.addEventListener('click', function(e) {
+            const currentData = new FormData(form);
+            let isModified = false;
+
+            for (let [key, value] of currentData.entries()) {
+                if (originalData.get(key) !== value) {
+                    isModified = true;
+                    break;
+                }
+            }
+
+            if (isModified) {
+                if (!confirm('Tens alterações não guardadas. Tens a certeza que queres cancelar?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Submit button loading state
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A guardar...';
+            }
+        });
+    </script>
+
+    <style>
+        .bg-gradient-pea {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+        }
+
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+        }
+    </style>
+}
+

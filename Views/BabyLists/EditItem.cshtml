@@ -1,0 +1,397 @@
+@model Ervilhinha.Models.BabyListItem
+
+@{
+    ViewData["Title"] = "Editar Item";
+}
+
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Minhas Listas</a></li>
+            <li class="breadcrumb-item"><a asp-action="Manage" asp-route-id="@Model.BabyListId">@ViewBag.ListName</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Item</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">✏️ Editar Item</h1>
+    <p class="text-soft mb-0">
+        <i class="bi bi-info-circle"></i> Atualiza as informações do item <strong>@Model.Name</strong>
+    </p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <form asp-action="EditItem" method="post" id="editItemForm">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="BabyListId" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="ReservedQuantity" />
+            <input type="hidden" asp-for="AcquiredQuantity" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <!-- ========== GRUPO 1: Informação Básica ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pea">
+                    <h5 class="mb-0">📝 Informação Básica</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Nome do Item -->
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold">
+                            Nome do Item <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg" 
+                               placeholder="Ex: Berço de madeira, Pack 5 bodies brancos 0-3M..." 
+                               autofocus required maxlength="200" id="itemNameInput" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            <span id="nameCharCount">@(Model.Name?.Length ?? 0)</span> / 200 caracteres
+                        </small>
+                    </div>
+
+                    <!-- Descrição -->
+                    <div class="mb-0">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Descrição <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="3" 
+                                  maxlength="1000" id="descriptionInput"
+                                  placeholder="Detalhes adicionais como cor, tamanho, marca preferida..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            Máximo 1000 caracteres • <span id="descCharCount">@(Model.Description?.Length ?? 0)</span> usados
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 2: Categorização ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-blue">
+                    <h5 class="mb-0">🏷️ Categorização</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Categoria -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Category" class="form-label fw-semibold">
+                                Categoria <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Category" class="form-select form-select-lg" required>
+                                <optgroup label="Essenciais">
+                                    <option value="1">🛏️ Quarto do Bebé</option>
+                                    <option value="6">🍼 Alimentação</option>
+                                    <option value="5">🛁 Higiene e Banho</option>
+                                    <option value="7">🚗 Passeio (Carrinho, Cadeira Auto)</option>
+                                    <option value="9">🏥 Saúde e Segurança</option>
+                                </optgroup>
+                                <optgroup label="Roupa por Idade">
+                                    <option value="2">👶 Roupa 0-3 Meses</option>
+                                    <option value="3">👕 Roupa 3-6 Meses</option>
+                                    <option value="4">👔 Roupa 6-12 Meses</option>
+                                </optgroup>
+                                <optgroup label="Outros">
+                                    <option value="8">🧸 Brinquedos</option>
+                                    <option value="10">✨ Acessórios</option>
+                                    <option value="11">📦 Outros</option>
+                                </optgroup>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Prioridade -->
+                        <div class="col-md-6">
+                            <label asp-for="Priority" class="form-label fw-semibold">
+                                Prioridade <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Priority" class="form-select form-select-lg" required>
+                                <option value="1">✅ Essencial (Comprar prioritariamente)</option>
+                                <option value="2">⭐ Recomendado (Muito útil)</option>
+                                <option value="3">💡 Opcional (Se houver orçamento)</option>
+                            </select>
+                            <span asp-validation-for="Priority" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 3: Planeamento Financeiro ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-yellow">
+                    <h5 class="mb-0">💰 Planeamento Financeiro</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Quantidade -->
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Quantity" class="form-label fw-semibold">
+                                Quantidade <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Quantity" type="number" class="form-control form-control-lg" 
+                                   min="1" max="100" required id="quantityInput" />
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Min: 1 | Máx: 100</small>
+                        </div>
+
+                        <!-- Custo Estimado -->
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="EstimatedCost" class="form-label fw-semibold">
+                                Custo Estimado <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-success text-white fw-bold">€</span>
+                                <input asp-for="EstimatedCost" type="number" class="form-control" 
+                                       step="0.01" min="0" max="10000" required id="estimatedCostInput" />
+                            </div>
+                            <span asp-validation-for="EstimatedCost" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Custo Real -->
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="ActualCost" class="form-label fw-semibold">
+                                Custo Real <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-primary text-white fw-bold">€</span>
+                                <input asp-for="ActualCost" type="number" class="form-control" 
+                                       step="0.01" min="0" max="10000" placeholder="0.00" id="actualCostInput" />
+                            </div>
+                            <small class="text-muted d-block mt-1">Preencher após compra</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Quando Comprar -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="RecommendedTiming" class="form-label fw-semibold">
+                                Quando Comprar <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <select asp-for="RecommendedTiming" class="form-select form-select-lg">
+                                <option value="">-- Quando necessário --</option>
+                                <option value="1">📅 Gravidez (até 6 meses)</option>
+                                <option value="2">📅 7º Mês de Gravidez</option>
+                                <option value="3">📅 8º Mês de Gravidez</option>
+                                <option value="4">📅 Antes do Nascimento</option>
+                                <option value="5">👶 Logo Após Nascimento</option>
+                                <option value="6">👶 Com 3 Meses do Bebé</option>
+                                <option value="7">👶 Com 6 Meses do Bebé</option>
+                                <option value="8">👶 Com 9 Meses do Bebé</option>
+                                <option value="9">⏰ Quando Necessário</option>
+                            </select>
+                        </div>
+
+                        <!-- Data da Compra -->
+                        <div class="col-md-6">
+                            <label asp-for="PurchaseDate" class="form-label fw-semibold">
+                                Data da Compra <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input asp-for="PurchaseDate" type="date" class="form-control form-control-lg" 
+                                   max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="PurchaseDate" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Data em que foi comprado</small>
+                        </div>
+                    </div>
+
+                    <!-- Comparação de Custos -->
+                    @if (Model.ActualCost.HasValue && Model.EstimatedCost > 0)
+                    {
+                        var diff = Model.ActualCost.Value - Model.EstimatedCost;
+                        var diffClass = diff > 0 ? "danger" : (diff < 0 ? "success" : "secondary");
+                        var diffIcon = diff > 0 ? "arrow-up" : (diff < 0 ? "arrow-down" : "dash");
+
+                        <div class="alert alert-@diffClass mt-3 mb-0" role="alert">
+                            <strong><i class="bi bi-@diffIcon-circle-fill"></i> Comparação de Custos:</strong><br>
+                            <span class="fs-5">
+                                Estimado: €@Model.EstimatedCost.ToString("F2") | 
+                                Real: €@Model.ActualCost.Value.ToString("F2") | 
+                                Diferença: €@Math.Abs(diff).ToString("F2") 
+                                @(diff > 0 ? "a mais" : diff < 0 ? "poupado" : "")
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 4: Status de Compra ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pink">
+                    <h5 class="mb-0">✅ Status de Compra</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input asp-for="IsPurchased" class="form-check-input" 
+                                       type="checkbox" role="switch" id="isPurchasedToggle" />
+                                <label class="form-check-label fw-semibold" for="isPurchasedToggle">
+                                    <span class="fs-5">✅</span> Item Já Comprado
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-5">Marca quando tiveres adquirido o item</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input asp-for="IsGift" class="form-check-input" 
+                                       type="checkbox" role="switch" id="isGiftToggle" />
+                                <label class="form-check-label fw-semibold" for="isGiftToggle">
+                                    <span class="fs-5">🎁</span> Foi Presente/Oferta
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-5">Item recebido como presente</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 5: Informações Adicionais ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%);">
+                    <h5 class="mb-0">➕ Informações Adicionais</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Link do Produto -->
+                    <div class="mb-3">
+                        <label asp-for="ProductUrl" class="form-label fw-semibold">
+                            Link do Produto <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white">
+                                <i class="bi bi-link-45deg"></i>
+                            </span>
+                            <input asp-for="ProductUrl" type="url" class="form-control" 
+                                   placeholder="https://www.loja.com/produto" maxlength="500" />
+                        </div>
+                        <span asp-validation-for="ProductUrl" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Notas -->
+                    <div class="mb-0">
+                        <label asp-for="Notes" class="form-label fw-semibold">
+                            Notas <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <textarea asp-for="Notes" class="form-control" rows="2" 
+                                  maxlength="1000" id="notesInput"
+                                  placeholder="Observações, preferências, alternativas..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                        <small class="text-muted">Máximo 1000 caracteres</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== BOTÕES DE AÇÃO ========== -->
+            <div class="d-flex gap-2 justify-content-between align-items-center">
+                <a asp-action="Manage" asp-route-id="@Model.BabyListId" 
+                   class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Alterações
+                </button>
+            </div>
+
+            <!-- Helper Text -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i> As alterações serão aplicadas imediatamente
+                </small>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Character counters
+        const nameInput = document.getElementById('itemNameInput');
+        const nameCount = document.getElementById('nameCharCount');
+        const descInput = document.getElementById('descriptionInput');
+        const descCount = document.getElementById('descCharCount');
+
+        nameInput.addEventListener('input', function() {
+            nameCount.textContent = this.value.length;
+        });
+
+        descInput.addEventListener('input', function() {
+            descCount.textContent = this.value.length;
+        });
+
+        // Auto-resize textareas
+        [descInput, document.getElementById('notesInput')].forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+        // Format cost inputs
+        const estimatedCostInput = document.getElementById('estimatedCostInput');
+        const actualCostInput = document.getElementById('actualCostInput');
+
+        [estimatedCostInput, actualCostInput].forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value) {
+                    this.value = parseFloat(this.value).toFixed(2);
+                }
+            });
+        });
+
+        // Confirm cancel if modified
+        const form = document.getElementById('editItemForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const originalData = new FormData(form);
+
+        cancelBtn.addEventListener('click', function(e) {
+            const currentData = new FormData(form);
+            let isModified = false;
+
+            for (let [key, value] of currentData.entries()) {
+                if (originalData.get(key) !== value) {
+                    isModified = true;
+                    break;
+                }
+            }
+
+            if (isModified) {
+                if (!confirm('Tens alterações não guardadas. Tens a certeza que queres cancelar?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Submit loading state
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A guardar...';
+            }
+        });
+    </script>
+
+    <style>
+        .bg-gradient-pea {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+        }
+
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+        }
+
+        .bg-gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+        }
+
+        .bg-gradient-yellow {
+            background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);
+        }
+
+        .form-switch-lg .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+    </style>
+}
+

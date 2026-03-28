@@ -2,60 +2,117 @@
 
 @{
     ViewData["Title"] = "Editar Despesa";
+    var originalAmount = Model.Amount;
 }
 
-<h1>✏️ Editar Despesa</h1>
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Início</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Despesas</a></li>
+            <li class="breadcrumb-item active">Editar</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">✏️ Editar Despesa</h1>
+    <p class="text-soft mb-0"><i class="bi bi-info-circle"></i> Atualiza as informações da despesa</p>
+</div>
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit" method="post">
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <form asp-action="Edit" method="post" id="editExpenseForm">
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedDate" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label">Descrição</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Amount" class="form-label">Montante (€)</label>
-                    <input asp-for="Amount" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);">
+                    <h5 class="mb-0">📋 Informações Principais</h5>
                 </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Descrição <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Description" class="form-control form-control-lg" 
+                               placeholder="Ex: Compras do supermercado..." 
+                               autofocus required maxlength="200" id="descriptionInput" />
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                        <small class="text-muted"><span id="descCharCount">@(Model.Description?.Length ?? 0)</span> / 200 caracteres</small>
+                    </div>
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Date" class="form-label">Data</label>
-                    <input asp-for="Date" class="form-control" type="date" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Amount" class="form-label fw-semibold">
+                                Montante <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-danger text-white fw-bold">€</span>
+                                <input asp-for="Amount" type="number" class="form-control" 
+                                       step="0.01" min="0" max="1000000" required id="amountInput" />
+                            </div>
+                            <span asp-validation-for="Amount" class="text-danger small"></span>
+                            <small class="text-muted" id="amountChange"></small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Date" class="form-label fw-semibold">
+                                Data <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Date" type="date" class="form-control form-control-lg" 
+                                   max="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            <span asp-validation-for="Date" class="text-danger small"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="ExpenseCategoryId" class="form-label">Categoria</label>
-                <select asp-for="ExpenseCategoryId" class="form-select">
-                    <option value="">-- Seleciona uma Categoria --</option>
-                    @foreach (var cat in ViewBag.Categories)
-                    {
-                        <option value="@cat.Id">@cat.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="ExpenseCategoryId" class="text-danger"></span>
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);">
+                    <h5 class="mb-0">🏷️ Categorização</h5>
+                </div>
+                <div class="card-body">
+                    <label asp-for="ExpenseCategoryId" class="form-label fw-semibold">
+                        Categoria <span class="text-danger">*</span>
+                    </label>
+                    <select asp-for="ExpenseCategoryId" class="form-select form-select-lg" required>
+                        <option value="">-- Seleciona uma Categoria --</option>
+                        @foreach (var cat in ViewBag.Categories)
+                        {
+                            <option value="@cat.Id">@cat.Icon @cat.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ExpenseCategoryId" class="text-danger small"></span>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Notes" class="form-label">Notas</label>
-                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);">
+                    <h5 class="mb-0">📝 Notas Adicionais</h5>
+                </div>
+                <div class="card-body">
+                    <label asp-for="Notes" class="form-label fw-semibold">
+                        Notas <span class="text-muted small">(opcional)</span>
+                    </label>
+                    <textarea asp-for="Notes" class="form-control" rows="3" 
+                              maxlength="500" id="notesInput"
+                              placeholder="Observações adicionais..."></textarea>
+                    <span asp-validation-for="Notes" class="text-danger small"></span>
+                    <small class="text-muted">Máximo 500 caracteres • <span id="notesCharCount">@(Model.Notes?.Length ?? 0)</span> usados</small>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Guardar Alterações</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <div class="d-flex gap-2 justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Alterações
+                </button>
+            </div>
+
+            <div class="text-center mt-3">
+                <small class="text-muted"><i class="bi bi-shield-check"></i> As alterações serão aplicadas imediatamente</small>
             </div>
         </form>
     </div>
@@ -63,4 +120,65 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        const originalAmount = @originalAmount;
+        const descInput = document.getElementById('descriptionInput');
+        const descCount = document.getElementById('descCharCount');
+        const notesInput = document.getElementById('notesInput');
+        const notesCount = document.getElementById('notesCharCount');
+        const amountInput = document.getElementById('amountInput');
+        const amountChange = document.getElementById('amountChange');
+
+        descInput.addEventListener('input', () => descCount.textContent = descInput.value.length);
+        notesInput.addEventListener('input', () => {
+            notesCount.textContent = notesInput.value.length;
+            notesInput.style.height = 'auto';
+            notesInput.style.height = notesInput.scrollHeight + 'px';
+        });
+
+        amountInput.addEventListener('input', function() {
+            const newAmount = parseFloat(this.value) || 0;
+            const diff = newAmount - originalAmount;
+            if (diff !== 0) {
+                const color = diff > 0 ? 'danger' : 'success';
+                const symbol = diff > 0 ? '+' : '';
+                amountChange.innerHTML = `<span class="text-${color}">${symbol}€${diff.toFixed(2)} vs original</span>`;
+            } else {
+                amountChange.innerHTML = '';
+            }
+        });
+
+        amountInput.addEventListener('blur', function() {
+            if (this.value) this.value = parseFloat(this.value).toFixed(2);
+        });
+
+        const form = document.getElementById('editExpenseForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const originalData = new FormData(form);
+
+        cancelBtn.addEventListener('click', function(e) {
+            const currentData = new FormData(form);
+            let isModified = false;
+
+            for (let [key, value] of currentData.entries()) {
+                if (originalData.get(key) !== value) {
+                    isModified = true;
+                    break;
+                }
+            }
+
+            if (isModified && !confirm('Tens alterações não guardadas. Tens a certeza que queres cancelar?')) {
+                e.preventDefault();
+            }
+        });
+
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A guardar...';
+            }
+        });
+    </script>
 }

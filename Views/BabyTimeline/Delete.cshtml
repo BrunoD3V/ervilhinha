@@ -1,0 +1,72 @@
+@model Ervilhinha.Models.BabyTimeline
+
+@{
+    ViewData["Title"] = "Eliminar Evento";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-danger">
+                <h3 class="mb-0">🗑️ Eliminar Evento</h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning" role="alert">
+                    <strong>⚠️ Atenção!</strong> Tens a certeza que queres eliminar este evento? Esta ação não pode ser revertida.
+                </div>
+
+                <div class="card card-peach mb-4">
+                    <div class="card-body">
+                        <h4 class="mb-3">@Model.Title</h4>
+                        
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Tipo</dt>
+                            <dd class="col-sm-8">@Model.Type</dd>
+
+                            <dt class="col-sm-4">Fase</dt>
+                            <dd class="col-sm-8">@Model.Phase</dd>
+
+                            @if (Model.EventDate.HasValue)
+                            {
+                                <dt class="col-sm-4">Data</dt>
+                                <dd class="col-sm-8">📅 @Model.EventDate.Value.ToString("dd/MM/yyyy")</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                <dt class="col-sm-4">Descrição</dt>
+                                <dd class="col-sm-8">@Model.Description</dd>
+                            }
+
+                            @if (Model.EstimatedCost.HasValue)
+                            {
+                                <dt class="col-sm-4">Custo Estimado</dt>
+                                <dd class="col-sm-8">@Model.EstimatedCost.Value.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</dd>
+                            }
+
+                            <dt class="col-sm-4">Estado</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.IsCompleted)
+                                {
+                                    <span class="badge bg-success">✅ Concluído</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">⏰ Pendente</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">🗑️ Sim, Eliminar Evento</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+@model IEnumerable<Ervilhinha.Models.BabyList>
+
+@{
+    ViewData["Title"] = "Listas do Bebé";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">📋 Listas do Bebé</h1>
+        <p class="text-soft mb-0">Enxoval, lista de presentes e muito mais</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">➕ Nova Lista</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <div class="card card-pea">
+            <div class="card-body text-center">
+                <h6 class="text-soft">Total de Listas</h6>
+                <h3 class="mb-0">@ViewBag.TotalLists</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-blue">
+            <div class="card-body text-center">
+                <h6 class="text-soft">🔓 Partilhadas</h6>
+                <h3 class="mb-0">@ViewBag.SharedLists</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-yellow">
+            <div class="card-body text-center">
+                <h6 class="text-soft">🔒 Privadas</h6>
+                <h3 class="mb-0">@ViewBag.PrivateLists</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var list in Model)
+        {
+            var totalItems = list.Items.Count;
+            var purchasedItems = list.Items.Count(i => i.IsPurchased);
+            var reservedItems = list.Items.Sum(i => i.ReservedQuantity);
+            var progressPercent = totalItems > 0 ? (int)((purchasedItems / (double)totalItems) * 100) : 0;
+            var totalCost = list.Items.Sum(i => i.EstimatedCost * i.Quantity);
+
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">
+                                    @if (list.Type == Ervilhinha.Models.ListType.Enxoval)
+                                    {
+                                        <span>🛒</span>
+                                    }
+                                    else if (list.Type == Ervilhinha.Models.ListType.Presentes)
+                                    {
+                                        <span>🎁</span>
+                                    }
+                                    else
+                                    {
+                                        <span>📋</span>
+                                    }
+                                    @list.Name
+                                </h5>
+                                @if (!string.IsNullOrEmpty(list.BabyName))
+                                {
+                                    <p class="text-soft mb-0 small">👶 @list.BabyName</p>
+                                }
+                            </div>
+                            <div>
+                                @if (list.IsShared)
+                                {
+                                    @if (list.IsPublic)
+                                    {
+                                        <span class="badge bg-success">🔓 Pública</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">🔗 Partilhada</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">🔒 Privada</span>
+                                }
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(list.Description))
+                        {
+                            <p class="text-muted small mb-3">@list.Description</p>
+                        }
+
+                        @if (list.ExpectedDate.HasValue)
+                        {
+                            <p class="text-soft small mb-2">
+                                📅 Data Prevista: <strong>@list.ExpectedDate.Value.ToString("dd/MM/yyyy")</strong>
+                            </p>
+                        }
+
+                        <hr>
+
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <div class="text-soft small">Items</div>
+                                <div class="h6 mb-0">@totalItems</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-soft small">Comprados</div>
+                                <div class="h6 mb-0 text-success">@purchasedItems</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-soft small">Total</div>
+                                <div class="h6 mb-0">@totalCost.ToString("C0", new System.Globalization.CultureInfo("pt-PT"))</div>
+                            </div>
+                        </div>
+
+                        @if (totalItems > 0)
+                        {
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="small text-soft">Progresso</span>
+                                    <strong class="small">@progressPercent%</strong>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: @progressPercent%"></div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (list.IsShared && !string.IsNullOrEmpty(list.ShareCode))
+                        {
+                            <div class="alert alert-info py-2 px-3 mb-3">
+                                <small>
+                                    <strong>Código de Partilha:</strong> 
+                                    <span class="font-monospace">@list.ShareCode</span>
+                                </small>
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2">
+                            <a asp-action="Manage" asp-route-id="@list.Id" class="btn btn-primary btn-sm">
+                                Ver e Gerir Lista
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-soft small">
+                        Criada em @list.CreatedDate.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">📋</span>
+            </div>
+            <h4 class="mb-3">Ainda não tens listas criadas</h4>
+            <p class="text-soft mb-4">
+                Cria a tua primeira lista para começar a organizar o enxoval do bebé<br>
+                ou partilhar uma lista de presentes com família e amigos!
+            </p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Criar Primeira Lista</a>
+        </div>
+    </div>
+}

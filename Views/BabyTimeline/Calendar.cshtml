@@ -1,0 +1,67 @@
+@model IEnumerable<Ervilhinha.Models.BabyTimeline>
+
+@{
+    ViewData["Title"] = "Calendário de Eventos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">📅 Calendário de Eventos</h1>
+        <p class="text-soft mb-0">Vista cronológica dos próximos eventos</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">📋 Vista Lista</a>
+        <a asp-action="Create" class="btn btn-primary ms-2">➕ Novo Evento</a>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Evento</th>
+                            <th>Tipo</th>
+                            <th>Fase</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(e => e.EventDate.HasValue).OrderBy(e => e.EventDate))
+                        {
+                            <tr>
+                                <td>@item.EventDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td><strong>@item.Title</strong></td>
+                                <td><span class="badge bg-primary">@item.Type</span></td>
+                                <td><span class="badge bg-info">@item.Phase</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">✏️</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">🗑️</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">📅</span>
+            </div>
+            <h4 class="mb-3">Nenhum evento com data definida</h4>
+            <p class="text-soft mb-4">Adiciona eventos com datas para veres aqui no calendário</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Adicionar Evento</a>
+        </div>
+    </div>
+}

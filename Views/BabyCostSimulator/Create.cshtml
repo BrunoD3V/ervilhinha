@@ -1,0 +1,339 @@
+@model Ervilhinha.Models.BabyCostSimulator
+
+@{
+    ViewData["Title"] = "Criar Simulação de Custos";
+}
+
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Início</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Simulações</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Nova Simulação</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">💰 Simulador de Custos do Bebé</h1>
+    <p class="text-soft mb-0">
+        <i class="bi bi-info-circle"></i> Preenche os teus dados para estimarmos os custos do primeiro ano
+    </p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+        <form asp-action="Create" method="post" id="simulatorForm">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <!-- ========== GRUPO 1: Informações Financeiras ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);">
+                    <h5 class="mb-0">💵 Informações Financeiras</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Rendimento Mensal -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="MonthlyIncome" class="form-label fw-semibold">
+                                Rendimento Mensal <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-success text-white fw-bold">€</span>
+                                <input asp-for="MonthlyIncome" type="number" class="form-control" 
+                                       step="0.01" min="0" max="100000" placeholder="2000.00" 
+                                       required id="incomeInput" />
+                            </div>
+                            <span asp-validation-for="MonthlyIncome" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Rendimento líquido mensal da família</small>
+                        </div>
+
+                        <!-- Estilo de Vida -->
+                        <div class="col-md-6">
+                            <label asp-for="Lifestyle" class="form-label fw-semibold">
+                                Estilo de Vida <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Lifestyle" class="form-select form-select-lg" required id="lifestyleSelect">
+                                <option value="1">💸 Económico - Apenas o essencial</option>
+                                <option value="2" selected>⚖️ Moderado - Equilíbrio qualidade/preço</option>
+                                <option value="3">✨ Confortável - Produtos de qualidade</option>
+                                <option value="4">👑 Premium - O melhor para o bebé</option>
+                            </select>
+                            <span asp-validation-for="Lifestyle" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Impacta no custo estimado dos produtos</small>
+                        </div>
+                    </div>
+
+                    <!-- Custo Estimado Mensal -->
+                    <div class="alert alert-info mt-3 mb-0" role="alert">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span><strong>💡 Custo Estimado Mensal:</strong></span>
+                            <span class="fs-4 fw-bold text-primary">€ <span id="estimatedMonthlyCost">---</span></span>
+                        </div>
+                        <small class="text-muted">Baseado no rendimento e estilo de vida (10-20% do rendimento)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 2: Informações da Gravidez ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);">
+                    <h5 class="mb-0">🤰 Informações da Gravidez</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Semanas de Gravidez -->
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="PregnancyWeeks" class="form-label fw-semibold">
+                                Semanas de Gravidez
+                            </label>
+                            <input asp-for="PregnancyWeeks" type="number" class="form-control form-control-lg" 
+                                   min="0" max="42" placeholder="0" id="weeksInput" />
+                            <span asp-validation-for="PregnancyWeeks" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">0-42 semanas</small>
+                        </div>
+
+                        <!-- Data Prevista -->
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="ExpectedDueDate" class="form-label fw-semibold">
+                                Data Prevista
+                            </label>
+                            <input asp-for="ExpectedDueDate" type="date" class="form-control form-control-lg" 
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" id="dueDateInput" />
+                            <span asp-validation-for="ExpectedDueDate" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Data prevista de parto</small>
+                        </div>
+
+                        <!-- Tipo de Parto -->
+                        <div class="col-md-4">
+                            <label asp-for="ExpectedBirthType" class="form-label fw-semibold">
+                                Tipo de Parto
+                            </label>
+                            <select asp-for="ExpectedBirthType" class="form-select form-select-lg">
+                                <option value="1">🏥 Parto Normal - SNS</option>
+                                <option value="2">🏥 Cesariana - SNS</option>
+                                <option value="3">🏨 Parto Normal - Privado</option>
+                                <option value="4">🏨 Cesariana - Privado</option>
+                            </select>
+                            <span asp-validation-for="ExpectedBirthType" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Impacta no custo inicial</small>
+                        </div>
+                    </div>
+
+                    <!-- Tempo Restante -->
+                    <div class="alert alert-warning mt-3 mb-0" role="alert" id="timeRemainingAlert" style="display:none;">
+                        <strong><i class="bi bi-calendar-event"></i> Tempo Restante:</strong>
+                        <span id="timeRemainingText"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 3: Preferências e Situação ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);">
+                    <h5 class="mb-0">✅ Preferências e Apoios</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Amamentação -->
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input asp-for="WillBreastfeed" class="form-check-input" 
+                                       type="checkbox" role="switch" id="breastfeedToggle" checked />
+                                <label class="form-check-label fw-semibold" for="breastfeedToggle">
+                                    <span class="fs-5">🤱</span> Amamentação
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-5">
+                                Reduz custos com leite em <strong>~€100/mês</strong>
+                            </small>
+                        </div>
+
+                        <!-- Items Doados -->
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input asp-for="HasDonatedItems" class="form-check-input" 
+                                       type="checkbox" role="switch" id="donatedToggle" />
+                                <label class="form-check-label fw-semibold" for="donatedToggle">
+                                    <span class="fs-5">♻️</span> Items Doados
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-5">
+                                Reduz custos em <strong>20-30%</strong>
+                            </small>
+                        </div>
+
+                        <!-- Apoio do Governo -->
+                        <div class="col-md-4">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input asp-for="HasGovernmentSupport" class="form-check-input" 
+                                       type="checkbox" role="switch" id="supportToggle" checked />
+                                <label class="form-check-label fw-semibold" for="supportToggle">
+                                    <span class="fs-5">🏛️</span> Apoio do Governo
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-5">
+                                Abono de família <strong>~€150/mês</strong>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Estimativa de Poupança -->
+                    <div class="alert alert-success mt-3 mb-0" role="alert" id="savingsAlert" style="display:none;">
+                        <strong><i class="bi bi-piggy-bank-fill"></i> Poupança Estimada:</strong>
+                        <span id="savingsText" class="fs-5"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== BOTÕES DE AÇÃO ========== -->
+            <div class="d-flex gap-2 justify-content-center">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-calculator-fill"></i> Calcular Custos
+                </button>
+            </div>
+
+            <!-- Helper Text -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> A simulação é uma estimativa baseada em médias portuguesas
+                </small>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sidebar de Informação -->
+    <div class="col-lg-3 col-xl-3 mt-4 mt-lg-0">
+        <div class="card shadow sticky-top" style="top: 1rem;">
+            <div class="card-header bg-info bg-opacity-10">
+                <h6 class="mb-0 text-info">
+                    <i class="bi bi-lightbulb-fill"></i> Sabia que?
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="small mb-0">
+                    <li class="mb-2">
+                        O custo médio do 1º ano de um bebé em Portugal varia entre <strong>€5.000 - €15.000</strong>
+                    </li>
+                    <li class="mb-2">
+                        Amamentar pode poupar até <strong>€1.200/ano</strong> em leite artificial
+                    </li>
+                    <li class="mb-2">
+                        Items de segunda mão reduzem custos em <strong>20-40%</strong>
+                    </li>
+                    <li>
+                        O abono de família pode chegar a <strong>€150/mês</strong> dependendo do rendimento
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // Calculate estimated monthly cost
+        const incomeInput = document.getElementById('incomeInput');
+        const lifestyleSelect = document.getElementById('lifestyleSelect');
+        const estimatedCostSpan = document.getElementById('estimatedMonthlyCost');
+
+        function updateEstimatedCost() {
+            const income = parseFloat(incomeInput.value) || 0;
+            const lifestyle = parseInt(lifestyleSelect.value) || 2;
+
+            // Percentages based on lifestyle
+            const percentages = { 1: 0.10, 2: 0.15, 3: 0.20, 4: 0.25 };
+            const percentage = percentages[lifestyle];
+
+            const estimatedCost = income * percentage;
+            estimatedCostSpan.textContent = estimatedCost.toFixed(2);
+        }
+
+        incomeInput.addEventListener('input', updateEstimatedCost);
+        lifestyleSelect.addEventListener('change', updateEstimatedCost);
+
+        // Calculate time remaining
+        const dueDateInput = document.getElementById('dueDateInput');
+        const timeRemainingAlert = document.getElementById('timeRemainingAlert');
+        const timeRemainingText = document.getElementById('timeRemainingText');
+
+        dueDateInput.addEventListener('change', function() {
+            if (this.value) {
+                const dueDate = new Date(this.value);
+                const today = new Date();
+                const diffTime = dueDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const diffWeeks = Math.floor(diffDays / 7);
+
+                if (diffDays > 0) {
+                    timeRemainingText.textContent = `${diffWeeks} semanas (${diffDays} dias) até à data prevista`;
+                    timeRemainingAlert.style.display = 'block';
+                } else {
+                    timeRemainingAlert.style.display = 'none';
+                }
+            }
+        });
+
+        // Calculate savings
+        const breastfeedToggle = document.getElementById('breastfeedToggle');
+        const donatedToggle = document.getElementById('donatedToggle');
+        const supportToggle = document.getElementById('supportToggle');
+        const savingsAlert = document.getElementById('savingsAlert');
+        const savingsText = document.getElementById('savingsText');
+
+        function updateSavings() {
+            let savings = 0;
+            const messages = [];
+
+            if (breastfeedToggle.checked) {
+                savings += 100;
+                messages.push('€100/mês (amamentação)');
+            }
+
+            if (donatedToggle.checked) {
+                savings += 150;
+                messages.push('€150/mês (items doados)');
+            }
+
+            if (supportToggle.checked) {
+                savings += 150;
+                messages.push('€150/mês (apoio governo)');
+            }
+
+            if (savings > 0) {
+                savingsText.textContent = `€${savings}/mês = €${(savings * 12).toFixed(0)}/ano | ${messages.join(' + ')}`;
+                savingsAlert.style.display = 'block';
+            } else {
+                savingsAlert.style.display = 'none';
+            }
+        }
+
+        [breastfeedToggle, donatedToggle, supportToggle].forEach(toggle => {
+            toggle.addEventListener('change', updateSavings);
+        });
+
+        // Initial calculations
+        updateEstimatedCost();
+        updateSavings();
+
+        // Submit loading state
+        const form = document.getElementById('simulatorForm');
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A calcular...';
+            }
+        });
+    </script>
+
+    <style>
+        .form-switch-lg .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+    </style>
+}
+

@@ -1,0 +1,62 @@
+@model IEnumerable<Ervilhinha.Models.SmartAlert>
+
+@{
+    ViewData["Title"] = "Alertas Inteligentes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">🔔 Alertas Inteligentes</h1>
+        <p class="text-soft mb-0">Recomendações e notificações personalizadas</p>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card shadow">
+        <div class="card-body">
+            @foreach (var alert in Model.OrderByDescending(a => a.CreatedDate))
+            {
+                <div class="card mb-3 @(alert.IsRead ? "" : "bg-light")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2">
+                                    @if (!alert.IsRead)
+                                    {
+                                        <span class="badge bg-primary me-2">NOVO</span>
+                                    }
+                                    @alert.Title
+                                </h5>
+                                <p class="mb-2">@alert.Message</p>
+                                <small class="text-muted">
+                                    @alert.CreatedDate.ToString("dd/MM/yyyy HH:mm") · 
+                                    <span class="badge bg-secondary">@alert.Category</span>
+                                    <span class="badge bg-info">@alert.Type</span>
+                                </small>
+                            </div>
+                            @if (!alert.IsRead)
+                            {
+                                <div class="ms-3">
+                                    <a asp-action="MarkAsRead" asp-route-id="@alert.Id" class="btn btn-sm btn-outline-success">✓ Marcar como lido</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">🔔</span>
+            </div>
+            <h4 class="mb-3">Nenhum alerta no momento</h4>
+            <p class="text-soft mb-4">Os alertas inteligentes vão aparecer aqui à medida que usas a aplicação</p>
+        </div>
+    </div>
+}

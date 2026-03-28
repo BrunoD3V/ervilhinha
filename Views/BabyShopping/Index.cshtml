@@ -1,0 +1,86 @@
+@model IEnumerable<Ervilhinha.Models.BabyShoppingItem>
+
+@{
+    ViewData["Title"] = "Enxoval do Bebé";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">🛒 Enxoval do Bebé</h1>
+        <p class="text-soft mb-0">Lista de compras para o bebé</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">➕ Adicionar Item</a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Categoria</th>
+                            <th>Qtd</th>
+                            <th class="text-end">Custo Est.</th>
+                            <th>Prioridade</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderByDescending(i => i.Priority).ThenBy(i => i.IsPurchased))
+                        {
+                            <tr class="@(item.IsPurchased ? "table-success" : "")">
+                                <td>
+                                    @if (item.IsPurchased)
+                                    {
+                                        <del>@item.Name</del>
+                                    }
+                                    else
+                                    {
+                                        <strong>@item.Name</strong>
+                                    }
+                                </td>
+                                <td><span class="badge bg-secondary">@item.Category</span></td>
+                                <td>@item.Quantity</td>
+                                <td class="text-end">@((item.EstimatedCost * item.Quantity).ToString("C2", new System.Globalization.CultureInfo("pt-PT")))</td>
+                                <td><span class="badge bg-info">@item.Priority</span></td>
+                                <td>
+                                    @if (item.IsPurchased)
+                                    {
+                                        <span class="badge bg-success">✅ Comprado</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">⏳ Pendente</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">✏️</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">🗑️</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">🛒</span>
+            </div>
+            <h4 class="mb-3">Lista de compras vazia</h4>
+            <p class="text-soft mb-4">Começa a preparar o enxoval do bebé!</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Adicionar Primeiro Item</a>
+        </div>
+    </div>
+}

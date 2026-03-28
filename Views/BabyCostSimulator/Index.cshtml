@@ -1,0 +1,133 @@
+@model Ervilhinha.Models.BabyCostSimulator
+
+@{
+    ViewData["Title"] = "Simulador de Custos do Bebé";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">💰 Simulador de Custos do Bebé</h1>
+            <p class="text-soft mb-0">Planeia os custos desde a gravidez até ao primeiro ano</p>
+        </div>
+        <a asp-action="Edit" class="btn btn-primary">✏️ Editar Simulação</a>
+    </div>
+
+    @if (Model != null)
+    {
+        <!-- Resumo Financeiro -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h6 class="text-soft mb-2">💰 Total 1º Ano</h6>
+                        <h3 class="mb-0 fw-bold">@Model.EstimatedTotalFirstYear.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h6 class="text-soft mb-2">📊 Impacto Mensal</h6>
+                        <h3 class="mb-0 fw-bold">@Model.EstimatedMonthlyImpact.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h6 class="text-soft mb-2">🤰 Gravidez</h6>
+                        <h3 class="mb-0 fw-bold">@Model.EstimatedPregnancyCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h6 class="text-soft mb-2">🏥 Nascimento</h6>
+                        <h3 class="mb-0 fw-bold">@Model.EstimatedBirthCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custos Detalhados -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="mb-3">👶 Custos 0-6 Meses</h5>
+                        <h3 class="fw-bold">@Model.Estimated0to6MonthsCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                        <small class="text-soft">≈ @((Model.Estimated0to6MonthsCost / 6).ToString("C2", new System.Globalization.CultureInfo("pt-PT")))/mês</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="mb-3">🍼 Custos 6-12 Meses</h5>
+                        <h3 class="fw-bold">@Model.Estimated6to12MonthsCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                        <small class="text-soft">≈ @((Model.Estimated6to12MonthsCost / 6).ToString("C2", new System.Globalization.CultureInfo("pt-PT")))/mês</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendações -->
+        @if (!string.IsNullOrEmpty(Model.Recommendations))
+        {
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">💡 Recomendações Personalizadas</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var recommendation in Model.Recommendations.Split("\n"))
+                    {
+                        <p class="mb-2">@recommendation</p>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Configurações Atuais -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">⚙️ Configurações da Simulação</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <strong>Rendimento Mensal:</strong> @Model.MonthlyIncome.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Estilo de Vida:</strong> @Model.Lifestyle.ToString()
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Tipo de Parto:</strong> @Model.ExpectedBirthType.ToString().Replace("Publico", "Público (SNS)").Replace("Privado", "Privado")
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Semanas de Gravidez:</strong> @Model.PregnancyWeeks semanas
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Vai Amamentar:</strong> @(Model.WillBreastfeed ? "Sim" : "Não")
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <strong>Tem Itens Oferecidos:</strong> @(Model.HasDonatedItems ? "Sim" : "Não")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="SavingsGoal" class="btn btn-success btn-lg">📈 Calcular Objetivo de Poupança</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <h4>👋 Ainda não criaste a tua simulação!</h4>
+            <p>Cria uma simulação para estimar os custos do bebé e receber recomendações personalizadas.</p>
+            <a asp-action="Create" class="btn btn-primary mt-3">Criar Simulação</a>
+        </div>
+    }
+</div>

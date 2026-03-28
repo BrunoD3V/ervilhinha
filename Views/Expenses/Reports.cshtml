@@ -1,58 +1,85 @@
 @model Ervilhinha.Models.ReportsViewModel
 
 @{
-    ViewData["Title"] = "Expense Reports";
+    ViewData["Title"] = "Relatórios Financeiros";
 }
 
-<h1>📊 Expense Reports</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">📊 Relatórios Financeiros</h1>
+        <p class="text-soft mb-0">Análise completa das tuas despesas e investimentos no bebé</p>
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">← Voltar às Despesas</a>
+</div>
 
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h3>Grand Total</h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-4">$@Model.GrandTotal.ToString("N2")</h1>
+<!-- Card Total Geral -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card card-pea shadow-lg">
+            <div class="card-body text-center py-4">
+                <div class="d-flex justify-content-around align-items-center">
+                    <div>
+                        <p class="text-soft mb-1">💰 Total Investido no Bebé</p>
+                        <h1 class="display-3 mb-0" style="color: var(--text-dark); font-weight: 700;">@Model.GrandTotal.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h1>
+                    </div>
+                    <div class="text-start">
+                        <p class="mb-1"><strong>@Model.CategoryTotals.Sum(x => x.Count)</strong> despesas registadas</p>
+                        <p class="mb-1"><strong>@Model.CategoryTotals.Count</strong> categorias diferentes</p>
+                        <p class="mb-0"><strong>@Model.MonthlyTotals.Count</strong> meses de histórico</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>📈 Expenses by Category</h4>
+    <!-- Gráfico de Categorias -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-blue shadow">
+            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">🏷️ Despesas por Categoria</h4>
+                        <p class="text-soft small mb-0">Distribuição do investimento</p>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <canvas id="categoryChart" height="300"></canvas>
+                <div style="height: 350px; position: relative;">
+                    <canvas id="categoryChart"></canvas>
+                </div>
             </div>
         </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <h4>Category Details</h4>
+
+        <div class="card card-yellow shadow mt-4">
+            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                <h5 class="mb-0">📋 Detalhes por Categoria</h5>
             </div>
             <div class="card-body">
                 @if (Model.CategoryTotals.Any())
                 {
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Category</th>
-                                    <th>Count</th>
-                                    <th>Total</th>
+                                    <th>Categoria</th>
+                                    <th class="text-center">Qtd</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-end">%</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.CategoryTotals)
+                                @foreach (var item in Model.CategoryTotals.OrderByDescending(x => x.Total))
                                 {
+                                    var percentage = (item.Total / Model.GrandTotal * 100);
                                     <tr>
-                                        <td>@item.Category</td>
-                                        <td>@item.Count</td>
-                                        <td><strong>$@item.Total.ToString("N2")</strong></td>
+                                        <td><strong>@item.Category</strong></td>
+                                        <td class="text-center"><span class="badge bg-info">@item.Count</span></td>
+                                        <td class="text-end"><strong>@item.Total.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</strong></td>
+                                        <td class="text-end">
+                                            <span class="badge bg-success">@percentage.ToString("F1")%</span>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -61,44 +88,78 @@
                 }
                 else
                 {
-                    <p class="text-muted">No expense data available.</p>
+                    <div class="text-center py-4">
+                        <p class="text-muted">📭 Ainda não existem despesas registadas.</p>
+                        <a asp-action="Create" class="btn btn-primary mt-2">Adicionar Primeira Despesa</a>
+                    </div>
                 }
             </div>
         </div>
     </div>
-    
-    <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>📅 Monthly Trends</h4>
+
+    <!-- Gráfico Mensal -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-peach shadow">
+            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">📅 Evolução Mensal</h4>
+                        <p class="text-soft small mb-0">Tendência de gastos ao longo do tempo</p>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <canvas id="monthlyChart" height="300"></canvas>
+                <div style="height: 350px; position: relative;">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
             </div>
         </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <h4>Monthly Totals</h4>
+
+        <div class="card card-pink shadow mt-4">
+            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                <h5 class="mb-0">📅 Totais Mensais</h5>
             </div>
             <div class="card-body">
                 @if (Model.MonthlyTotals.Any())
                 {
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Month</th>
-                                    <th>Total</th>
+                                    <th>Mês</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-end">Variação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.MonthlyTotals)
+                                @{
+                                    var monthlyList = Model.MonthlyTotals.OrderByDescending(x => new DateTime(x.Year, x.Month, 1)).Take(12).ToList();
+                                    decimal? previousTotal = null;
+                                }
+                                @foreach (var item in monthlyList)
                                 {
+                                    var monthDate = new DateTime(item.Year, item.Month, 1);
+                                    var variation = previousTotal.HasValue ? ((item.Total - previousTotal.Value) / previousTotal.Value * 100) : 0;
+                                    var variationClass = variation > 0 ? "text-danger" : variation < 0 ? "text-success" : "text-muted";
+                                    var variationIcon = variation > 0 ? "▲" : variation < 0 ? "▼" : "—";
+
                                     <tr>
-                                        <td>@(new DateTime(item.Year, item.Month, 1).ToString("MMMM yyyy"))</td>
-                                        <td><strong>$@item.Total.ToString("N2")</strong></td>
+                                        <td><strong>@monthDate.ToString("MMMM yyyy", new System.Globalization.CultureInfo("pt-PT"))</strong></td>
+                                        <td class="text-end"><strong>@item.Total.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</strong></td>
+                                        <td class="text-end">
+                                            @if (previousTotal.HasValue)
+                                            {
+                                                <span class="@variationClass">
+                                                    @variationIcon @Math.Abs(variation).ToString("F1")%
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
                                     </tr>
+                                    previousTotal = item.Total;
                                 }
                             </tbody>
                         </table>
@@ -106,46 +167,97 @@
                 }
                 else
                 {
-                    <p class="text-muted">No expense data available.</p>
+                    <div class="text-center py-4">
+                        <p class="text-muted">📭 Ainda não existem despesas mensais registadas.</p>
+                    </div>
                 }
             </div>
         </div>
     </div>
 </div>
 
-<div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Back to Expenses</a>
-</div>
+<!-- Estatísticas Adicionais -->
+@if (Model.MonthlyTotals.Any())
+{
+    var avgMonthly = Model.MonthlyTotals.Average(x => x.Total);
+    var maxMonth = Model.MonthlyTotals.OrderByDescending(x => x.Total).First();
+    var minMonth = Model.MonthlyTotals.OrderBy(x => x.Total).First();
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-soft">📊 Média Mensal</h6>
+                    <h3 class="mb-0">@avgMonthly.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-soft">📈 Mês Mais Alto</h6>
+                    <h3 class="mb-0">@maxMonth.Total.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    <small class="text-muted">@(new DateTime(maxMonth.Year, maxMonth.Month, 1).ToString("MMMM yyyy", new System.Globalization.CultureInfo("pt-PT")))</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-soft">📉 Mês Mais Baixo</h6>
+                    <h3 class="mb-0">@minMonth.Total.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                    <small class="text-muted">@(new DateTime(minMonth.Year, minMonth.Month, 1).ToString("MMMM yyyy", new System.Globalization.CultureInfo("pt-PT")))</small>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // Category Chart (Pie)
+        // Configuração global dos gráficos
+        Chart.defaults.font.family = "'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif";
+        Chart.defaults.font.size = 13;
+        Chart.defaults.color = '#5D4037';
+
+        // Cores pastel harmonizadas com o tema
+        const pastelColors = [
+            '#FFCCBC', // Pêssego
+            '#C8E6C9', // Verde claro
+            '#BBDEFB', // Azul bebé
+            '#F8BBD0', // Rosa bebé
+            '#FFF9C4', // Amarelo suave
+            '#E1BEE7', // Lilás
+            '#FFCCBC', // Pêssego claro
+            '#A5D6A7', // Verde médio
+            '#90CAF9', // Azul médio
+            '#F48FB1'  // Rosa médio
+        ];
+
+        const pastelBorders = [
+            '#FFAB91',
+            '#A5D6A7',
+            '#90CAF9',
+            '#F48FB1',
+            '#FFF59D',
+            '#CE93D8',
+            '#FFAB91',
+            '#81C784',
+            '#64B5F6',
+            '#EC407A'
+        ];
+
+        // Gráfico de Categorias (Doughnut)
         const categoryData = {
             labels: [@Html.Raw(string.Join(",", Model.CategoryTotals.Select(x => $"'{x.Category}'")))],
             datasets: [{
-                label: 'Expenses by Category',
+                label: 'Valor Investido',
                 data: [@Html.Raw(string.Join(",", Model.CategoryTotals.Select(x => x.Total)))],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)',
-                    'rgba(255, 159, 64, 0.7)',
-                    'rgba(99, 255, 132, 0.7)',
-                    'rgba(235, 54, 162, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(99, 255, 132, 1)',
-                    'rgba(235, 54, 162, 1)'
-                ],
-                borderWidth: 2
+                backgroundColor: pastelColors,
+                borderColor: pastelBorders,
+                borderWidth: 2,
+                hoverOffset: 10
             }]
         };
 
@@ -160,11 +272,29 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(93, 64, 55, 0.95)',
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
                             callbacks: {
                                 label: function(context) {
-                                    return context.label + ': $' + context.parsed.toFixed(2);
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed.toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) + ' (' + percentage + '%)';
                                 }
                             }
                         }
@@ -173,22 +303,32 @@
             }
         );
 
-        // Monthly Chart (Bar)
+        // Gráfico Mensal (Área)
+        const monthlyLabels = [@Html.Raw(string.Join(",", Model.MonthlyTotals.OrderBy(x => new DateTime(x.Year, x.Month, 1)).Take(12).Select(x => $"'{new DateTime(x.Year, x.Month, 1).ToString("MMM yyyy", new System.Globalization.CultureInfo("pt-PT"))}'")))];
+        const monthlyValues = [@Html.Raw(string.Join(",", Model.MonthlyTotals.OrderBy(x => new DateTime(x.Year, x.Month, 1)).Take(12).Select(x => x.Total)))];
+
         const monthlyData = {
-            labels: [@Html.Raw(string.Join(",", Model.MonthlyTotals.Take(12).Select(x => $"'{new DateTime(x.Year, x.Month, 1).ToString("MMM yyyy")}'")))],
+            labels: monthlyLabels,
             datasets: [{
-                label: 'Monthly Spending',
-                data: [@Html.Raw(string.Join(",", Model.MonthlyTotals.Take(12).Select(x => x.Total)))],
-                backgroundColor: 'rgba(78, 205, 196, 0.7)',
-                borderColor: 'rgba(78, 205, 196, 1)',
-                borderWidth: 2
+                label: 'Gastos Mensais',
+                data: monthlyValues,
+                backgroundColor: 'rgba(165, 214, 167, 0.3)',
+                borderColor: '#81C784',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#66BB6A',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
             }]
         };
 
         const monthlyChart = new Chart(
             document.getElementById('monthlyChart'),
             {
-                type: 'bar',
+                type: 'line',
                 data: monthlyData,
                 options: {
                     responsive: true,
@@ -198,8 +338,16 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
-                                    return '$' + value.toFixed(2);
+                                    return value.toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'});
                                 }
+                            },
+                            grid: {
+                                color: 'rgba(200, 230, 201, 0.3)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
                             }
                         }
                     },
@@ -208,9 +356,19 @@
                             display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(93, 64, 55, 0.95)',
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
                             callbacks: {
                                 label: function(context) {
-                                    return 'Total: $' + context.parsed.y.toFixed(2);
+                                    return 'Total: ' + context.parsed.y.toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'});
                                 }
                             }
                         }

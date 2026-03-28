@@ -1,0 +1,54 @@
+@model Ervilhinha.Models.BabyListReservation
+
+@{
+    ViewData["Title"] = "Reserva Confirmada";
+    Layout = "~/Views/Shared/_LayoutFullWidth.cshtml";
+    var shareCode = ViewBag.ShareCode as string;
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-success">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <span style="font-size: 4rem;">✅</span>
+                    </div>
+                    
+                    <h3 class="mb-3">Reserva Confirmada!</h3>
+                    <p class="lead mb-4">Obrigado, <strong>@Model.ReservedByName</strong>!</p>
+
+                    <div class="alert alert-success">
+                        <h5>📦 Detalhes da Reserva</h5>
+                        <hr>
+                        <p class="mb-1"><strong>Item:</strong> @Model.BabyListItem.Name</p>
+                        <p class="mb-1"><strong>Quantidade:</strong> @Model.Quantity</p>
+                        <p class="mb-1"><strong>Data:</strong> @Model.ReservedDate.ToString("dd/MM/yyyy HH:mm")</p>
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <p class="mb-0"><strong>Mensagem:</strong> @Model.Message</p>
+                        }
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h6>ℹ️ Próximos Passos</h6>
+                        <ul class="mb-0 text-start small">
+                            <li>Os pais da lista <strong>@Model.BabyListItem.BabyList.Name</strong> vão ser notificados</li>
+                            <li>Guarda o teu email <span class="font-monospace">@Model.ReservedBy</span> para consultar as reservas</li>
+                            <li>Podes ver todas as tuas reservas <a asp-controller="BabyListPublic" asp-action="MyReservations" asp-route-email="@Model.ReservedBy">aqui</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a asp-controller="BabyListPublic" asp-action="ViewList" asp-route-code="@shareCode" class="btn btn-primary">
+                            ← Voltar à Lista
+                        </a>
+                        <a asp-controller="BabyListPublic" asp-action="MyReservations" asp-route-email="@Model.ReservedBy" class="btn btn-outline-secondary">
+                            📋 Ver Minhas Reservas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

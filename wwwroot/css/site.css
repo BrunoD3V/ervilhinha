@@ -38,12 +38,59 @@ html {
 }
 
 body {
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
   padding-bottom: 80px;
   color: var(--text-dark);
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   background: transparent;
   min-height: 100vh;
+}
+
+/* ===================================
+   🎯 SISTEMA DE LAYOUT PRINCIPAL
+   =================================== */
+
+/* HOMEPAGE: Sem alterações - usar layout full width */
+
+/* PÁGINAS INTERNAS: Layout 85% */
+.main-layout-container {
+  width: 85%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+body.internal-pages main {
+  padding: 2rem;
+}
+
+/* Resetar containers Bootstrap em páginas internas */
+body.internal-pages .container,
+body.internal-pages .container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Força conteúdo a usar largura total */
+body.internal-pages .card,
+body.internal-pages .table-responsive,
+body.internal-pages .row,
+body.internal-pages .alert,
+body.internal-pages .d-flex,
+body.internal-pages h1,
+body.internal-pages h2 {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body.internal-pages .col-12,
+body.internal-pages [class*="col-"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 /* Tipografia Suave */
@@ -189,8 +236,21 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
   border-bottom: 2px solid var(--pea-green-light);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   min-height: 56px;
+  position: relative;
+  z-index: 1030 !important;
+}
+
+/* Container navbar com largura 85% - alinhado perfeitamente */
+.navbar .main-layout-container {
+  width: 85%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .navbar-brand {
@@ -198,6 +258,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-dark) !important;
   font-size: 1.25rem;
   padding: 0.5rem 0;
+  margin-right: 1rem;
 }
 
 .nav-link {
@@ -217,7 +278,135 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Botão de Login - Destaque Verde Suave */
 .navbar-nav .btn-success {
-  min-width: 160px;
+  min-width: 140px;
+  font-weight: 500;
+  box-shadow: 0 3px 10px rgba(129, 199, 132, 0.3);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+.navbar-nav .btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(129, 199, 132, 0.4);
+}
+
+/* ========================================
+   🎯 DROPDOWN MENU Z-INDEX FIX - CRITICAL
+   ======================================== */
+
+/* Ensure navbar collapse appears above page content */
+.navbar-collapse {
+  z-index: 1031 !important;
+}
+
+/* Dropdown containers */
+.dropdown {
+  position: relative;
+  z-index: 1040;
+}
+
+/* Dropdown menus - MUST be above all page content */
+.dropdown-menu {
+  z-index: 1050 !important;
+  position: absolute !important;
+}
+
+/* Ensure dropdown shows when open */
+.dropdown-menu.show {
+  z-index: 1050 !important;
+  display: block;
+}
+
+/* CRITICAL: Ensure all page content stays below navbar */
+section, .hero-modern, .feature-section, main, .card {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   📱 RESPONSIVIDADE MOBILE
+   ======================================== */
+
+/* Mobile: Navbar collapse para mobile */
+@media (max-width: 991.98px) {
+  .navbar .main-layout-container {
+    width: 95%;
+    padding: 0 0.5rem;
+  }
+
+  .navbar-collapse {
+    margin-top: 1rem;
+    padding: 1rem 0;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-link {
+    padding: 0.6rem 1rem !important;
+    margin: 0.2rem 0;
+    display: block;
+  }
+
+  .navbar-nav .btn-success {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  /* Main layout em mobile */
+  .main-layout-container {
+    width: 95% !important;
+  }
+
+  body.internal-pages main {
+    padding: 1rem !important;
+  }
+
+  /* Cards em mobile */
+  .card {
+    margin-bottom: 1rem !important;
+  }
+
+  .card-body {
+    padding: 1.25rem !important;
+  }
+
+  /* Tabelas responsivas */
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+
+  /* Botões em mobile */
+  .btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-lg {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Formulários em mobile */
+  .form-control,
+  .form-select {
+    font-size: 16px; /* Previne zoom no iOS */
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .main-layout-container {
+    width: 90% !important;
+  }
+}
+
+/* Desktop pequeno */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .main-layout-container {
+    width: 88% !important;
+  }
+}
   font-weight: 500;
   box-shadow: 0 3px 10px rgba(129, 199, 132, 0.3);
   padding: 0.4rem 1rem;
@@ -338,6 +527,125 @@ h1, h2, h3, h4, h5, h6 {
 .bg-danger {
   background: #FFCDD2 !important;
   color: var(--text-dark) !important;
+}
+
+.bg-primary {
+  background: var(--baby-blue) !important;
+  color: var(--text-dark) !important;
+}
+
+.bg-secondary {
+  background: #E0E0E0 !important;
+  color: var(--text-dark) !important;
+}
+
+/* ========================================
+   📋 CARD HEADERS PASTEL
+   ======================================== */
+
+.card-header.bg-primary {
+  background: linear-gradient(135deg, var(--baby-blue) 0%, #90CAF9 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.card-header.bg-danger {
+  background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.card-header.bg-success {
+  background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--pea-green-soft) 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.card-header.bg-warning {
+  background: linear-gradient(135deg, var(--baby-yellow) 0%, #FFF59D 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.card-header.bg-info {
+  background: linear-gradient(135deg, var(--baby-blue) 0%, #81D4FA 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+/* ========================================
+   📊 TABLE HEADERS PASTEL
+   ======================================== */
+
+.table-light {
+  background: var(--pea-green-light) !important;
+  color: var(--text-dark) !important;
+}
+
+thead.table-primary {
+  background: linear-gradient(135deg, var(--baby-blue) 0%, #BBDEFB 100%) !important;
+  color: var(--text-dark) !important;
+}
+
+/* ========================================
+   🔘 BOTÕES PASTEL OVERRIDE
+   ======================================== */
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--pea-green-soft) 0%, var(--pea-green) 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--pea-green) 0%, #81C784 100%) !important;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #EF9A9A 0%, #E57373 100%) !important;
+  transform: translateY(-2px);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--baby-peach) 0%, #FFAB91 100%) !important;
+  color: var(--text-dark) !important;
+  border: none;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #FFAB91 0%, #FF8A65 100%) !important;
+  transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+  border-color: var(--pea-green-soft);
+  color: var(--pea-green-soft);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--pea-green-light);
+  border-color: var(--pea-green-soft);
+  color: var(--text-dark);
+}
+
+.btn-outline-danger {
+  border-color: #EF9A9A;
+  color: #E57373;
+  background: transparent;
+}
+
+.btn-outline-danger:hover {
+  background: #FFCDD2;
+  border-color: #EF9A9A;
+  color: var(--text-dark);
 }
 
 /* ========================================
@@ -925,5 +1233,93 @@ main {
 
   .scroll-reveal {
     transform: translateY(30px);
+  }
+}
+
+/* ========================================
+   🎯 NAVBAR DROPDOWN STYLES
+   ======================================== */
+
+/* Dropdown headers styling */
+.dropdown-header {
+  color: var(--text-soft) !important;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 1rem;
+  margin-top: 0.25rem;
+}
+
+.dropdown-header:first-child {
+  margin-top: 0;
+}
+
+/* Dropdown items com melhor hover */
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+  background-color: var(--pea-green-light);
+  border-left-color: var(--pea-green-soft);
+  padding-left: 1.25rem;
+}
+
+.dropdown-item:active {
+  background-color: var(--pea-green);
+}
+
+/* Dropdown dividers mais suaves */
+.dropdown-divider {
+  border-top-color: var(--pea-green-light);
+  margin: 0.5rem 0;
+}
+
+/* Dropdown menu com shadow melhorada */
+.dropdown-menu {
+  border: 1px solid var(--pea-green-light);
+  box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+}
+
+/* Nav items ativos */
+.nav-item.active .nav-link,
+.nav-link.active {
+  color: var(--pea-green-soft) !important;
+  font-weight: 600;
+}
+
+/* Navbar responsiva - mobile */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
+  }
+
+  .dropdown-menu {
+    border: none;
+    box-shadow: none;
+    padding-left: 1rem;
+  }
+
+  .dropdown-header {
+    padding-left: 0;
+  }
+
+  .dropdown-item {
+    border-left: none;
+    padding-left: 0.5rem;
+  }
+
+  .dropdown-item:hover {
+    padding-left: 0.75rem;
+    background-color: var(--pea-green-light);
   }
 }

@@ -39,6 +39,11 @@ if (!string.IsNullOrEmpty(googleClientId) &&
 // Register Invoice OCR Service
 builder.Services.AddScoped<IInvoiceOcrService, AzureInvoiceOcrService>();
 
+// Register Smart Planning Services
+builder.Services.AddScoped<BabyCostCalculatorService>();
+builder.Services.AddScoped<FamilyBudgetService>();
+builder.Services.AddScoped<SmartAlertService>();
+
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();

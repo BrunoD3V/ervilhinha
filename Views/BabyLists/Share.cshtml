@@ -1,0 +1,130 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    ViewData["Title"] = "Partilhar Lista";
+    var shareUrl = $"{Context.Request.Scheme}://{Context.Request.Host}/BabyListPublic/View?code={Model.ShareCode}";
+}
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">🔗 Partilhar Lista</h1>
+            <p class="text-soft mb-0">@Model.Name</p>
+        </div>
+        <a asp-action="Manage" asp-route-id="@Model.Id" class="btn btn-outline-secondary">← Voltar</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card card-blue shadow mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">📋 Código de Partilha</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control form-control-lg font-monospace text-center" value="@Model.ShareCode" readonly id="shareCode">
+                    <button class="btn btn-primary" onclick="copiarCodigo()" title="Copiar">
+                        📋 Copiar
+                    </button>
+                </div>
+                <p class="text-soft small mb-0">
+                    Partilha este código com família e amigos para acederem à lista
+                </p>
+            </div>
+        </div>
+
+        <div class="card card-pea shadow mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">🔗 Link Direto</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" value="@shareUrl" readonly id="shareUrl">
+                    <button class="btn btn-primary" onclick="copiarLink()" title="Copiar">
+                        📋 Copiar
+                    </button>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="https://wa.me/?text=@Uri.EscapeDataString($"Olá! Criámos uma lista para o bebé: {shareUrl}")" target="_blank" class="btn btn-success btn-sm">
+                        📱 WhatsApp
+                    </a>
+                    <a href="mailto:?subject=@Uri.EscapeDataString($"Lista do Bebé: {Model.Name}")&body=@Uri.EscapeDataString($"Olá!\n\nCriámos uma lista para o bebé.\n\nPodes ver aqui: {shareUrl}\n\nOu usar o código: {Model.ShareCode}")" class="btn btn-info btn-sm">
+                        📧 Email
+                    </a>
+                    <button onclick="copiarMensagem()" class="btn btn-secondary btn-sm">
+                        💬 Copiar Mensagem
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <h5 class="mb-3">⚙️ Configurações de Privacidade</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <strong>Visibilidade da Lista</strong>
+                        <p class="text-soft small mb-0">
+                            @if (Model.IsPublic)
+                            {
+                                <span>🔓 <strong>Pública</strong> - Qualquer pessoa com o link pode ver</span>
+                            }
+                            else
+                            {
+                                <span>🔒 <strong>Privada</strong> - Apenas convidados específicos</span>
+                            }
+                        </p>
+                    </div>
+                    <form asp-action="TogglePublic" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        @if (Model.IsPublic)
+                        {
+                            <button type="submit" class="btn btn-warning">
+                                🔓 Tornar Privada
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success">
+                                🔒 Tornar Pública
+                            </button>
+                        }
+                    </form>
+                </div>
+
+                <hr>
+
+                <h6 class="mb-2">ℹ️ Como funciona?</h6>
+                <ul class="text-soft small mb-0">
+                    <li>Partilha o código ou link com família e amigos</li>
+                    <li>Eles podem ver os items da lista e fazer reservas</li>
+                    <li>As reservas evitam presentes duplicados</li>
+                    <li>Podes ver quem reservou cada item na gestão da lista</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copiarCodigo() {
+            const input = document.getElementById('shareCode');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert('✅ Código copiado!');
+        }
+
+        function copiarLink() {
+            const input = document.getElementById('shareUrl');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert('✅ Link copiado!');
+        }
+
+        function copiarMensagem() {
+            const mensagem = `Olá!\n\nCriámos uma lista para o bebé: @Model.Name\n\n` +
+                           `Podes ver aqui: @shareUrl\n\n` +
+                           `Ou usar o código: @Model.ShareCode`;
+            navigator.clipboard.writeText(mensagem);
+            alert('✅ Mensagem copiada!');
+        }
+    </script>
+}

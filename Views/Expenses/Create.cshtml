@@ -4,59 +4,287 @@
     ViewData["Title"] = "Adicionar Despesa";
 }
 
-<h1>➕ Adicionar Despesa</h1>
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Início</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Despesas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
+        </ol>
+    </nav>
+    <h1 class="page-title">💸 Adicionar Nova Despesa</h1>
+    <p class="text-soft mb-0">
+        <i class="bi bi-info-circle"></i> Regista uma nova despesa familiar
+    </p>
+</div>
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <form asp-action="Create" method="post" id="createExpenseForm">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label">Descrição</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <!-- ========== GRUPO 1: Informações Principais ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);">
+                    <h5 class="mb-0">📋 Informações Principais</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Descrição -->
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Descrição <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Description" class="form-control form-control-lg" 
+                               placeholder="Ex: Compras do supermercado, Conta de luz..." 
+                               autofocus required maxlength="200" id="descriptionInput" />
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            <span id="descCharCount">0</span> / 200 caracteres
+                        </small>
+                    </div>
+
+                    <div class="row">
+                        <!-- Montante -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Amount" class="form-label fw-semibold">
+                                Montante <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-danger text-white fw-bold">€</span>
+                                <input asp-for="Amount" type="number" class="form-control" 
+                                       step="0.01" min="0" max="1000000" placeholder="0.00" 
+                                       required id="amountInput" />
+                            </div>
+                            <span asp-validation-for="Amount" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Valor gasto</small>
+                        </div>
+
+                        <!-- Data -->
+                        <div class="col-md-6">
+                            <label asp-for="Date" class="form-label fw-semibold">
+                                Data <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Date" type="date" class="form-control form-control-lg" 
+                                   max="@DateTime.Now.ToString("yyyy-MM-dd")" 
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            <span asp-validation-for="Date" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Data da despesa</small>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Amount" class="form-label">Montante (€)</label>
-                    <input asp-for="Amount" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
+            <!-- ========== GRUPO 2: Categorização ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);">
+                    <h5 class="mb-0">🏷️ Categorização</h5>
                 </div>
+                <div class="card-body">
+                    <label asp-for="ExpenseCategoryId" class="form-label fw-semibold">
+                        Categoria <span class="text-danger">*</span>
+                    </label>
+                    <select asp-for="ExpenseCategoryId" class="form-select form-select-lg" required id="categorySelect">
+                        <option value="">-- Seleciona uma Categoria --</option>
+                        @foreach (var cat in ViewBag.Categories)
+                        {
+                            <option value="@cat.Id">@cat.Icon @cat.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ExpenseCategoryId" class="text-danger small"></span>
+                    <small class="text-muted d-block mt-2">
+                        <i class="bi bi-info-circle"></i> Categoriza a despesa para melhor organização
+                    </small>
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Date" class="form-label">Data</label>
-                    <input asp-for="Date" class="form-control" type="date" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="ExpenseCategoryId" class="form-label">Categoria</label>
-                <select asp-for="ExpenseCategoryId" class="form-select">
-                    <option value="">-- Seleciona uma Categoria --</option>
-                    @foreach (var cat in ViewBag.Categories)
+                    @if (ViewBag.Categories == null || !((IEnumerable<dynamic>)ViewBag.Categories).Any())
                     {
-                        <option value="@cat.Id">@cat.Name</option>
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <strong>Sem categorias!</strong> 
+                            <a asp-controller="ExpenseCategories" asp-action="Create" class="alert-link">
+                                Cria a primeira categoria aqui
+                            </a>
+                        </div>
                     }
-                </select>
-                <span asp-validation-for="ExpenseCategoryId" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Notes" class="form-label">Notas</label>
-                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
+            <!-- ========== GRUPO 3: Notas Adicionais ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);">
+                    <h5 class="mb-0">📝 Notas Adicionais</h5>
+                </div>
+                <div class="card-body">
+                    <label asp-for="Notes" class="form-label fw-semibold">
+                        Notas <span class="text-muted small">(opcional)</span>
+                    </label>
+                    <textarea asp-for="Notes" class="form-control" rows="3" 
+                              maxlength="500" id="notesInput"
+                              placeholder="Observações, detalhes adicionais sobre a despesa..."></textarea>
+                    <span asp-validation-for="Notes" class="text-danger small"></span>
+                    <small class="text-muted d-block mt-1">
+                        Máximo 500 caracteres • <span id="notesCharCount">0</span> usados
+                    </small>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <!-- ========== BOTÕES DE AÇÃO ========== -->
+            <div class="d-flex gap-2 justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Despesa
+                </button>
+            </div>
+
+            <!-- Helper Text -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i> A despesa será registada no teu histórico
+                </small>
             </div>
         </form>
+    </div>
+
+    <!-- Sidebar de Ajuda -->
+    <div class="col-lg-4 col-xl-3 mt-4 mt-lg-0">
+        <div class="card shadow sticky-top" style="top: 1rem;">
+            <div class="card-header bg-info bg-opacity-10">
+                <h6 class="mb-0 text-info">
+                    <i class="bi bi-lightbulb-fill"></i> Dicas Rápidas
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="small mb-0">
+                    <li class="mb-2">
+                        <strong>Descrição Clara:</strong> 
+                        Use nomes específicos (ex: "Pingo Doce - Semana 12")
+                    </li>
+                    <li class="mb-2">
+                        <strong>Categorias:</strong> 
+                        Facilita relatórios e análise de gastos
+                    </li>
+                    <li class="mb-2">
+                        <strong>Data Correta:</strong> 
+                        Regista a data real da despesa
+                    </li>
+                    <li>
+                        <strong>Notas:</strong> 
+                        Adiciona detalhes para futura referência
+                    </li>
+                </ul>
+
+                <hr>
+
+                <div class="text-center">
+                    <a asp-controller="Invoices" asp-action="Upload" class="btn btn-sm btn-outline-info w-100">
+                        <i class="bi bi-upload"></i> Upload de Fatura (OCR)
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // Character counters
+        const descInput = document.getElementById('descriptionInput');
+        const descCount = document.getElementById('descCharCount');
+        const notesInput = document.getElementById('notesInput');
+        const notesCount = document.getElementById('notesCharCount');
+
+        descInput.addEventListener('input', function() {
+            descCount.textContent = this.value.length;
+        });
+
+        notesInput.addEventListener('input', function() {
+            notesCount.textContent = this.value.length;
+        });
+
+        // Auto-resize textarea
+        notesInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // Format amount on blur
+        const amountInput = document.getElementById('amountInput');
+        amountInput.addEventListener('blur', function() {
+            if (this.value) {
+                this.value = parseFloat(this.value).toFixed(2);
+            }
+        });
+
+        // Smart category suggestion based on description
+        const categorySelect = document.getElementById('categorySelect');
+        descInput.addEventListener('blur', function() {
+            if (!categorySelect.value && this.value) {
+                const desc = this.value.toLowerCase();
+
+                // Auto-suggest based on keywords
+                const keywords = {
+                    'supermercado|pingo|continente|lidl|aldi': 'Alimentação',
+                    'luz|água|gas|internet|telefone|conta': 'Contas',
+                    'farmacia|médico|hospital|medicamento': 'Saúde',
+                    'gasolina|combustivel|portagem|parque': 'Transporte',
+                    'cinema|restaurante|cafe|jantar': 'Lazer'
+                };
+
+                for (let [pattern, categoryName] of Object.entries(keywords)) {
+                    if (new RegExp(pattern).test(desc)) {
+                        // Find option by text content
+                        for (let option of categorySelect.options) {
+                            if (option.text.includes(categoryName)) {
+                                categorySelect.value = option.value;
+                                categorySelect.classList.add('highlight-suggest');
+                                setTimeout(() => categorySelect.classList.remove('highlight-suggest'), 2000);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+
+        // Confirm cancel if form has data
+        const form = document.getElementById('createExpenseForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        cancelBtn.addEventListener('click', function(e) {
+            const hasData = descInput.value.trim() !== '' || 
+                           amountInput.value.trim() !== '';
+
+            if (hasData) {
+                if (!confirm('Tens dados não guardados. Tens a certeza que queres cancelar?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Submit loading state
+        form.addEventListener('submit', function() {
+            if (form.checkValidity()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A guardar despesa...';
+            }
+        });
+    </script>
+
+    <style>
+        .highlight-suggest {
+            animation: pulse-border 1s ease-in-out 2;
+            box-shadow: 0 0 0 3px rgba(165, 214, 167, 0.5);
+        }
+
+        @@keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(165, 214, 167, 0.5); }
+            50% { box-shadow: 0 0 0 8px rgba(165, 214, 167, 0); }
+        }
+    </style>
 }
+

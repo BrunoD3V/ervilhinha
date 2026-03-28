@@ -1,0 +1,337 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    ViewData["Title"] = $"Gerir: {Model.Name}";
+    var totalItems = Model.Items.Count;
+    var purchasedItems = Model.Items.Count(i => i.IsPurchased);
+    var totalQuantity = Model.Items.Sum(i => i.Quantity);
+    var reservedQuantity = Model.Items.Sum(i => i.ReservedQuantity);
+    var acquiredQuantity = Model.Items.Sum(i => i.AcquiredQuantity);
+    var progressPercent = totalQuantity > 0 ? (int)(((reservedQuantity + acquiredQuantity) / (double)totalQuantity) * 100) : 0;
+    var totalCost = Model.Items.Sum(i => i.EstimatedCost * i.Quantity);
+    var spentCost = Model.Items.Where(i => i.IsPurchased).Sum(i => (i.ActualCost ?? i.EstimatedCost) * i.Quantity);
+}
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="display-6 mb-1">
+                @if (Model.Type == Ervilhinha.Models.ListType.Enxoval)
+                {
+                    <span>🛒</span>
+                }
+                else if (Model.Type == Ervilhinha.Models.ListType.Presentes)
+                {
+                    <span>🎁</span>
+                }
+                else
+                {
+                    <span>📋</span>
+                }
+                @Model.Name
+            </h1>
+            @if (!string.IsNullOrEmpty(Model.BabyName))
+            {
+                <p class="lead text-soft mb-0">👶 Para: <strong>@Model.BabyName</strong></p>
+            }
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">← Voltar</a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <p class="text-muted">@Model.Description</p>
+    }
+
+    @if (Model.ExpectedDate.HasValue)
+    {
+        <p class="text-soft">📅 Data Prevista: <strong>@Model.ExpectedDate.Value.ToString("dd/MM/yyyy")</strong></p>
+    }
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        @if (TempData["ShareCode"] != null)
+        {
+            <br><strong>Código de Partilha:</strong> <span class="font-monospace">@TempData["ShareCode"]</span>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card card-pea shadow">
+            <div class="card-body">
+                <h5 class="mb-3">📊 Estatísticas</h5>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Progresso Geral</span>
+                        <strong>@progressPercent%</strong>
+                    </div>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-success" style="width: @progressPercent%"></div>
+                    </div>
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-3">
+                        <div class="text-soft small">Total Items</div>
+                        <div class="h4 mb-0">@totalItems</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Comprados</div>
+                        <div class="h4 mb-0 text-success">@purchasedItems</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Estimado</div>
+                        <div class="h5 mb-0">@totalCost.ToString("C0", new System.Globalization.CultureInfo("pt-PT"))</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-soft small">Gasto</div>
+                        <div class="h5 mb-0 text-info">@spentCost.ToString("C0", new System.Globalization.CultureInfo("pt-PT"))</div>
+                    </div>
+                </div>
+
+                @if (Model.IsShared)
+                {
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="text-soft small">Reservados</div>
+                            <div class="h5 mb-0 text-warning">@reservedQuantity</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-soft small">Adquiridos</div>
+                            <div class="h5 mb-0 text-success">@acquiredQuantity</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card @(Model.IsShared ? "card-blue" : "card-yellow") shadow">
+            <div class="card-body">
+                <h6 class="mb-3">⚙️ Ações Rápidas</h6>
+                
+                <div class="d-grid gap-2">
+                    <a asp-action="AddItem" asp-route-listId="@Model.Id" class="btn btn-primary btn-sm">
+                        ➕ Adicionar Item
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                        ✏️ Editar Lista
+                    </a>
+
+                    @if (Model.IsShared)
+                    {
+                        <hr class="my-2">
+                        <div class="alert alert-info py-2 px-2 mb-2">
+                            <small>
+                                <strong>Código:</strong><br>
+                                <span class="font-monospace h6">@Model.ShareCode</span>
+                            </small>
+                        </div>
+                        <a asp-action="Share" asp-route-id="@Model.Id" class="btn btn-info btn-sm">
+                            🔗 Partilhar Lista
+                        </a>
+                        <form asp-action="TogglePublic" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            @if (Model.IsPublic)
+                            {
+                                <button type="submit" class="btn btn-outline-warning btn-sm w-100">
+                                    🔓 Tornar Privada
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-outline-success btn-sm w-100">
+                                    🔒 Tornar Pública
+                                </button>
+                            }
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="ToggleSharing" method="post">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-outline-info btn-sm w-100">
+                                🔗 Ativar Partilha
+                            </button>
+                        </form>
+                    }
+
+                    <hr class="my-2">
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">
+                        🗑️ Eliminar Lista
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="mb-3">📦 Items da Lista</h5>
+
+        @if (Model.Items.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Categoria</th>
+                            <th class="text-center">Qtd</th>
+                            @if (Model.IsShared)
+                            {
+                                <th class="text-center">Reservado</th>
+                            }
+                            <th class="text-end">Custo</th>
+                            <th>Prioridade</th>
+                            @if (!Model.IsShared)
+                            {
+                                <th>Timing</th>
+                            }
+                            <th>Estado</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items.OrderBy(i => i.IsPurchased).ThenByDescending(i => i.Priority).ThenBy(i => i.Category))
+                        {
+                            <tr class="@(item.IsPurchased ? "table-success" : item.IsFullyReserved ? "table-warning" : "")">
+                                <td>
+                                    @if (item.IsPurchased)
+                                    {
+                                        <del>@item.Name</del>
+                                    }
+                                    else
+                                    {
+                                        <strong>@item.Name</strong>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <br><small class="text-soft">@item.Description</small>
+                                    }
+                                    @if (item.IsGift)
+                                    {
+                                        <br><span class="badge bg-success">🎁 Presente</span>
+                                    }
+                                </td>
+                                <td><span class="badge bg-secondary">@item.Category.ToString()</span></td>
+                                <td class="text-center">@item.Quantity</td>
+                                @if (Model.IsShared)
+                                {
+                                    <td class="text-center">
+                                        @if (item.ReservedQuantity > 0)
+                                        {
+                                            <span class="badge bg-warning">@item.ReservedQuantity</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-soft">-</span>
+                                        }
+                                    </td>
+                                }
+                                <td class="text-end">
+                                    @if (item.IsPurchased && item.ActualCost.HasValue)
+                                    {
+                                        <span>@item.ActualCost.Value.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.EstimatedCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Priority == Ervilhinha.Models.ItemPriority.Essencial)
+                                    {
+                                        <span class="badge bg-danger">✅ Essencial</span>
+                                    }
+                                    else if (item.Priority == Ervilhinha.Models.ItemPriority.Recomendado)
+                                    {
+                                        <span class="badge bg-info">⭐ Recomendado</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">💡 Opcional</span>
+                                    }
+                                </td>
+                                @if (!Model.IsShared)
+                                {
+                                    <td>
+                                        @if (item.RecommendedTiming.HasValue)
+                                        {
+                                            <small class="text-soft">@item.RecommendedTiming.ToString()</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-soft">-</span>
+                                        }
+                                    </td>
+                                }
+                                <td>
+                                    @if (item.IsPurchased)
+                                    {
+                                        <span class="badge bg-success">✅ Comprado</span>
+                                    }
+                                    else if (item.IsFullyReserved)
+                                    {
+                                        <span class="badge bg-warning">⏳ Reservado</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">📋 Pendente</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="EditItem" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">✏️</a>
+                                        <form asp-action="TogglePurchased" asp-route-id="@item.Id" method="post" class="d-inline">
+                                            @if (item.IsPurchased)
+                                            {
+                                                <button type="submit" class="btn btn-outline-warning" title="Desmarcar">↩️</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-outline-success" title="Marcar como comprado">✅</button>
+                                            }
+                                        </form>
+                                        <form asp-action="DeleteItem" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Eliminar este item?');">
+                                            <button type="submit" class="btn btn-outline-danger" title="Eliminar">🗑️</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <p class="text-soft mb-3">Ainda não há items nesta lista</p>
+                <a asp-action="AddItem" asp-route-listId="@Model.Id" class="btn btn-primary">
+                    ➕ Adicionar Primeiro Item
+                </a>
+            </div>
+        }
+    </div>
+</div>

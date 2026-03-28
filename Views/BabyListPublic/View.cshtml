@@ -1,0 +1,130 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "~/Views/Shared/_LayoutFullWidth.cshtml";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">
+            🎁 @Model.Name
+        </h1>
+        @if (!string.IsNullOrEmpty(Model.BabyName))
+        {
+            <p class="lead">👶 Para: <strong>@Model.BabyName</strong></p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="text-muted">@Model.Description</p>
+        }
+        @if (Model.ExpectedDate.HasValue)
+        {
+            <p class="text-soft">📅 Data Prevista: <strong>@Model.ExpectedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("pt-PT"))</strong></p>
+        }
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Items.Any())
+    {
+        var categories = Model.Items.GroupBy(i => i.Category).OrderBy(g => g.Key);
+        
+        @foreach (var categoryGroup in categories)
+        {
+            <div class="mb-5">
+                <h4 class="mb-3">📦 @categoryGroup.Key.ToString()</h4>
+                <div class="row">
+                    @foreach (var item in categoryGroup.OrderBy(i => i.AvailableQuantity <= 0).ThenByDescending(i => i.Priority))
+                    {
+                        var isFullyReserved = item.AvailableQuantity <= 0;
+                        
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm @(isFullyReserved ? "border-success" : "")">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">@item.Name</h5>
+                                        @if (item.Priority == Ervilhinha.Models.ItemPriority.Essencial)
+                                        {
+                                            <span class="badge bg-danger">✅</span>
+                                        }
+                                        else if (item.Priority == Ervilhinha.Models.ItemPriority.Recomendado)
+                                        {
+                                            <span class="badge bg-info">⭐</span>
+                                        }
+                                    </div>
+
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <p class="text-muted small">@item.Description</p>
+                                    }
+
+                                    @if (item.EstimatedCost > 0)
+                                    {
+                                        <p class="text-soft mb-2">
+                                            💰 Custo: <strong>@item.EstimatedCost.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</strong>
+                                        </p>
+                                    }
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small>Disponível:</small>
+                                            <strong>@item.AvailableQuantity / @item.Quantity</strong>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            @{
+                                                var reservedPercent = item.Quantity > 0 ? (int)((item.ReservedQuantity / (double)item.Quantity) * 100) : 0;
+                                                var acquiredPercent = item.Quantity > 0 ? (int)((item.AcquiredQuantity / (double)item.Quantity) * 100) : 0;
+                                            }
+                                            <div class="progress-bar bg-warning" style="width: @reservedPercent%"></div>
+                                            <div class="progress-bar bg-success" style="width: @acquiredPercent%"></div>
+                                        </div>
+                                    </div>
+
+                                    @if (item.AvailableQuantity > 0)
+                                    {
+                                        <a asp-controller="BabyListPublic" asp-action="Reserve" asp-route-code="@Model.ShareCode" asp-route-itemId="@item.Id" class="btn btn-primary btn-sm w-100">
+                                            🎁 Reservar
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success btn-sm w-100" disabled>
+                                            ✅ Totalmente Reservado
+                                        </button>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(item.ProductUrl))
+                                    {
+                                        <a href="@item.ProductUrl" target="_blank" class="btn btn-outline-secondary btn-sm w-100 mt-2">
+                                            🔗 Ver Produto
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <p class="text-soft">Esta lista ainda não tem items</p>
+        </div>
+    }
+
+    <div class="text-center mt-5">
+        <p class="text-soft small">
+            💡 Para criar a tua própria lista para o bebé, visita 
+            <a asp-controller="Home" asp-action="Index">Ervilhinha</a>
+        </p>
+    </div>
+</div>

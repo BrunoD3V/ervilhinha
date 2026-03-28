@@ -1,0 +1,336 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    ViewData["Title"] = "Nova Lista do Bebé";
+}
+
+<div class="mb-4">
+    <h1 class="page-title">➕ Nova Lista do Bebé</h1>
+    <p class="text-soft mb-0">Cria uma lista para organizar o enxoval ou partilhar presentes com família e amigos</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <form asp-action="Create" method="post" id="createListForm">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <!-- ========== GRUPO 1: Informações Básicas ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pea">
+                    <h5 class="mb-0">📝 Informações Básicas</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Nome da Lista -->
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold">
+                            Nome da Lista <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg" 
+                               placeholder="Ex: Enxoval da Maria, Lista de Presentes para o João..." 
+                               autofocus required maxlength="100" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i> Este nome aparecerá no topo da tua lista
+                        </small>
+                    </div>
+
+                    <!-- Tipo de Lista -->
+                    <div class="mb-4">
+                        <label asp-for="Type" class="form-label fw-semibold">
+                            Tipo de Lista <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="Type" class="form-select form-select-lg" required id="listTypeSelect">
+                            <option value="">-- Selecione o tipo de lista --</option>
+                            <option value="1" selected>🛒 Enxoval (Planeamento Pessoal)</option>
+                            <option value="2">🎁 Lista de Presentes (Partilhável)</option>
+                            <option value="3">📋 Lista Geral</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger small"></span>
+                        <div class="alert alert-info mt-2 py-2 px-3">
+                            <small>
+                                <strong>💡 Dica:</strong><br>
+                                <strong>Enxoval:</strong> Para organizar o que precisas comprar, com controlo de orçamento<br>
+                                <strong>Presentes:</strong> Para partilhar com família/amigos que queiram oferecer
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Descrição -->
+                    <div class="mb-0">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Descrição <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="3" 
+                                  maxlength="500"
+                                  placeholder="Ex: Lista de items essenciais para os primeiros meses do bebé..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">Máximo 500 caracteres</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 2: Informações do Bebé ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-pink">
+                    <h5 class="mb-0">👶 Informações do Bebé</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Nome do Bebé -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="BabyName" class="form-label fw-semibold">
+                                Nome do Bebé <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input asp-for="BabyName" class="form-control" 
+                                   maxlength="100"
+                                   placeholder="Ex: Maria, João..." />
+                            <span asp-validation-for="BabyName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Data Prevista -->
+                        <div class="col-md-6">
+                            <label asp-for="ExpectedDate" class="form-label fw-semibold">
+                                Data Prevista <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input asp-for="ExpectedDate" type="date" class="form-control" 
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="ExpectedDate" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-1">Data prevista de nascimento</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== GRUPO 3: Opções de Partilha ========== -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-gradient-blue">
+                    <h5 class="mb-0">🔗 Opções de Partilha</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Toggle Ativar Partilha -->
+                    <div class="mb-3">
+                        <div class="form-check form-switch form-switch-lg">
+                            <input asp-for="IsShared" class="form-check-input" 
+                                   type="checkbox" role="switch" id="isSharedToggle" />
+                            <label class="form-check-label fw-semibold" for="isSharedToggle">
+                                <span class="fs-5">🔗</span> Ativar Partilha da Lista
+                            </label>
+                        </div>
+                        <small class="text-muted d-block ms-5">
+                            Permite partilhar esta lista com família e amigos. Será gerado um código único de 9 caracteres.
+                        </small>
+                    </div>
+
+                    <!-- Opções de Partilha (Condicional) -->
+                    <div id="shareOptions" style="display: none;" class="mt-4">
+                        <div class="alert alert-primary" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                <div>
+                                    <strong>Como funciona a partilha?</strong>
+                                    <p class="mb-0 small mt-1">
+                                        Após criar a lista, receberás um <strong>código de partilha</strong> (ex: ABC123XYZ) e um <strong>link direto</strong>. 
+                                        Podes enviar por WhatsApp, email ou mensagem para as pessoas verem a lista e reservarem presentes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visibilidade Pública -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input asp-for="IsPublic" class="form-check-input" 
+                                       type="checkbox" id="isPublicToggle" />
+                                <label class="form-check-label fw-semibold" for="isPublicToggle">
+                                    🔓 Tornar lista pública
+                                </label>
+                            </div>
+                            <small class="text-muted d-block ms-4">
+                                <strong>Pública:</strong> Qualquer pessoa com o link pode ver a lista<br>
+                                <strong>Privada:</strong> Apenas pessoas que convidares podem aceder
+                            </small>
+                        </div>
+
+                        <!-- Co-Gestor -->
+                        <div class="mb-0">
+                            <label for="coManagerEmail" class="form-label fw-semibold">
+                                Co-Gestor da Lista <span class="text-muted small">(opcional)</span>
+                            </label>
+                            <input type="email" name="coManagerEmail" id="coManagerEmail" 
+                                   class="form-control" 
+                                   placeholder="email.do.parceiro@exemplo.com" />
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-person-plus"></i> Email do parceiro/parceira para gerir a lista em conjunto (adicionar/editar items)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== BOTÕES DE AÇÃO ========== -->
+            <div class="d-flex gap-2 justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg" id="cancelBtn">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                    <i class="bi bi-check-circle-fill"></i> Criar Lista
+                </button>
+            </div>
+
+            <!-- Helper Text -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i> Os teus dados estão seguros. Podes editar ou eliminar a lista a qualquer momento.
+                </small>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Toggle Share Options
+        const isSharedToggle = document.getElementById('isSharedToggle');
+        const shareOptions = document.getElementById('shareOptions');
+        const listTypeSelect = document.getElementById('listTypeSelect');
+
+        function updateShareOptions() {
+            if (isSharedToggle.checked) {
+                shareOptions.style.display = 'block';
+                shareOptions.classList.add('fade-in');
+            } else {
+                shareOptions.style.display = 'none';
+            }
+        }
+
+        isSharedToggle.addEventListener('change', updateShareOptions);
+
+        // Sugestão: Se escolher "Lista de Presentes", sugerir ativar partilha
+        listTypeSelect.addEventListener('change', function() {
+            if (this.value === '2' && !isSharedToggle.checked) {
+                // Highlight sugestivo
+                isSharedToggle.parentElement.parentElement.classList.add('highlight-suggest');
+                setTimeout(() => {
+                    isSharedToggle.parentElement.parentElement.classList.remove('highlight-suggest');
+                }, 2000);
+            }
+        });
+
+        // Confirmação ao cancelar se form tiver dados
+        const form = document.getElementById('createListForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        cancelBtn.addEventListener('click', function(e) {
+            const formData = new FormData(form);
+            let hasData = false;
+
+            for (let [key, value] of formData.entries()) {
+                if (value && value.trim() !== '') {
+                    hasData = true;
+                    break;
+                }
+            }
+
+            if (hasData) {
+                if (!confirm('Tens dados não guardados. Tens a certeza que queres cancelar?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Submit button loading state
+        form.addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> A criar lista...';
+        });
+
+        // Check on page load (para quando há erro de validação)
+        if (isSharedToggle.checked) {
+            shareOptions.style.display = 'block';
+        }
+    </script>
+
+    <style>
+        /* Highlight sugestivo */
+        .highlight-suggest {
+            animation: pulse-border 1s ease-in-out 2;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        @@keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form switch larger */
+        .form-switch-lg .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+
+        /* Gradient headers */
+        .bg-gradient-pea {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+        }
+
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+        }
+
+        .bg-gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+        }
+
+        /* Required asterisk */
+        .text-danger {
+            font-weight: bold;
+        }
+
+        /* Form control focus states */
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #A5D6A7;
+            box-shadow: 0 0 0 0.25rem rgba(165, 214, 167, 0.25);
+        }
+
+        /* Invalid state */
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #dc3545;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+    </style>
+}
+
+        // Toggle share options
+        const isSharedToggle = document.getElementById('isSharedToggle');
+        const shareOptions = document.getElementById('shareOptions');
+
+        isSharedToggle.addEventListener('change', function() {
+            shareOptions.style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Check on page load
+        if (isSharedToggle.checked) {
+            shareOptions.style.display = 'block';
+        }
+    </script>
+}

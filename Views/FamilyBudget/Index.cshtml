@@ -1,0 +1,78 @@
+@model Ervilhinha.Models.FamilyBudget
+
+@{
+    ViewData["Title"] = "Orçamento Familiar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">💰 Orçamento Familiar</h1>
+        <p class="text-soft mb-0">Gere o orçamento mensal da família</p>
+    </div>
+    <a asp-action="Edit" class="btn btn-primary">✏️ Editar Orçamento</a>
+</div>
+
+@if (Model != null)
+{
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="mb-3">Orçamento do Mês: @Model.Month/@Model.Year</h5>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card card-pea">
+                        <div class="card-body text-center">
+                            <h6 class="text-soft">💵 Rendimento Mensal</h6>
+                            <h3 class="mb-0">@Model.TotalIncome.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card card-blue">
+                        <div class="card-body text-center">
+                            <h6 class="text-soft">🎯 Total Orçamentado</h6>
+                            <h3 class="mb-0">
+                                @{
+                                    var totalBudgeted = Model.BudgetBaby + Model.BudgetHouse + Model.BudgetFood + Model.BudgetTransport + Model.BudgetHealth + Model.BudgetLeisure + Model.BudgetSavings + Model.BudgetOther;
+                                }
+                                @totalBudgeted.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <h6 class="mb-3">Categorias do Orçamento:</h6>
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr><td>👶 Bebé</td><td class="text-end">@Model.BudgetBaby.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>🏠 Casa</td><td class="text-end">@Model.BudgetHouse.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>🍽️ Alimentação</td><td class="text-end">@Model.BudgetFood.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>🚗 Transporte</td><td class="text-end">@Model.BudgetTransport.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>🏥 Saúde</td><td class="text-end">@Model.BudgetHealth.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>🎉 Lazer</td><td class="text-end">@Model.BudgetLeisure.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>💰 Poupanças</td><td class="text-end">@Model.BudgetSavings.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                        <tr><td>📦 Outros</td><td class="text-end">@Model.BudgetOther.ToString("C2", new System.Globalization.CultureInfo("pt-PT"))</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">💰</span>
+            </div>
+            <h4 class="mb-3">Ainda não tens orçamento definido</h4>
+            <p class="text-soft mb-4">Define o teu orçamento mensal para começar a gerir as finanças da família</p>
+            <a asp-action="Edit" class="btn btn-primary btn-lg">✏️ Definir Orçamento</a>
+        </div>
+    </div>
+}

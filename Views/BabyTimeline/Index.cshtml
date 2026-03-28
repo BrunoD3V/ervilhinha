@@ -1,0 +1,122 @@
+@model IEnumerable<Ervilhinha.Models.BabyTimeline>
+
+@{
+    ViewData["Title"] = "Timeline do Bebé";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">📅 Timeline do Bebé</h1>
+        <p class="text-soft mb-0">Acompanha todas as etapas importantes da gravidez até ao primeiro ano</p>
+    </div>
+    <div>
+        <a asp-action="Create" class="btn btn-primary">➕ Adicionar Evento</a>
+        <a asp-action="Calendar" class="btn btn-info ms-2">📅 Ver Calendário</a>
+    </div>
+</div>
+
+<!-- Cards de Estatísticas -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card card-pea shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-soft">📊 Total de Eventos</h6>
+                <h2 class="mb-0">@Model.Count()</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-blue shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-soft">⏰ Próximos Eventos</h6>
+                <h2 class="mb-0">@ViewBag.UpcomingCount</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-peach shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-soft">⚠️ Atrasados</h6>
+                <h2 class="mb-0 @(ViewBag.OverdueCount > 0 ? "text-danger" : "")">@ViewBag.OverdueCount</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Timeline de Eventos -->
+@if (Model.Any())
+{
+    <div class="card shadow">
+        <div class="card-body">
+            @foreach (var item in Model.OrderBy(e => e.EventDate ?? DateTime.MaxValue))
+            {
+                var isPast = item.EventDate.HasValue && item.EventDate.Value < DateTime.Today;
+                var isToday = item.EventDate.HasValue && item.EventDate.Value.Date == DateTime.Today;
+                var cardClass = item.IsCompleted ? "card-pea" : isPast ? "card-peach" : isToday ? "card-yellow" : "card-blue";
+
+                <div class="card @cardClass mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-0">
+                                    @if (item.IsCompleted)
+                                    {
+                                        <del>@item.Title</del>
+                                        <span class="badge bg-success ms-2">✅ Concluído</span>
+                                    }
+                                    else
+                                    {
+                                        @item.Title
+                                    }
+                                </h5>
+
+                                @if (!string.IsNullOrEmpty(item.Description))
+                                {
+                                    <p class="text-soft mb-2 mt-2">@item.Description</p>
+                                }
+
+                                <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                                    @if (item.EventDate.HasValue)
+                                    {
+                                        <span class="badge bg-info">
+                                            📅 @item.EventDate.Value.ToString("dd/MM/yyyy")
+                                        </span>
+
+                                        @if (!item.IsCompleted && item.EventDate < DateTime.Today)
+                                        {
+                                            var daysLate = (DateTime.Today - item.EventDate.Value).Days;
+                                            <span class="badge bg-danger">⏰ Atrasado @daysLate dias</span>
+                                        }
+                                    }
+
+                                    <span class="badge bg-secondary">@item.Phase</span>
+                                    <span class="badge bg-primary">@item.Type</span>
+                                </div>
+                            </div>
+
+                            <div class="ms-3">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="Editar">✏️</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <span style="font-size: 4rem;">📅</span>
+            </div>
+            <h4 class="mb-3">Ainda não existem eventos na timeline</h4>
+            <p class="text-soft mb-4">Começa a registar momentos importantes da gravidez e primeiros tempos do bebé!</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Adicionar Primeiro Evento</a>
+        </div>
+    </div>
+}
