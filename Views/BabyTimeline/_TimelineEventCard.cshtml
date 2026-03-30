@@ -1,0 +1,82 @@
+@model Ervilhinha.Models.BabyTimeline
+
+<div class="timeline-item card mb-3 shadow-sm htmx-added" data-phase="@Model.Phase">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <h5 class="card-title mb-2">
+                    @switch (Model.Type)
+                    {
+                        case Ervilhinha.Models.TimelineEventType.ConsultaMedica:
+                            <span>🏭</span>
+                            break;
+                        case Ervilhinha.Models.TimelineEventType.ExameVacina:
+                            <span>💉</span>
+                            break;
+                        case Ervilhinha.Models.TimelineEventType.CompraImportante:
+                            <span>🛒</span>
+                            break;
+                        case Ervilhinha.Models.TimelineEventType.MarcoBebe:
+                            <span>⭐</span>
+                            break;
+                        default:
+                            <span>📏</span>
+                            break;
+                    }
+                    @Model.Title
+                    @if (Model.IsCompleted)
+                    {
+                        <span class="badge bg-success ms-2">✅ Concluído</span>
+                    }
+                </h5>
+                
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <p class="card-text text-muted small mb-2">@Model.Description</p>
+                }
+                
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    @if (Model.EventDate.HasValue)
+                    {
+                        <span class="badge bg-light text-dark">📅 @Model.EventDate.Value.ToString("dd/MM/yyyy")</span>
+                    }
+                    @if (Model.PregnancyWeek.HasValue)
+                    {
+                        <span class="badge bg-info">🤰 @Model.PregnancyWeek semanas</span>
+                    }
+                    @if (Model.BabyMonthAge.HasValue)
+                    {
+                        <span class="badge bg-warning">👶 @Model.BabyMonthAge meses</span>
+                    }
+                    @if (Model.EstimatedCost > 0)
+                    {
+                        <span class="badge bg-success">💰 €@Model.EstimatedCost</span>
+                    }
+                </div>
+            </div>
+            <div class="ms-3">
+                <div class="btn-group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary" title="Editar">✏️</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .htmx-added {
+        animation: slideIn 0.4s ease-out;
+    }
+</style>

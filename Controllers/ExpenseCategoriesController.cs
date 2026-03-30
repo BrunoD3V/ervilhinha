@@ -41,6 +41,52 @@ namespace Ervilhinha.Controllers
             return View(category);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateAjax([FromForm] ExpenseCategory category)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    category.CreatedBy = User.Identity?.Name ?? "Unknown";
+                    category.CreatedDate = DateTime.UtcNow;
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true });
+                }
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(", ", errors) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePartial([FromForm] ExpenseCategory category)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    category.CreatedBy = User.Identity?.Name ?? "Unknown";
+                    category.CreatedDate = DateTime.UtcNow;
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+
+                    return PartialView("_CategoryRow", category);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

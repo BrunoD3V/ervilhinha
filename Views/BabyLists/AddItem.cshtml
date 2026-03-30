@@ -25,59 +25,60 @@
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
             <!-- ========== GRUPO 1: Informação Básica ========== -->
-            <div class="card shadow mb-4">
-                <div class="card-header bg-gradient-pea">
-                    <h5 class="mb-0">📝 Informação Básica</h5>
-                </div>
+            <div class="card form-card-modern shadow mb-4">
                 <div class="card-body">
-                    <!-- Nome do Item -->
-                    <div class="mb-4">
-                        <label asp-for="Name" class="form-label fw-semibold">
-                            Nome do Item <span class="text-danger">*</span>
-                        </label>
-                        <input asp-for="Name" class="form-control form-control-lg" 
-                               placeholder="Ex: Berço de madeira, Pack 5 bodies brancos 0-3M, Carrinho de passeio..." 
-                               autofocus required maxlength="200" id="itemNameInput" />
-                        <span asp-validation-for="Name" class="text-danger small"></span>
-                        <small class="text-muted d-block mt-1">
-                            <span id="nameCharCount">0</span> / 200 caracteres
-                        </small>
+                    <div class="form-header-decorated">
+                        <h5>Informação Básica</h5>
                     </div>
 
-                    <!-- Descrição -->
-                    <div class="mb-0">
-                        <label asp-for="Description" class="form-label fw-semibold">
-                            Descrição <span class="text-muted small">(opcional)</span>
-                        </label>
-                        <textarea asp-for="Description" class="form-control" rows="3" 
-                                  maxlength="1000" id="descriptionInput"
-                                  placeholder="Detalhes adicionais como cor, tamanho, marca preferida, características especiais..."></textarea>
-                        <span asp-validation-for="Description" class="text-danger small"></span>
-                        <small class="text-muted d-block mt-1">
-                            Máximo 1000 caracteres • <span id="descCharCount">0</span> usados
-                        </small>
+                    <!-- Nome do Item - Floating Label + Ícone -->
+                    <div class="form-floating-modern input-with-icon">
+                        <input asp-for="Name" 
+                               id="Name" 
+                               placeholder=" " 
+                               class="form-control" 
+                               required 
+                               maxlength="200" 
+                               autofocus />
+                        <label for="Name">Nome do Item *</label>
+                        <span class="input-icon">📦</span>
                     </div>
+                    <div class="form-hint">Ex: Berço de madeira, Pack 5 bodies 0-3M...</div>
+
+                    <!-- Descrição - Floating Label + Ícone -->
+                    <div class="form-floating-modern input-with-icon">
+                        <textarea asp-for="Description" 
+                                  id="Description" 
+                                  placeholder=" " 
+                                  class="form-control" 
+                                  maxlength="1000"></textarea>
+                        <label for="Description">Descrição (opcional)</label>
+                        <span class="input-icon">💬</span>
+                    </div>
+                    <div class="form-hint">Detalhes como cor, tamanho, marca preferida...</div>
                 </div>
             </div>
 
             <!-- ========== GRUPO 2: Categorização ========== -->
-            <div class="card shadow mb-4">
-                <div class="card-header bg-gradient-blue">
-                    <h5 class="mb-0">🏷️ Categorização</h5>
-                </div>
+            <div class="card form-card-modern shadow mb-4">
                 <div class="card-body">
-                    <div class="row">
-                        <!-- Categoria -->
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label asp-for="Category" class="form-label fw-semibold">
-                                Categoria <span class="text-danger">*</span>
-                            </label>
-                            <select asp-for="Category" class="form-select form-select-lg" required id="categorySelect">
-                                <option value="">-- Selecione a categoria --</option>
-                                <optgroup label="Essenciais">
-                                    <option value="1">🛏️ Quarto do Bebé</option>
-                                    <option value="6">🍼 Alimentação</option>
-                                    <option value="5">🛁 Higiene e Banho</option>
+                    <div class="form-header-decorated">
+                        <h5>Categorização</h5>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Categoria - Com Ícone -->
+                        <div class="col-md-6">
+                            <div class="input-with-icon">
+                                <select asp-for="Category" 
+                                        id="Category" 
+                                        class="form-select" 
+                                        required>
+                                    <option value="">Escolha a categoria...</option>
+                                    <optgroup label="Essenciais">
+                                        <option value="1">🛏️ Quarto do Bebé</option>
+                                        <option value="6">🍼 Alimentação</option>
+                                        <option value="5">🛁 Higiene e Banho</option>
                                     <option value="7">🚗 Passeio (Carrinho, Cadeira Auto)</option>
                                     <option value="9">🏥 Saúde e Segurança</option>
                                 </optgroup>

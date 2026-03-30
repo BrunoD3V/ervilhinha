@@ -1,0 +1,93 @@
+@model Ervilhinha.Models.BabyList
+
+@{
+    var totalItems = Model.Items?.Count ?? 0;
+    var purchasedItems = Model.Items?.Count(i => i.IsPurchased) ?? 0;
+    var progressPercent = totalItems > 0 ? (int)((purchasedItems / (double)totalItems) * 100) : 0;
+    var totalCost = Model.Items?.Sum(i => i.EstimatedCost * i.Quantity) ?? 0;
+}
+
+<div class="col-md-6 col-lg-4 mb-4 htmx-added">
+    <div class="card shadow h-100">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 class="card-title mb-1">
+                        @switch (Model.Type)
+                        {
+                            case Ervilhinha.Models.ListType.Enxoval: <span>🛒</span> break;
+                            case Ervilhinha.Models.ListType.Presentes: <span>🎁</span> break;
+                            default: <span>📋</span> break;
+                        }
+                        @Model.Name
+                    </h5>
+                    @if (!string.IsNullOrEmpty(Model.BabyName))
+                    {
+                        <p class="text-soft small mb-0">👶 @Model.BabyName</p>
+                    }
+                </div>
+                <div>
+                    @if (Model.IsShared)
+                    {
+                        <span class="badge bg-info">🔓 Partilhada</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">🔒 Privada</span>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <p class="text-muted small mb-3">@Model.Description</p>
+            }
+
+            @if (Model.ExpectedDate.HasValue)
+            {
+                <p class="text-soft small mb-2">
+                    📅 Data Prevista: <strong>@Model.ExpectedDate.Value.ToString("dd/MM/yyyy")</strong>
+                </p>
+            }
+
+            <hr>
+
+            <div class="row text-center mb-3">
+                <div class="col-4">
+                    <div class="text-soft small">Items</div>
+                    <div class="h6 mb-0">@totalItems</div>
+                </div>
+                <div class="col-4">
+                    <div class="text-soft small">Comprados</div>
+                    <div class="h6 mb-0 text-success">@purchasedItems</div>
+                </div>
+                <div class="col-4">
+                    <div class="text-soft small">Total</div>
+                    <div class="h6 mb-0">@totalCost.ToString("C0", new System.Globalization.CultureInfo("pt-PT"))</div>
+                </div>
+            </div>
+
+            @if (totalItems > 0)
+            {
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="small text-soft">Progresso</span>
+                        <strong class="small">@progressPercent%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: @progressPercent%"></div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-grid">
+                <a asp-action="Manage" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">
+                    Ver e Gerir Lista
+                </a>
+            </div>
+        </div>
+        <div class="card-footer text-soft small">
+            Criada em @Model.CreatedDate.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+</div>

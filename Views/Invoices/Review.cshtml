@@ -9,9 +9,13 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card mb-3">
-            <div class="card-header @(Model.HasErrors ? "bg-warning" : "bg-success text-white")">
+            <div class="card-header @(Model.HasErrors ? "bg-warning" : Model.IsProcessed ? "bg-success text-white" : "bg-secondary")">
                 <h4>
-                    @if (Model.HasErrors)
+                    @if (!Model.IsProcessed)
+                    {
+                        <span>📝 Inserção Manual</span>
+                    }
+                    else if (Model.HasErrors)
                     {
                         <span>⚠️ Fatura Precisa de Revisão</span>
                     }
@@ -21,15 +25,22 @@
                     }
                     else
                     {
-                        <span>Dados Extraídos pela IA</span>
+                        <span>🤖 Dados Extraídos pela IA</span>
                     }
                 </h4>
             </div>
             <div class="card-body">
                 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                 {
-                    <div class="alert alert-warning">
-                        <strong>Nota de Processamento:</strong> @Model.ErrorMessage
+                    <div class="alert alert-danger">
+                        <strong>⚠️ Erro de Processamento:</strong><br/>
+                        @Model.ErrorMessage
+                    </div>
+                }
+                else if (!Model.IsProcessed)
+                {
+                    <div class="alert alert-info">
+                        <strong>ℹ️ Modo Manual:</strong> O serviço de OCR não está disponível. Insere os dados da fatura manualmente.
                     </div>
                 }
 

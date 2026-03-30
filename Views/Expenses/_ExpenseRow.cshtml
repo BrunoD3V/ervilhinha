@@ -1,0 +1,41 @@
+@model Ervilhinha.Models.Expense
+
+<tr class="htmx-added">
+    <td>@Model.Date.ToShortDateString()</td>
+    <td>
+        @Model.Description
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <br /><small class="text-muted">@Model.Notes</small>
+        }
+    </td>
+    <td><span class="badge" style="background-color: @Model.ExpenseCategory?.Color">@Model.ExpenseCategory?.Name</span></td>
+    <td><strong>€@Model.Amount.ToString("N2")</strong></td>
+    <td>@Model.CreatedBy</td>
+    <td>
+        <div class="btn-group btn-group-sm">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Eliminar</a>
+            }
+        </div>
+    </td>
+</tr>
+
+<style>
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .htmx-added {
+        animation: slideIn 0.3s ease-out;
+    }
+</style>

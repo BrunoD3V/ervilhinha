@@ -124,6 +124,34 @@ namespace Ervilhinha.Controllers
             return View(babyList);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreatePartial([FromForm] BabyList babyList)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userEmail = User.Identity?.Name ?? string.Empty;
+
+                if (ModelState.IsValid)
+                {
+                    babyList.UserId = userId!;
+                    babyList.CreatedBy = userEmail;
+                    babyList.CreatedDate = DateTime.UtcNow;
+
+                    _context.Add(babyList);
+                    await _context.SaveChangesAsync();
+
+                    return PartialView("_ListCard", babyList);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // GET: BabyLists/Manage/5
         public async Task<IActionResult> Manage(int? id)
         {
@@ -334,6 +362,77 @@ namespace Ervilhinha.Controllers
 
             ViewBag.ListId = item.BabyListId;
             return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddItemAjax([FromForm] BabyListItem item)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userEmail = User.Identity?.Name ?? string.Empty;
+
+                var babyList = await _context.BabyLists
+                    .Include(l => l.Managers)
+                    .FirstOrDefaultAsync(l => l.Id == item.BabyListId && 
+                        (l.UserId == userId || l.Managers.Any(m => m.ManagerEmail == userEmail)));
+
+                if (babyList == null) 
+                    return Json(new { success = false, message = "Lista não encontrada" });
+
+                if (ModelState.IsValid)
+                {
+                    item.CreatedDate = DateTime.UtcNow;
+                    item.CreatedBy = userEmail;
+
+                    _context.Add(item);
+                    await _context.SaveChangesAsync();
+
+                    return Json(new { success = true });
+                }
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(", ", errors) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddItemPartial([FromForm] BabyListItem item)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userEmail = User.Identity?.Name ?? string.Empty;
+
+                var babyList = await _context.BabyLists
+                    .Include(l => l.Managers)
+                    .FirstOrDefaultAsync(l => l.Id == item.BabyListId && 
+                        (l.UserId == userId || l.Managers.Any(m => m.ManagerEmail == userEmail)));
+
+                if (babyList == null) 
+                    return BadRequest("Lista não encontrada");
+
+                if (ModelState.IsValid)
+                {
+                    item.CreatedDate = DateTime.UtcNow;
+                    item.CreatedBy = userEmail;
+
+                    _context.Add(item);
+                    await _context.SaveChangesAsync();
+
+                    return PartialView("_ItemRow", item);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: BabyLists/EditItem/5

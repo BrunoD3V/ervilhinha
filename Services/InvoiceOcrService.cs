@@ -47,8 +47,16 @@ namespace Ervilhinha.Services
                 // Check if Azure Form Recognizer is configured
                 if (string.IsNullOrEmpty(_endpoint) || string.IsNullOrEmpty(_apiKey))
                 {
-                    _logger.LogWarning("Azure Form Recognizer not configured. Using mock data.");
-                    return GetMockResult();
+                    _logger.LogError("❌ Azure Form Recognizer NOT CONFIGURED! OCR service unavailable.");
+
+                    // Em produção, falhar explicitamente
+                    return new InvoiceOcrResult
+                    {
+                        Success = false,
+                        ErrorMessage = "⚠️ Serviço de leitura de faturas não configurado. " +
+                                      "É necessário configurar Azure Document Intelligence para processar faturas. " +
+                                      "Consulta Documentation/Invoice-OCR-Roadmap.md para instruções."
+                    };
                 }
 
                 var credential = new AzureKeyCredential(_apiKey);
@@ -127,24 +135,6 @@ namespace Ervilhinha.Services
                 return field.Content;
             }
             return null;
-        }
-
-        private InvoiceOcrResult GetMockResult()
-        {
-            // Return mock data for development when Azure is not configured
-            return new InvoiceOcrResult
-            {
-                Success = true,
-                VendorName = "Sample Store (Mock Data)",
-                TotalAmount = 45.99m,
-                InvoiceDate = DateTime.Today.AddDays(-2),
-                RawText = "This is mock OCR data. Configure Azure Form Recognizer for real invoice processing.",
-                LineItems = new List<LineItem>
-                {
-                    new LineItem { Description = "Sample Item 1", Amount = 25.99m },
-                    new LineItem { Description = "Sample Item 2", Amount = 20.00m }
-                }
-            };
         }
     }
 }

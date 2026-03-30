@@ -1,0 +1,76 @@
+@model Ervilhinha.Models.BabyListItem
+
+<tr class="htmx-added">
+    <td>
+        <strong>@Model.Name</strong>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <br><small class="text-muted">@Model.Description</small>
+        }
+    </td>
+    <td>
+        @switch (Model.Category)
+        {
+            case Ervilhinha.Models.ItemCategory.QuartoBebe: <span>🛏️ Quarto</span> break;
+            case Ervilhinha.Models.ItemCategory.Roupa0a3: <span>👕 0-3M</span> break;
+            case Ervilhinha.Models.ItemCategory.Roupa3a6: <span>👕 3-6M</span> break;
+            case Ervilhinha.Models.ItemCategory.Roupa6a12: <span>👕 6-12M</span> break;
+            case Ervilhinha.Models.ItemCategory.HigieneBanho: <span>🛁 Higiene</span> break;
+            case Ervilhinha.Models.ItemCategory.Alimentacao: <span>🍼 Alimentação</span> break;
+            case Ervilhinha.Models.ItemCategory.Passeio: <span>🚗 Passeio</span> break;
+            case Ervilhinha.Models.ItemCategory.Brinquedos: <span>🧸 Brinquedos</span> break;
+            case Ervilhinha.Models.ItemCategory.SaudeSeguranca: <span>🏥 Saúde</span> break;
+            case Ervilhinha.Models.ItemCategory.Acessorios: <span>🎒 Acessórios</span> break;
+            default: <span>📦 Outros</span> break;
+        }
+    </td>
+    <td class="text-center">
+        @switch (Model.Priority)
+        {
+            case Ervilhinha.Models.ItemPriority.Essencial: <span class="badge bg-danger">✅ Essencial</span> break;
+            case Ervilhinha.Models.ItemPriority.Recomendado: <span class="badge bg-warning">⭐ Recomendado</span> break;
+            case Ervilhinha.Models.ItemPriority.Opcional: <span class="badge bg-info">💡 Opcional</span> break;
+        }
+    </td>
+    <td class="text-center">
+        <span class="badge bg-light text-dark">@Model.Quantity</span>
+    </td>
+    <td class="text-end">
+        @if (Model.EstimatedCost > 0)
+        {
+            <strong>€@Model.EstimatedCost.ToString("N2")</strong>
+        }
+        else
+        {
+            <span class="text-muted">-</span>
+        }
+    </td>
+    <td class="text-center">
+        @if (Model.IsPurchased)
+        {
+            <span class="badge bg-success">✅ Comprado</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">📋 Pendente</span>
+        }
+    </td>
+    <td class="text-center">
+        <div class="btn-group btn-group-sm">
+            <a asp-action="EditItem" asp-route-id="@Model.Id" class="btn btn-outline-primary" title="Editar">✏️</a>
+            <form asp-action="TogglePurchased" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @if (Model.IsPurchased)
+                {
+                    <button type="submit" class="btn btn-outline-warning" title="Desmarcar">↩️</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-outline-success" title="Marcar como comprado">✅</button>
+                }
+            </form>
+            <form asp-action="DeleteItem" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Eliminar este item?');">
+                <button type="submit" class="btn btn-outline-danger" title="Eliminar">🗑️</button>
+            </form>
+        </div>
+    </td>
+</tr>

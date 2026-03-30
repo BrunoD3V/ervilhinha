@@ -1,0 +1,1024 @@
+/* ========================================
+   ✨ FORMULÁRIOS MODERNOS "LIVING ON THE EDGE"
+   Inputs únicos com personalidade e animações
+   Mantém a paleta pastel Ervilhinha 🌿
+   ======================================== */
+
+/* === OVERRIDE SISTEMA BASE === */
+.form-control, 
+.form-select, 
+textarea.form-control,
+input.form-control {
+  border-radius: 20px !important;
+  border: 2px solid transparent !important;
+  padding: 1rem 1.2rem !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 245, 233, 0.5) 100%) !important;
+  backdrop-filter: blur(10px);
+  font-size: 1rem !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  box-shadow: 
+    0 4px 15px rgba(93, 64, 55, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+}
+
+/* Efeito de levitação ao focar - WOW! */
+.form-control:focus, 
+.form-select:focus, 
+textarea.form-control:focus,
+input.form-control:focus {
+  border-color: #A5D6A7 !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(200, 230, 201, 0.2) 100%) !important;
+  box-shadow: 
+    0 0 0 4px rgba(165, 214, 167, 0.25),
+    0 10px 30px rgba(129, 199, 132, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-3px) !important;
+  outline: none !important;
+}
+
+.form-label {
+  color: #8D6E63 !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.75rem !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.3px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Brilho decorativo nos labels ✨ */
+.form-label::before {
+  content: '✨';
+  font-size: 1rem;
+  opacity: 0.7;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+/* === FLOATING LABEL SYSTEM COMPLETO === */
+.form-floating-modern {
+  position: relative;
+  margin-bottom: 1.75rem;
+}
+
+.form-floating-modern input,
+.form-floating-modern select,
+.form-floating-modern textarea {
+  width: 100%;
+  padding: 1.3rem 1.2rem 0.7rem 3.5rem !important;
+  border: 2px solid transparent;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(232, 245, 233, 0.6) 100%);
+  backdrop-filter: blur(15px);
+  font-size: 1.05rem;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 6px 20px rgba(93, 64, 55, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 1;
+  color: #5D4037;
+}
+
+/* Efeito glass ao focar - INTENSO */
+.form-floating-modern input:focus,
+.form-floating-modern select:focus,
+.form-floating-modern textarea:focus {
+  border-color: #A5D6A7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(200, 230, 201, 0.25) 100%);
+  box-shadow: 
+    0 0 0 5px rgba(165, 214, 167, 0.2),
+    0 12px 35px rgba(129, 199, 132, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 1);
+  transform: translateY(-4px) scale(1.01);
+  outline: none;
+}
+
+/* Label flutuante animada */
+.form-floating-modern label {
+  position: absolute;
+  left: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A1887F;
+  font-weight: 500;
+  font-size: 1.05rem;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 2;
+  letter-spacing: 0.3px;
+}
+
+/* Label sobe quando ativo - MAGIA ✨ */
+.form-floating-modern input:focus ~ label,
+.form-floating-modern input:not(:placeholder-shown) ~ label,
+.form-floating-modern select:focus ~ label,
+.form-floating-modern select:not([value=""]) ~ label,
+.form-floating-modern select:valid ~ label,
+.form-floating-modern textarea:focus ~ label,
+.form-floating-modern textarea:not(:placeholder-shown) ~ label {
+  top: 0.65rem;
+  left: 3.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #A5D6A7;
+  transform: translateY(0);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* === ÍCONES INTEGRADOS - GANHAM VIDA === */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input,
+.input-with-icon select,
+.input-with-icon textarea {
+  padding-left: 3.5rem !important;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: #A1887F;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Ícone GANHA VIDA ao focar! 🎭 */
+.input-with-icon input:focus ~ .input-icon,
+.input-with-icon select:focus ~ .input-icon,
+.input-with-icon textarea:focus ~ .input-icon {
+  color: #A5D6A7;
+  transform: translateY(-50%) scale(1.25) rotate(12deg);
+  filter: drop-shadow(0 3px 6px rgba(129, 199, 132, 0.5));
+}
+
+/* === BOTÕES ULTRA MODERNOS COM RIPPLE === */
+.btn-modern-primary {
+  position: relative;
+  padding: 1.1rem 2.8rem;
+  border-radius: 28px;
+  border: none;
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 
+    0 10px 30px rgba(129, 199, 132, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito ONDA ao clicar - RIPPLE! 🌊 */
+.btn-modern-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.7s ease-out, height 0.7s ease-out;
+}
+
+.btn-modern-primary:active::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn-modern-primary:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 
+    0 15px 45px rgba(129, 199, 132, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Botão outline com SHIMMER effect ✨ */
+.btn-modern-outline {
+  position: relative;
+  padding: 1rem 2.3rem;
+  border-radius: 28px;
+  border: 3px solid #A5D6A7;
+  background: transparent;
+  color: #A5D6A7;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all 0.35s ease;
+  overflow: hidden;
+}
+
+.btn-modern-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(165, 214, 167, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-modern-outline:hover::before {
+  left: 100%;
+}
+
+.btn-modern-outline:hover {
+  background: #E8F5E9;
+  border-color: #C8E6C9;
+  color: #5D4037;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(165, 214, 167, 0.4);
+}
+
+/* === CARD DE FORMULÁRIO COM BOLHAS FLUTUANTES === */
+.form-card-modern {
+  position: relative;
+  padding: 3rem 2.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(232, 245, 233, 0.85) 100%);
+  backdrop-filter: blur(25px);
+  border-radius: 35px;
+  border: 3px solid rgba(200, 230, 201, 0.6);
+  box-shadow: 
+    0 25px 70px rgba(93, 64, 55, 0.18),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+}
+
+/* Bolha flutuante 1 - verde */
+.form-card-modern::before {
+  content: '';
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: -120px;
+  right: -120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 230, 201, 0.5) 0%, transparent 70%);
+  animation: float-bubble-slow 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Bolha flutuante 2 - rosa */
+.form-card-modern::after {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  bottom: -90px;
+  left: -90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 187, 208, 0.4) 0%, transparent 70%);
+  animation: float-bubble-slow 8s ease-in-out infinite;
+  animation-delay: 4s;
+  pointer-events: none;
+}
+
+@keyframes float-bubble-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  33% {
+    transform: translate(15px, -15px) scale(1.15);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translate(-10px, 15px) scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* === HEADER DECORADO COM ESTRELAS === */
+.form-header-decorated {
+  position: relative;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+}
+
+.form-header-decorated::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #A5D6A7, transparent);
+  border-radius: 2px;
+}
+
+.form-header-decorated h3,
+.form-header-decorated h4,
+.form-header-decorated h5 {
+  display: inline-block;
+  position: relative;
+}
+
+/* Estrelas decorativas ✨ */
+.form-header-decorated h3::before,
+.form-header-decorated h4::before,
+.form-header-decorated h5::before {
+  content: '✨';
+  position: absolute;
+  left: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  opacity: 0.7;
+  animation: twinkle-star 2.5s ease-in-out infinite;
+}
+
+.form-header-decorated h3::after,
+.form-header-decorated h4::after,
+.form-header-decorated h5::after {
+  content: '✨';
+  position: absolute;
+  right: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  opacity: 0.7;
+  animation: twinkle-star 2.5s ease-in-out infinite;
+  animation-delay: 1.25s;
+}
+
+@keyframes twinkle-star {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateY(-50%) scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.3) rotate(180deg);
+  }
+}
+
+/* === FLOATING LABEL SYSTEM === */
+.form-floating-modern {
+  position: relative;
+  margin-bottom: 1.75rem;
+}
+
+.form-floating-modern input,
+.form-floating-modern select,
+.form-floating-modern textarea {
+  width: 100%;
+  padding: 1.3rem 1.2rem 0.7rem 3.5rem !important;
+  border: 2px solid transparent;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(232, 245, 233, 0.6) 100%);
+  backdrop-filter: blur(15px);
+  font-size: 1.05rem;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 6px 20px rgba(93, 64, 55, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 1;
+  color: #5D4037;
+}
+
+.form-floating-modern input:focus,
+.form-floating-modern select:focus,
+.form-floating-modern textarea:focus {
+  border-color: #A5D6A7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(200, 230, 201, 0.25) 100%);
+  box-shadow: 
+    0 0 0 5px rgba(165, 214, 167, 0.2),
+    0 12px 35px rgba(129, 199, 132, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 1);
+  transform: translateY(-4px) scale(1.01);
+  outline: none;
+}
+
+/* Label flutuante */
+.form-floating-modern label {
+  position: absolute;
+  left: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A1887F;
+  font-weight: 500;
+  font-size: 1.05rem;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 2;
+  letter-spacing: 0.3px;
+}
+
+/* Label sobe! */
+.form-floating-modern input:focus ~ label,
+.form-floating-modern input:not(:placeholder-shown) ~ label,
+.form-floating-modern select:focus ~ label,
+.form-floating-modern select:not([value=""]) ~ label,
+.form-floating-modern select:valid ~ label,
+.form-floating-modern textarea:focus ~ label,
+.form-floating-modern textarea:not(:placeholder-shown) ~ label {
+  top: 0.65rem;
+  left: 3.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #A5D6A7;
+  transform: translateY(0);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* === ÍCONES COM ANIMAÇÕES === */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input,
+.input-with-icon select,
+.input-with-icon textarea {
+  padding-left: 3.5rem !important;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: #A1887F;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.input-with-icon input:focus ~ .input-icon,
+.input-with-icon select:focus ~ .input-icon,
+.input-with-icon textarea:focus ~ .input-icon {
+  color: #A5D6A7;
+  transform: translateY(-50%) scale(1.25) rotate(12deg);
+  filter: drop-shadow(0 3px 6px rgba(129, 199, 132, 0.5));
+}
+
+/* === VALIDAÇÃO ARROJADA === */
+.form-control.is-valid,
+.form-select.is-valid,
+input.form-control.is-valid {
+  border-color: #81C784 !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(129, 199, 132, 0.15) 100%) !important;
+  box-shadow: 
+    0 0 0 3px rgba(129, 199, 132, 0.2),
+    0 6px 20px rgba(129, 199, 132, 0.3) !important;
+  animation: pulse-valid 2s ease-in-out infinite;
+}
+
+@keyframes pulse-valid {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 3px rgba(129, 199, 132, 0.2),
+      0 6px 20px rgba(129, 199, 132, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 5px rgba(129, 199, 132, 0.3),
+      0 8px 25px rgba(129, 199, 132, 0.4);
+  }
+}
+
+.valid-feedback {
+  display: block !important;
+  color: #66BB6A !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  margin-top: 0.6rem !important;
+  padding-left: 1rem !important;
+  animation: slideInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.valid-feedback::before {
+  content: '✓ ';
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #81C784;
+  margin-right: 0.3rem;
+  display: inline-block;
+  animation: checkmark-pop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkmark-pop {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Input inválido com SHAKE dramático! */
+.form-control.is-invalid,
+.form-select.is-invalid,
+input.form-control.is-invalid {
+  border-color: #EF9A9A !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 205, 210, 0.2) 100%) !important;
+  animation: shake-intense 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake-intense {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-12px); }
+  20%, 40%, 60%, 80% { transform: translateX(12px); }
+}
+
+.invalid-feedback {
+  display: block !important;
+  color: #E57373 !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  margin-top: 0.6rem !important;
+  padding-left: 1rem !important;
+  animation: slideInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.invalid-feedback::before {
+  content: '⚠ ';
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #EF9A9A;
+  margin-right: 0.3rem;
+  display: inline-block;
+  animation: warning-pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes warning-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* === TEXTAREA MODERNA === */
+.form-floating-modern textarea {
+  min-height: 140px;
+  resize: vertical;
+  padding-top: 1.8rem !important;
+  line-height: 1.6;
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* === SWITCH TOGGLE ULTRA MODERNO === */
+.switch-modern-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.switch-modern {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 36px;
+}
+
+.switch-modern input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+  border-radius: 36px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 28px;
+  width: 28px;
+  left: 4px;
+  bottom: 4px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Switch ligado - GLOW verde! */
+.switch-modern input:checked + .switch-slider {
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
+  box-shadow: 
+    0 0 0 3px rgba(165, 214, 167, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(129, 199, 132, 0.5);
+}
+
+.switch-modern input:checked + .switch-slider::before {
+  transform: translateX(34px);
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(200, 230, 201, 0.5) 100%);
+  box-shadow: 
+    0 4px 12px rgba(129, 199, 132, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.switch-label {
+  color: #5D4037;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* === CHECKBOX MODERNOS COM POP! === */
+.form-check-modern {
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.form-check-modern input[type="checkbox"],
+.form-check-modern input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form-check-modern .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 28px;
+  width: 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(232, 245, 233, 0.6) 100%);
+  border: 2px solid #E8F5E9;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 3px 10px rgba(93, 64, 55, 0.1);
+}
+
+.form-check-modern input:checked ~ .checkmark {
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
+  border-color: #81C784;
+  transform: scale(1.1);
+  box-shadow: 
+    0 0 0 3px rgba(165, 214, 167, 0.3),
+    0 5px 15px rgba(129, 199, 132, 0.4);
+}
+
+/* Checkmark icon animado */
+.form-check-modern .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.form-check-modern input:checked ~ .checkmark::after {
+  display: block;
+  animation: checkmark-draw 0.3s ease-out;
+}
+
+@keyframes checkmark-draw {
+  0% { height: 0; }
+  100% { height: 12px; }
+}
+
+/* Radio button variant */
+.form-check-modern.radio .checkmark {
+  border-radius: 50%;
+}
+
+.form-check-modern.radio .checkmark::after {
+  left: 7px;
+  top: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  transform: scale(0);
+}
+
+.form-check-modern.radio input:checked ~ .checkmark::after {
+  transform: scale(1);
+  animation: radio-pop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes radio-pop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* === FILE INPUT MODERNO === */
+.file-input-modern {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.file-input-modern input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  border: 3px dashed #E8F5E9;
+  border-radius: 25px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(232, 245, 233, 0.4) 100%);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  text-align: center;
+}
+
+.file-input-label:hover {
+  border-color: #A5D6A7;
+  border-style: solid;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(200, 230, 201, 0.3) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(165, 214, 167, 0.3);
+}
+
+.file-input-icon {
+  font-size: 3.5rem;
+  color: #A5D6A7;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.file-input-label:hover .file-input-icon {
+  transform: scale(1.25) rotate(12deg);
+  filter: drop-shadow(0 4px 10px rgba(129, 199, 132, 0.5));
+}
+
+.file-input-text {
+  color: #5D4037;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.file-input-hint {
+  color: #A1887F;
+  font-size: 0.9rem;
+}
+
+/* === PLACEHOLDER ANIMADO === */
+.form-control::placeholder,
+.form-select::placeholder,
+textarea.form-control::placeholder,
+input.form-control::placeholder {
+  color: #A1887F;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus::placeholder,
+.form-select:focus::placeholder,
+textarea.form-control:focus::placeholder,
+input.form-control:focus::placeholder {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+/* === HINT TEXT DECORATIVO === */
+.form-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #A1887F;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  font-style: italic;
+}
+
+.form-hint::before {
+  content: '💡';
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* === FORM ACTIONS === */
+.form-actions-modern {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid rgba(200, 230, 201, 0.3);
+}
+
+.form-actions-modern.centered {
+  justify-content: center;
+}
+
+/* === LOADING STATE === */
+.form-control.loading,
+.form-select.loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.form-control.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 3px solid #E8F5E9;
+  border-top-color: #A5D6A7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === RESPONSIVIDADE MOBILE === */
+@media (max-width: 768px) {
+  .form-card-modern {
+    padding: 2rem 1.5rem;
+    border-radius: 25px;
+  }
+  
+  .form-control, 
+  .form-select, 
+  input.form-control {
+    padding: 0.9rem 1rem !important;
+  }
+  
+  .form-floating-modern input,
+  .form-floating-modern select,
+  .form-floating-modern textarea {
+    padding: 1.1rem 1rem 0.6rem 3rem !important;
+    font-size: 1rem;
+  }
+  
+  .form-floating-modern label {
+    left: 3rem;
+    font-size: 1rem;
+  }
+  
+  .form-floating-modern input:focus ~ label,
+  .form-floating-modern select:focus ~ label,
+  .form-floating-modern textarea:focus ~ label,
+  .form-floating-modern input:not(:placeholder-shown) ~ label,
+  .form-floating-modern select:valid ~ label,
+  .form-floating-modern textarea:not(:placeholder-shown) ~ label {
+    font-size: 0.75rem;
+    left: 3rem;
+  }
+  
+  .input-with-icon .input-icon {
+    left: 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .btn-modern-primary,
+  .btn-modern-outline {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.05rem;
+  }
+  
+  .form-header-decorated h3::before,
+  .form-header-decorated h3::after,
+  .form-header-decorated h4::before,
+  .form-header-decorated h4::after,
+  .form-header-decorated h5::before,
+  .form-header-decorated h5::after {
+    display: none;
+  }
+  
+  .switch-modern {
+    width: 60px;
+    height: 32px;
+  }
+  
+  .switch-slider::before {
+    height: 24px;
+    width: 24px;
+  }
+  
+  .switch-modern input:checked + .switch-slider::before {
+    transform: translateX(28px);
+  }
+  
+  .form-actions-modern {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .form-actions-modern .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-card-modern {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .form-header-decorated {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-control, 
+  .form-select,
+  input.form-control {
+    font-size: 16px !important; /* Previne zoom no iOS */
+  }
+}
+
+/* === INPUT GROUP MODERNO === */
+.input-group-modern {
+  position: relative;
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+}
+
+.input-group-modern .form-control {
+  border-radius: 20px 0 0 20px !important;
+  border-right: none !important;
+}
+
+.input-group-modern .input-group-text {
+  background: linear-gradient(135deg, #E8F5E9 0%, rgba(200, 230, 201, 0.6) 100%);
+  border: 2px solid transparent;
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  padding: 1rem 1.5rem;
+  color: #5D4037;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(93, 64, 55, 0.08);
+}

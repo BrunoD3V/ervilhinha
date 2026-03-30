@@ -10,7 +10,9 @@
         <p class="text-soft mb-0">Acompanha todas as etapas importantes da gravidez até ao primeiro ano</p>
     </div>
     <div>
-        <a asp-action="Create" class="btn btn-primary">➕ Adicionar Evento</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTimelineModal">
+            ➕ Adicionar Evento
+        </button>
         <a asp-action="Calendar" class="btn btn-info ms-2">📅 Ver Calendário</a>
     </div>
 </div>
@@ -47,7 +49,7 @@
 @if (Model.Any())
 {
     <div class="card shadow">
-        <div class="card-body">
+        <div class="card-body" id="timelineEventsList">
             @foreach (var item in Model.OrderBy(e => e.EventDate ?? DateTime.MaxValue))
             {
                 var isPast = item.EventDate.HasValue && item.EventDate.Value < DateTime.Today;
@@ -116,7 +118,108 @@ else
             </div>
             <h4 class="mb-3">Ainda não existem eventos na timeline</h4>
             <p class="text-soft mb-4">Começa a registar momentos importantes da gravidez e primeiros tempos do bebé!</p>
-            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Adicionar Primeiro Evento</a>
+            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createTimelineModal">
+                ➕ Adicionar Primeiro Evento
+            </button>
         </div>
     </div>
 }
+
+<!-- Modal de Criação de Evento -->
+<div class="modal fade" id="createTimelineModal" tabindex="-1" aria-labelledby="createTimelineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);">
+                <h5 class="modal-title" id="createTimelineModalLabel">📅 Novo Evento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="@Url.Action("CreatePartial", "BabyTimeline")"
+                  hx-target="#timelineEventsList"
+                  hx-swap="afterbegin"
+                  hx-on:htmx:after-request="closeModalAndReset('createTimelineModal')">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Título <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Title" required maxlength="200" placeholder="Ex: Consulta com Dr. Silva..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Data <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="EventDate" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Tipo <span class="text-danger">*</span></label>
+                            <select class="form-select" name="Type" required>
+                                <option value="">-- Selecione --</option>
+                                <option value="0">👨‍⚕️ Consulta</option>
+                                <option value="1">📷 Ecografia</option>
+                                <option value="2">🔬 Exame</option>
+                                <option value="3">⭐ Marco</option>
+                                <option value="4">🛒 Compra</option>
+                                <option value="5">📌 Outro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Fase <span class="text-danger">*</span></label>
+                            <select class="form-select" name="Phase" required>
+                                <option value="">-- Selecione --</option>
+                                <option value="0">🔮 Planeamento</option>
+                                <option value="1">🤰 Gravidez</option>
+                                <option value="2">🍼 Nascimento</option>
+                                <option value="3">👶 0-3 meses</option>
+                                <option value="4">😊 3-6 meses</option>
+                                <option value="5">🚼 6-12 meses</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Prioridade</label>
+                            <select class="form-select" name="Priority">
+                                <option value="0">🔴 Alta</option>
+                                <option value="1" selected>🟡 Média</option>
+                                <option value="2">🟢 Baixa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Semana Gravidez</label>
+                            <input type="number" class="form-control" name="PregnancyWeek" min="0" max="42" placeholder="1-42" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Mês Vida</label>
+                            <input type="number" class="form-control" name="BabyMonthAge" min="0" max="12" placeholder="0-12" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Descrição</label>
+                            <textarea class="form-control" name="Description" rows="2" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Custo (€)</label>
+                            <input type="number" class="form-control" name="EstimatedCost" step="0.01" min="0" placeholder="0.00" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Lembrar (dias antes)</label>
+                            <input type="number" class="form-control" name="ReminderDaysBefore" min="0" placeholder="7" />
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="HasReminder" id="hasReminder" />
+                                <label class="form-check-label" for="hasReminder">🔔 Ativar Lembrete</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="IsCompleted" id="isCompleted" />
+                                <label class="form-check-label" for="isCompleted">✅ Concluído</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Adicionar Evento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

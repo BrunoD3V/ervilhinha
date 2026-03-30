@@ -1,0 +1,32 @@
+@model Ervilhinha.Models.BabyItem
+
+<div class="card mb-3 htmx-added">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">
+            <span class="badge bg-info">@Model.Category</span>
+            <span class="badge @(Model.Priority <= 2 ? "bg-danger" : Model.Priority == 3 ? "bg-warning" : "bg-secondary")">
+                Prioridade: @Model.Priority
+            </span>
+        </p>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="card-text"><small>@Model.Description</small></p>
+        }
+        @if (Model.EstimatedCost > 0)
+        {
+            <p class="card-text"><strong>Custo Estimado:</strong> €@Model.EstimatedCost</p>
+        }
+        <div class="btn-group">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-primary">Editar</a>
+            <form asp-action="MarkAsPurchased" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-success">✅ Marcar como Comprado</button>
+            </form>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">Eliminar</a>
+            }
+        </div>
+    </div>
+</div>

@@ -66,6 +66,54 @@ namespace Ervilhinha.Controllers
             return View(expense);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateAjax([FromForm] Expense expense)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    expense.CreatedBy = User.Identity?.Name ?? "Unknown";
+                    expense.CreatedDate = DateTime.UtcNow;
+                    _context.Add(expense);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Despesa criada com sucesso!" });
+                }
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(", ", errors) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePartial([FromForm] Expense expense)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    expense.CreatedBy = User.Identity?.Name ?? "Unknown";
+                    expense.CreatedDate = DateTime.UtcNow;
+                    _context.Add(expense);
+                    await _context.SaveChangesAsync();
+
+                    await _context.Entry(expense).Reference(e => e.ExpenseCategory).LoadAsync();
+
+                    return PartialView("_ExpenseRow", expense);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

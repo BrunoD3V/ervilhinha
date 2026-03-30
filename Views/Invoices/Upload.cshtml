@@ -4,22 +4,51 @@
 
 <h1>📸 Carregar Fatura</h1>
 
+@if (ViewBag.OcrConfigured == false)
+{
+    <div class="alert alert-warning">
+        <h5>⚠️ Serviço de OCR Não Configurado</h5>
+        <p>
+            <strong>Azure Document Intelligence não está configurado.</strong>
+            A funcionalidade de leitura automática de faturas está desativada.
+        </p>
+        <p class="mb-0">
+            📖 Para ativar, consulta: <code>Documentation/Invoice-OCR-Roadmap.md</code><br/>
+            💡 Podes continuar fazendo upload - os dados terão de ser inseridos manualmente.
+        </p>
+    </div>
+}
+
 <div class="row">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h4>Scanner de Faturas IA</h4>
+                <h4>Scanner de Faturas IA @(ViewBag.OcrConfigured == false ? "(Modo Manual)" : "")</h4>
             </div>
             <div class="card-body">
-                <div class="alert alert-info">
-                    <h5>📷 Como funciona:</h5>
-                    <ol>
-                        <li>Tira uma foto à fatura ou carrega um PDF</li>
-                        <li>A IA extrai automaticamente o fornecedor, data e montante</li>
-                        <li>Revê os dados extraídos</li>
-                        <li>A despesa é criada automaticamente!</li>
-                    </ol>
-                </div>
+                @if (ViewBag.OcrConfigured == true)
+                {
+                    <div class="alert alert-info">
+                        <h5>📷 Como funciona:</h5>
+                        <ol>
+                            <li>Tira uma foto à fatura ou carrega um PDF</li>
+                            <li>A IA extrai automaticamente o fornecedor, data e montante</li>
+                            <li>Revê os dados extraídos</li>
+                            <li>A despesa é criada automaticamente!</li>
+                        </ol>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-secondary">
+                        <h5>📝 Modo Manual:</h5>
+                        <ol>
+                            <li>Carrega a imagem ou PDF da fatura</li>
+                            <li>Insere manualmente os dados (fornecedor, data, montante)</li>
+                            <li>A despesa é criada com a fatura anexada</li>
+                        </ol>
+                    </div>
+                }
 
                 <form asp-action="Upload" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
@@ -45,7 +74,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            🤖 Carregar & Processar com IA
+                            @(ViewBag.OcrConfigured == true ? "🤖 Carregar & Processar com IA" : "📤 Carregar Fatura (Manual)")
                         </button>
                         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
                     </div>
@@ -72,11 +101,16 @@
 
                 <h6>🔒 Privacidade & Segurança</h6>
                 <p class="small text-muted">
-                    As tuas faturas são processadas de forma segura e armazenadas apenas na tua conta.
-                    @if (string.IsNullOrEmpty(ViewBag.AzureConfigured))
+                    As tuas faturas são armazenadas de forma segura apenas na tua conta.
+                    @if (ViewBag.OcrConfigured == true)
                     {
                         <br /><br />
-                        <strong>Nota:</strong> <text>Azure Form Recognizer não está configurado. O sistema usará dados de demonstração.</text>
+                        <strong>✅ OCR Ativo:</strong> <text>Processamento na EU (Azure West Europe).</text>
+                    }
+                    else
+                    {
+                        <br /><br />
+                        <strong>⚠️ OCR Desativado:</strong> <text>Configuração Azure em falta. Inserção manual necessária.</text>
                     }
                 </p>
             </div>

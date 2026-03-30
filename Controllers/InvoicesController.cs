@@ -13,12 +13,18 @@ namespace Ervilhinha.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IInvoiceOcrService _ocrService;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
 
-        public InvoicesController(ApplicationDbContext context, IInvoiceOcrService ocrService, IWebHostEnvironment environment)
+        public InvoicesController(
+            ApplicationDbContext context, 
+            IInvoiceOcrService ocrService, 
+            IWebHostEnvironment environment,
+            IConfiguration configuration)
         {
             _context = context;
             _ocrService = ocrService;
             _environment = environment;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -28,11 +34,23 @@ namespace Ervilhinha.Controllers
                 .OrderByDescending(i => i.UploadDate)
                 .ToListAsync();
 
+            // Passar status OCR para view
+            var endpoint = _configuration["AzureFormRecognizer:Endpoint"];
+            var apiKey = _configuration["AzureFormRecognizer:ApiKey"];
+            ViewBag.OcrConfigured = !string.IsNullOrEmpty(endpoint) && !string.IsNullOrEmpty(apiKey);
+
             return View(invoices);
         }
 
         public IActionResult Upload()
         {
+            // Verifica se Azure Form Recognizer está configurado
+            var endpoint = _configuration["AzureFormRecognizer:Endpoint"];
+            var apiKey = _configuration["AzureFormRecognizer:ApiKey"];
+            var isConfigured = !string.IsNullOrEmpty(endpoint) && !string.IsNullOrEmpty(apiKey);
+
+            ViewBag.OcrConfigured = isConfigured;
+
             return View();
         }
 
@@ -116,10 +134,19 @@ namespace Ervilhinha.Controllers
 
                     invoice.ExpenseId = expense.Id;
                     await _context.SaveChangesAsync();
-                }
 
-                TempData["Success"] = "Invoice uploaded and processed successfully!";
-                return RedirectToAction(nameof(Review), new { id = invoice.Id });
+                    TempData["Success"] = "✅ Fatura processada com sucesso! Verifica os dados extraídos.";
+                    return RedirectToAction(nameof(Review), new { id = invoice.Id });
+                }
+                else
+                {
+                    // OCR falhou - mostrar mensagem apropriada
+                    TempData["Warning"] = !string.IsNullOrEmpty(ocrResult.ErrorMessage) 
+                        ? ocrResult.ErrorMessage 
+                        : "⚠️ Não foi possível extrair dados automaticamente. Podes inserir manualmente.";
+
+                    return RedirectToAction(nameof(Review), new { id = invoice.Id });
+                }
             }
             catch (Exception ex)
             {

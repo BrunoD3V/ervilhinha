@@ -32,7 +32,7 @@ namespace Ervilhinha.Models
         /// Email do criador (para partilha)
         /// </summary>
         public string CreatedBy { get; set; } = string.Empty;
-
+        
         /// <summary>
         /// Data prevista de nascimento
         /// </summary>

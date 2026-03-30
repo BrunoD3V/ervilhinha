@@ -1,0 +1,673 @@
+/* ========================================
+   🎆 ERVILHINHA - EFEITOS ÉPICOS EXTRA
+   Formulários AINDA MAIS arrojados!
+   ======================================== */
+
+/* ========================================
+   ✨ PARTICLE BACKGROUND (Floating Elements)
+   ======================================== */
+
+.form-card-modern.with-particles {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Partículas flutuantes decorativas */
+.form-card-modern.with-particles::before,
+.form-card-modern.with-particles::after {
+  pointer-events: none;
+}
+
+/* Partícula 1 - Estrela Grande */
+.form-card-modern.with-particles .particle-1 {
+  content: '✨';
+  position: absolute;
+  font-size: 2rem;
+  top: 10%;
+  left: 15%;
+  opacity: 0.5;
+  animation: float-particle-1 6s ease-in-out infinite;
+}
+
+/* Partícula 2 - Coração */
+.form-card-modern.with-particles .particle-2 {
+  content: '💚';
+  position: absolute;
+  font-size: 1.5rem;
+  top: 70%;
+  right: 10%;
+  opacity: 0.4;
+  animation: float-particle-2 7s ease-in-out infinite;
+}
+
+/* Partícula 3 - Bebé */
+.form-card-modern.with-particles .particle-3 {
+  content: '👶';
+  position: absolute;
+  font-size: 1.8rem;
+  bottom: 20%;
+  left: 80%;
+  opacity: 0.3;
+  animation: float-particle-3 8s ease-in-out infinite;
+}
+
+@keyframes float-particle-1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(20px, -20px) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-particle-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-15px, 15px) scale(1.3);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-particle-3 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0.2;
+  }
+  33% {
+    transform: translate(10px, -15px) rotate(15deg) scale(1.1);
+    opacity: 0.5;
+  }
+  66% {
+    transform: translate(-10px, 10px) rotate(-15deg) scale(0.9);
+    opacity: 0.4;
+  }
+}
+
+/* ========================================
+   🎊 SUCCESS CONFETTI EFFECT
+   ======================================== */
+
+/* Container para confetti (adicionar via JS) */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #A5D6A7;
+  top: -10px;
+  opacity: 0;
+  animation: confetti-fall 3s ease-in forwards;
+}
+
+.confetti-piece:nth-child(2n) {
+  background: #F8BBD0;
+  animation-delay: 0.2s;
+}
+
+.confetti-piece:nth-child(3n) {
+  background: #BBDEFB;
+  animation-delay: 0.4s;
+}
+
+.confetti-piece:nth-child(4n) {
+  background: #FFCCBC;
+  width: 8px;
+  height: 8px;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+/* ========================================
+   🌈 INPUT RAINBOW GLOW ON FOCUS
+   ======================================== */
+
+.form-control.rainbow-glow:focus,
+.form-select.rainbow-glow:focus {
+  animation: rainbow-border 2s ease-in-out infinite;
+}
+
+@keyframes rainbow-border {
+  0% {
+    border-color: #A5D6A7;
+    box-shadow: 0 0 0 4px rgba(165, 214, 167, 0.3);
+  }
+  25% {
+    border-color: #BBDEFB;
+    box-shadow: 0 0 0 4px rgba(187, 222, 251, 0.3);
+  }
+  50% {
+    border-color: #F8BBD0;
+    box-shadow: 0 0 0 4px rgba(248, 187, 208, 0.3);
+  }
+  75% {
+    border-color: #FFCCBC;
+    box-shadow: 0 0 0 4px rgba(255, 204, 188, 0.3);
+  }
+  100% {
+    border-color: #A5D6A7;
+    box-shadow: 0 0 0 4px rgba(165, 214, 167, 0.3);
+  }
+}
+
+/* ========================================
+   💫 CURSOR TRAIL EFFECT
+   ======================================== */
+
+.cursor-trail {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(165, 214, 167, 0.6) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  animation: trail-fade 0.6s ease-out forwards;
+}
+
+@keyframes trail-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* ========================================
+   🎭 SKELETON LOADERS
+   ======================================== */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    #E8F5E9 0%,
+    #C8E6C9 50%,
+    #E8F5E9 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 15px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 10px;
+}
+
+.skeleton-input {
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.skeleton-button {
+  height: 45px;
+  width: 120px;
+}
+
+/* ========================================
+   🎨 GRADIENT TEXT ANIMATION
+   ======================================== */
+
+.text-gradient-animated {
+  background: linear-gradient(
+    90deg,
+    #A5D6A7 0%,
+    #81C784 25%,
+    #F8BBD0 50%,
+    #BBDEFB 75%,
+    #A5D6A7 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ========================================
+   ⚡ PULSE ATTENTION EFFECT
+   ======================================== */
+
+.pulse-attention {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(165, 214, 167, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(165, 214, 167, 0);
+  }
+}
+
+/* ========================================
+   🎪 FLIP CARD EFFECT (para info cards)
+   ======================================== */
+
+.flip-card-container {
+  perspective: 1000px;
+  height: 300px;
+}
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-container:hover .flip-card {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.flip-card-front {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+.flip-card-back {
+  background: linear-gradient(135deg, #F8BBD0 0%, #E1BEE7 100%);
+  transform: rotateY(180deg);
+}
+
+/* ========================================
+   🎯 TOOLTIP MODERNO
+   ======================================== */
+
+.tooltip-modern {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-modern .tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background: linear-gradient(135deg, #5D4037 0%, #8D6E63 100%);
+  color: white;
+  text-align: center;
+  border-radius: 15px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1100;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+}
+
+.tooltip-modern .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #5D4037 transparent transparent transparent;
+}
+
+.tooltip-modern:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   🎬 SLIDE-IN ANIMATIONS
+   ======================================== */
+
+.slide-in-left {
+  animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   🔥 BUTTON FIRE EFFECT (on hover)
+   ======================================== */
+
+.btn-fire {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-fire::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: scale(0);
+  transition: transform 0.6s ease-out;
+}
+
+.btn-fire:hover::before {
+  transform: scale(1);
+  animation: fire-pulse 1s ease-out infinite;
+}
+
+@keyframes fire-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   💎 GLASS CARD PREMIUM
+   ======================================== */
+
+.glass-card-premium {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 8px 32px 0 rgba(93, 64, 55, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-premium::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: glass-shine 3s ease-in-out infinite;
+}
+
+@keyframes glass-shine {
+  0%, 100% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  50% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* ========================================
+   🎪 MORPHING SHAPES (decoração)
+   ======================================== */
+
+.morphing-shape {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  background: linear-gradient(135deg, rgba(165, 214, 167, 0.3) 0%, rgba(248, 187, 208, 0.3) 100%);
+  animation: morph 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    transform: rotate(0deg);
+  }
+  25% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(90deg);
+  }
+  50% {
+    border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%;
+    transform: rotate(180deg);
+  }
+  75% {
+    border-radius: 40% 60% 70% 30% / 50% 70% 30% 50%;
+    transform: rotate(270deg);
+  }
+}
+
+/* ========================================
+   🎯 PROGRESS RING (circular progress)
+   ======================================== */
+
+.progress-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.progress-ring-circle {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-path {
+  stroke-dasharray: 339.292;
+  stroke-dashoffset: 339.292;
+  stroke: #A5D6A7;
+  stroke-width: 8;
+  fill: none;
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+/* 75% completo */
+.progress-ring-path[data-progress="75"] {
+  stroke-dashoffset: 84.823;
+}
+
+/* ========================================
+   🎨 NEON GLOW EFFECT
+   ======================================== */
+
+.neon-glow {
+  text-shadow: 
+    0 0 5px #A5D6A7,
+    0 0 10px #A5D6A7,
+    0 0 20px #A5D6A7,
+    0 0 40px #81C784,
+    0 0 80px #81C784;
+  animation: neon-flicker 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neon-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ========================================
+   📱 MOBILE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Reduzir animações pesadas em mobile */
+  .morphing-shape,
+  .glass-card-premium::before,
+  .cursor-trail {
+    display: none;
+  }
+  
+  /* Simplificar partículas */
+  .form-card-modern.with-particles .particle-1,
+  .form-card-modern.with-particles .particle-2,
+  .form-card-modern.with-particles .particle-3 {
+    font-size: 1.2rem;
+    animation-duration: 4s;
+  }
+}
+
+/* ========================================
+   🎯 UTILITY CLASSES
+   ======================================== */
+
+.hidden {
+  display: none !important;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.rotate-in {
+  animation: rotateIn 0.6s ease-out;
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}

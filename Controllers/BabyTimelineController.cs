@@ -71,6 +71,57 @@ namespace Ervilhinha.Controllers
             return View(timeline);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateAjax([FromForm] BabyTimeline timeline)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    timeline.UserId = userId!;
+                    timeline.CreatedDate = DateTime.UtcNow;
+
+                    _context.Add(timeline);
+                    await _context.SaveChangesAsync();
+
+                    return Json(new { success = true });
+                }
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(", ", errors) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePartial([FromForm] BabyTimeline timeline)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    timeline.UserId = userId!;
+                    timeline.CreatedDate = DateTime.UtcNow;
+
+                    _context.Add(timeline);
+                    await _context.SaveChangesAsync();
+
+                    return PartialView("_TimelineEventCard", timeline);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // GET: BabyTimeline/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

@@ -1,6 +1,6 @@
-/* ========================================
-   🌿 ERVILHINHA - TEMA PASTEL COZY 
-   Cores inspiradas em "Little Pea" e bebés
+﻿/* ========================================
+   ðŸŒ¿ ERVILHINHA - TEMA PASTEL COZY 
+   Cores inspiradas em "Little Pea" e bebÃ©s
    ======================================== */
 
 :root {
@@ -48,12 +48,12 @@ body {
 }
 
 /* ===================================
-   🎯 SISTEMA DE LAYOUT PRINCIPAL
+   ðŸŽ¯ SISTEMA DE LAYOUT PRINCIPAL
    =================================== */
 
-/* HOMEPAGE: Sem alterações - usar layout full width */
+/* HOMEPAGE: Sem alteraÃ§Ãµes - usar layout full width */
 
-/* PÁGINAS INTERNAS: Layout 85% */
+/* PÃGINAS INTERNAS: Layout 85% */
 .main-layout-container {
   width: 85%;
   margin: 0 auto;
@@ -64,7 +64,7 @@ body.internal-pages main {
   padding: 2rem;
 }
 
-/* Resetar containers Bootstrap em páginas internas */
+/* Resetar containers Bootstrap em pÃ¡ginas internas */
 body.internal-pages .container,
 body.internal-pages .container-fluid {
   width: 100% !important;
@@ -73,7 +73,7 @@ body.internal-pages .container-fluid {
   margin: 0 !important;
 }
 
-/* Força conteúdo a usar largura total */
+/* ForÃ§a conteÃºdo a usar largura total */
 body.internal-pages .card,
 body.internal-pages .table-responsive,
 body.internal-pages .row,
@@ -105,7 +105,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   🎨 CARDS PASTEL FOFOS
+   ðŸŽ¨ CARDS PASTEL FOFOS
    ======================================== */
 
 .card {
@@ -152,7 +152,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   🔘 BOTÕES PASTEL FOFOS
+   ðŸ”˜ BOTÃ•ES PASTEL FOFOS
    ======================================== */
 
 .btn {
@@ -228,7 +228,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   🎯 NAVEGAÇÃO SUAVE
+   ðŸŽ¯ NAVEGAÃ‡ÃƒO SUAVE
    ======================================== */
 
 .navbar {
@@ -276,7 +276,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--pea-green-light);
 }
 
-/* Botão de Login - Destaque Verde Suave */
+/* BotÃ£o de Login - Destaque Verde Suave */
 .navbar-nav .btn-success {
   min-width: 140px;
   font-weight: 500;
@@ -291,7 +291,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   🎯 DROPDOWN MENU Z-INDEX FIX - CRITICAL
+   ðŸŽ¯ DROPDOWN MENU Z-INDEX FIX - CRITICAL
    ======================================== */
 
 /* Ensure navbar collapse appears above page content */
@@ -305,15 +305,15 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1040;
 }
 
-/* Dropdown menus - MUST be above all page content */
+/* Dropdown menus - ABAIXO dos modals (Bootstrap modals = 1055) */
 .dropdown-menu {
-  z-index: 1050 !important;
+  z-index: 1045 !important;
   position: absolute !important;
 }
 
 /* Ensure dropdown shows when open */
 .dropdown-menu.show {
-  z-index: 1050 !important;
+  z-index: 1045 !important;
   display: block;
 }
 
@@ -324,7 +324,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   📱 RESPONSIVIDADE MOBILE
+   ðŸ“± RESPONSIVIDADE MOBILE
    ======================================== */
 
 /* Mobile: Navbar collapse para mobile */
@@ -376,7 +376,7 @@ section, .hero-modern, .feature-section, main, .card {
     font-size: 0.875rem;
   }
 
-  /* Botões em mobile */
+  /* BotÃµes em mobile */
   .btn {
     padding: 0.5rem 1.2rem;
     font-size: 0.9rem;
@@ -387,7 +387,7 @@ section, .hero-modern, .feature-section, main, .card {
     font-size: 1rem;
   }
 
-  /* Formulários em mobile */
+  /* FormulÃ¡rios em mobile */
   .form-control,
   .form-select {
     font-size: 16px; /* Previne zoom no iOS */
@@ -419,7 +419,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   ⚠️ ALERTAS PASTEL
+   âš ï¸ ALERTAS PASTEL
    ======================================== */
 
 .alert {
@@ -453,7 +453,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   📝 FORMULÁRIOS SUAVES
+   ðŸ“ FORMULÃRIOS SUAVES
    ======================================== */
 
 .form-control, .form-select {
@@ -477,7 +477,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   📊 TABELAS SUAVES
+   ðŸ“Š TABELAS SUAVES
    ======================================== */
 
 .table {
@@ -500,7 +500,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   🎨 BADGES PASTEL
+   ðŸŽ¨ BADGES PASTEL
    ======================================== */
 
 .badge {
@@ -540,7 +540,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   📋 CARD HEADERS PASTEL
+   ðŸ“‹ CARD HEADERS PASTEL
    ======================================== */
 
 .card-header.bg-primary {
@@ -574,7 +574,7 @@ section, .hero-modern, .feature-section, main, .card {
 }
 
 /* ========================================
-   📊 TABLE HEADERS PASTEL
+   ðŸ“Š TABLE HEADERS PASTEL
    ======================================== */
 
 .table-light {
@@ -588,7 +588,7 @@ thead.table-primary {
 }
 
 /* ========================================
-   🔘 BOTÕES PASTEL OVERRIDE
+   ðŸ”˜ BOTÃ•ES PASTEL OVERRIDE
    ======================================== */
 
 .btn-primary {
@@ -649,7 +649,7 @@ thead.table-primary {
 }
 
 /* ========================================
-   ✨ ANIMAÇÕES SUAVES
+   âœ¨ ANIMAÃ‡Ã•ES SUAVES
    ======================================== */
 
 @keyframes fadeInUp {
@@ -668,7 +668,7 @@ thead.table-primary {
 }
 
 /* ========================================
-   🎯 SOMBRAS SUAVES
+   ðŸŽ¯ SOMBRAS SUAVES
    ======================================== */
 
 .shadow-sm {
@@ -684,10 +684,10 @@ thead.table-primary {
 }
 
 /* ========================================
-   🌿 ELEMENTOS ESPECIAIS
+   ðŸŒ¿ ELEMENTOS ESPECIAIS
    ======================================== */
 
-/* Container principal com padding respirável */
+/* Container principal com padding respirÃ¡vel */
 .container, .container-fluid {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -731,7 +731,7 @@ footer .container {
 }
 
 /* ========================================
-   📱 RESPONSIVIDADE
+   ðŸ“± RESPONSIVIDADE
    ======================================== */
 
 @media (max-width: 768px) {
@@ -763,7 +763,7 @@ footer .container {
 }
 
 /* ========================================
-   🎨 CLASSES UTILITÁRIAS EXTRAS
+   ðŸŽ¨ CLASSES UTILITÃRIAS EXTRAS
    ======================================== */
 
 .text-soft {
@@ -791,7 +791,7 @@ footer .container {
 }
 
 /* ========================================
-   ✨ SCROLL REVEAL ANIMATIONS & MODERN LAYOUT
+   âœ¨ SCROLL REVEAL ANIMATIONS & MODERN LAYOUT
    ======================================== */
 
 /* Scroll reveal base styles */
@@ -940,7 +940,7 @@ footer .container {
   background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--bg-cream) 50%, rgba(255, 204, 188, 0.1) 100%);
 }
 
-/* Seção específica para CTA final */
+/* SeÃ§Ã£o especÃ­fica para CTA final */
 .feature-section:last-of-type {
   min-height: 80vh;
   background: linear-gradient(135deg, var(--pea-green-light) 0%, var(--baby-peach) 40%, var(--baby-yellow) 100%) !important;
@@ -1020,7 +1020,7 @@ main {
   padding-right: 30px;
 }
 
-/* Larguras específicas por breakpoint */
+/* Larguras especÃ­ficas por breakpoint */
 @media (min-width: 1400px) {
   .container {
     max-width: 1600px !important;
@@ -1047,7 +1047,7 @@ main {
   }
 }
 
-/* Mobile: largura quase total com margem mínima */
+/* Mobile: largura quase total com margem mÃ­nima */
 @media (max-width: 767px) {
   .container {
     max-width: 100%;
@@ -1237,7 +1237,7 @@ main {
 }
 
 /* ========================================
-   🎯 NAVBAR DROPDOWN STYLES
+   ðŸŽ¯ NAVBAR DROPDOWN STYLES
    ======================================== */
 
 /* Dropdown headers styling */
@@ -1322,4 +1322,216 @@ main {
     padding-left: 0.75rem;
     background-color: var(--pea-green-light);
   }
+}
+
+/* ========================================
+   🎯 MODAL Z-INDEX FIX - SOLUÇÃO DEFINITIVA
+   ======================================== */
+
+/* HIERARQUIA Z-INDEX CORRETA:
+   1. Navbar (1030)
+   2. Dropdowns Navbar (1045)
+   3. Modal Backdrop (1040) ← INFERIOR ao modal!
+   4. Modal Container (1056) ← Container do modal
+
+   PROBLEMA ANTERIOR: Backdrop tinha z-index IGUAL ou SUPERIOR ao modal,
+   bloqueando todos os cliques na página inteira!
+
+   SOLUÇÃO: Backdrop DEVE estar ABAIXO do modal container.
+*/
+
+/* ========================================
+   🔧 BACKDROP POSITIONING FIX - CRITICAL
+   Garante que backdrop NUNCA sai do body
+   ======================================== */
+
+/* FORÇA backdrop a ficar SEMPRE dentro do body */
+html > .modal-backdrop {
+  /* Se por algum bug aparecer fora do body, move para dentro */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1040 !important;
+}
+
+/* Backdrop: Fundo escuro que escurece a página (ABAIXO do modal) */
+.modal-backdrop {
+  z-index: 1040 !important;
+  pointer-events: auto !important; /* Permite cliques (fecha modal ao clicar fora) */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  transition: opacity 0.15s linear !important;
+}
+
+/* Backdrop quando está a aparecer */
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+/* Backdrop visível */
+.modal-backdrop.show {
+  opacity: 1;
+}
+
+/* Modal Container: DEVE estar ACIMA do backdrop */
+.modal {
+  z-index: 1056 !important;
+  pointer-events: none !important; /* Não bloqueia cliques - passa para o content */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  outline: 0 !important;
+}
+
+/* Modal Dialog: Comportamento natural do Bootstrap */
+.modal-dialog {
+  pointer-events: none !important;
+  position: relative !important;
+  width: auto !important;
+  margin: 0.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: calc(100% - 1rem) !important;
+}
+
+/* Modal Content: Caixa branca onde estão os controlos (RECEBE os cliques) */
+.modal-content {
+  pointer-events: auto !important; /* Permite interação com formulário */
+  position: relative !important;
+  z-index: 1 !important; /* Relativo ao pai (.modal) */
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  background-color: #fff !important;
+  background-clip: padding-box !important;
+  border-radius: 35px !important; /* Arredondado moderno */
+  outline: 0 !important;
+}
+
+/* Garante que body com modal aberto não scrolle */
+body.modal-open {
+  overflow: hidden !important;
+  padding-right: 0 !important; /* Remove compensação de scroll */
+}
+
+/* Scroll automático quando conteúdo é grande */
+.modal-body {
+  overflow-y: auto;
+  max-height: calc(90vh - 120px);
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+/* ========================================
+   📱 MODAL RESPONSIVE SIZES
+   ======================================== */
+
+/* Tamanhos responsivos */
+.modal-lg {
+  max-width: 800px;
+}
+
+.modal-xl {
+  max-width: 1140px;
+}
+
+/* Mobile - modal ocupa mais espaço */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+    max-height: calc(100vh - 1rem);
+  }
+
+  .modal-content {
+    max-height: calc(100vh - 1rem);
+  }
+
+  .modal-body {
+    max-height: calc(100vh - 140px);
+  }
+}
+
+/* Tablet */
+@media (min-width: 577px) and (max-width: 991px) {
+  .modal-lg, .modal-xl {
+    max-width: calc(100% - 3rem);
+  }
+}
+
+/* Desktop - centraliza modal */
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+  }
+
+  .modal-dialog-centered {
+    min-height: calc(100% - 3.5rem);
+  }
+}
+
+/* ========================================
+   ✨ MODAL ANIMATIONS
+   ======================================== */
+
+/* Animações suaves */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+  transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+  transform: translate(0, 0);
+}
+
+/* Animação de fade do modal */
+.modal.fade {
+  transition: opacity 0.15s linear;
+}
+
+/* ========================================
+   🎯 MODAL STACKING (múltiplos modais)
+   ======================================== */
+
+/* Quando há múltiplos modais abertos */
+.modal.show ~ .modal.show {
+  z-index: 1057 !important;
+}
+
+.modal.show ~ .modal.show ~ .modal-backdrop {
+  z-index: 1041 !important;
+}
+
+/* HTMX Loading */
+.htmx-request .htmx-indicator {
+  display: inline-block;
+}
+
+.htmx-indicator {
+  display: none;
+}
+
+/* ========================================
+   🔧 DEBUG TOOLS (remover em produção)
+   ======================================== */
+
+/* Visualizar backdrop em dev (opcional) */
+.debug-mode .modal-backdrop {
+  background-color: rgba(255, 0, 0, 0.3) !important; /* Vermelho transparente */
+}
+
+.debug-mode .modal {
+  border: 3px solid lime !important; /* Verde brilhante */
 }

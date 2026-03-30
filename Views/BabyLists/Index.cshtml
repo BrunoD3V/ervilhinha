@@ -9,7 +9,9 @@
         <h1 class="page-title">📋 Listas do Bebé</h1>
         <p class="text-soft mb-0">Enxoval, lista de presentes e muito mais</p>
     </div>
-    <a asp-action="Create" class="btn btn-primary">➕ Nova Lista</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBabyListModal">
+        ➕ Nova Lista
+    </button>
 </div>
 
 @if (TempData["Success"] != null)
@@ -49,7 +51,7 @@
 
 @if (Model.Any())
 {
-    <div class="row">
+    <div class="row" id="babylistsContainer">
         @foreach (var list in Model)
         {
             var totalItems = list.Items.Count;
@@ -180,7 +182,106 @@ else
                 Cria a tua primeira lista para começar a organizar o enxoval do bebé<br>
                 ou partilhar uma lista de presentes com família e amigos!
             </p>
-            <a asp-action="Create" class="btn btn-primary btn-lg">➕ Criar Primeira Lista</a>
+            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createBabyListModal">
+                ➕ Criar Primeira Lista
+            </button>
         </div>
     </div>
 }
+
+<!-- Modal de Criação de Lista - ULTRA MODERNO ✨ -->
+<div class="modal fade" id="createBabyListModal" tabindex="-1" aria-labelledby="createBabyListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content form-card-modern">
+            <div class="modal-body">
+                <div class="form-header-decorated">
+                    <h4>Nova Lista do Bebé</h4>
+                </div>
+
+                <form hx-post="@Url.Action("CreatePartial", "BabyLists")"
+                      hx-target="#babylistsContainer"
+                      hx-swap="afterbegin"
+                      hx-on:htmx:after-request="closeModalAndReset('createBabyListModal'); location.reload();">
+
+                    <!-- Nome da Lista - Floating Label + Ícone -->
+                    <div class="form-floating-modern input-with-icon">
+                        <input type="text" 
+                               id="Name" 
+                               name="Name" 
+                               placeholder=" " 
+                               class="form-control" 
+                               required 
+                               maxlength="100" />
+                        <label for="Name">Nome da Lista *</label>
+                        <span class="input-icon">📝</span>
+                    </div>
+
+                    <!-- Tipo de Lista - Com Ícone -->
+                    <div class="input-with-icon mb-3">
+                        <select id="Type" 
+                                name="Type" 
+                                class="form-select" 
+                                required>
+                            <option value="">Escolha o tipo...</option>
+                            <option value="1">🛒 Enxoval (Planeamento Pessoal)</option>
+                            <option value="2">🎁 Lista de Presentes</option>
+                            <option value="3">📋 Lista Geral</option>
+                        </select>
+                        <span class="input-icon">🎁</span>
+                    </div>
+                    <div class="form-hint">Escolha entre lista privada (enxoval) ou pública (presentes)</div>
+
+                    <div class="row g-3 mb-3">
+                        <!-- Nome do Bebé - Floating Label + Ícone -->
+                        <div class="col-md-6">
+                            <div class="form-floating-modern input-with-icon">
+                                <input type="text" 
+                                       id="BabyName" 
+                                       name="BabyName" 
+                                       placeholder=" " 
+                                       class="form-control" 
+                                       maxlength="100" />
+                                <label for="BabyName">Nome do Bebé</label>
+                                <span class="input-icon">👶</span>
+                            </div>
+                        </div>
+
+                        <!-- Data Prevista - Floating Label + Ícone -->
+                        <div class="col-md-6">
+                            <div class="form-floating-modern input-with-icon">
+                                <input type="date" 
+                                       id="ExpectedDate" 
+                                       name="ExpectedDate" 
+                                       placeholder=" " 
+                                       class="form-control" />
+                                <label for="ExpectedDate">Data Prevista</label>
+                                <span class="input-icon">📅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descrição - Floating Label + Ícone -->
+                    <div class="form-floating-modern input-with-icon">
+                        <textarea id="Description" 
+                                  name="Description" 
+                                  placeholder=" " 
+                                  class="form-control" 
+                                  maxlength="500"></textarea>
+                        <label for="Description">Descrição</label>
+                        <span class="input-icon">💬</span>
+                    </div>
+
+                    <!-- Botões Modernos -->
+                    <div class="form-actions-modern">
+                        <button type="button" class="btn-modern-outline" data-bs-dismiss="modal">
+                            ❌ Cancelar
+                        </button>
+                        <button type="submit" class="btn-modern-primary">
+                            💾 Criar Lista
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

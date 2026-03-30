@@ -6,7 +6,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>👶 Artigos do Bebé</h1>
-    <a asp-action="Create" class="btn btn-primary">➕ Adicionar Novo Artigo</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBabyItemModal">
+        ➕ Adicionar Novo Artigo
+    </button>
 </div>
 
 <div class="row mb-3">
@@ -33,6 +35,7 @@
     {
         <div class="col-md-6">
             <h4>🔴 Por Comprar</h4>
+            <div id="babyItemsList">
             @foreach (var item in Model.Where(i => !i.IsPurchased))
             {
                 <div class="card mb-3">
@@ -64,6 +67,7 @@
                     </div>
                 </div>
             }
+            </div>
         </div>
         <div class="col-md-6">
             <h4>✅ Comprados</h4>
@@ -103,8 +107,84 @@
     {
         <div class="col-12">
             <div class="alert alert-info">
-                Não foram encontrados artigos do bebé. <a asp-action="Create">Adiciona o teu primeiro artigo!</a>
+                Não foram encontrados artigos do bebé. <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#createBabyItemModal">Adiciona o teu primeiro artigo!</button>
             </div>
         </div>
     }
+</div>
+
+<!-- Modal de Criação de Artigo -->
+<div class="modal fade" id="createBabyItemModal" tabindex="-1" aria-labelledby="createBabyItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);">
+                <h5 class="modal-title" id="createBabyItemModalLabel">👶 Novo Artigo do Bebé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="@Url.Action("CreatePartial", "BabyItems")"
+                  hx-target="#babyItemsList"
+                  hx-swap="afterbegin"
+                  hx-on:htmx:after-request="closeModalAndReset('createBabyItemModal')">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Name" required maxlength="200" placeholder="Ex: Bodies 0-3M, Carrinho..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Prioridade <span class="text-danger">*</span></label>
+                            <select class="form-select" name="Priority" required>
+                                <option value="1">1 - Muito Alta</option>
+                                <option value="2">2 - Alta</option>
+                                <option value="3" selected>3 - Média</option>
+                                <option value="4">4 - Baixa</option>
+                                <option value="5">5 - Muito Baixa</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Categoria</label>
+                            <input type="text" class="form-control" name="Category" list="categoryList" placeholder="Ex: Roupa, Quarto..." />
+                            <datalist id="categoryList">
+                                <option value="Roupa"></option>
+                                <option value="Quarto do Bebé"></option>
+                                <option value="Alimentação"></option>
+                                <option value="Banho"></option>
+                                <option value="Fraldas"></option>
+                                <option value="Brinquedos"></option>
+                                <option value="Segurança"></option>
+                                <option value="Viagem"></option>
+                            </datalist>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Custo Estimado (€)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" class="form-control" name="EstimatedCost" step="0.01" min="0" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Quantidade</label>
+                            <input type="number" class="form-control" name="Quantity" value="1" min="1" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Descrição</label>
+                            <textarea class="form-control" name="Description" rows="2" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="IsPurchased" id="isPurchased" />
+                                <label class="form-check-label" for="isPurchased">✅ Já Comprado</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Adicionar Artigo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,113 @@
+@model Ervilhinha.Models.FamilyBudget
+
+@{
+    ViewData["Title"] = $"Editar Orçamento - {ViewBag.MonthName}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>💰 Editar Orçamento</h1>
+        <p class="text-soft mb-0">@ViewBag.MonthName</p>
+    </div>
+    <a asp-action="Index" asp-route-year="@ViewBag.Year" asp-route-month="@ViewBag.Month" class="btn btn-secondary">
+        ← Voltar
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Year" />
+            <input type="hidden" asp-for="Month" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="TotalIncome" class="form-label fw-semibold">Rendimento Total Mensal (€) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-success text-white">€</span>
+                        <input asp-for="TotalIncome" class="form-control" step="0.01" required />
+                    </div>
+                    <span asp-validation-for="TotalIncome" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetBaby" class="form-label fw-semibold">Orçamento para o Bebé (€) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">👶</span>
+                        <input asp-for="BudgetBaby" class="form-control" step="0.01" required />
+                    </div>
+                    <span asp-validation-for="BudgetBaby" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetFood" class="form-label fw-semibold">Alimentação (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">🍽️</span>
+                        <input asp-for="BudgetFood" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetHouse" class="form-label fw-semibold">Habitação (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">🏠</span>
+                        <input asp-for="BudgetHouse" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetTransport" class="form-label fw-semibold">Transportes (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">🚗</span>
+                        <input asp-for="BudgetTransport" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetHealth" class="form-label fw-semibold">Saúde (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">🏥</span>
+                        <input asp-for="BudgetHealth" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetLeisure" class="form-label fw-semibold">Lazer (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">🎉</span>
+                        <input asp-for="BudgetLeisure" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BudgetSavings" class="form-label fw-semibold">Poupanças (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">💰</span>
+                        <input asp-for="BudgetSavings" class="form-control" step="0.01" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="BudgetOther" class="form-label fw-semibold">Outros (€)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">📦</span>
+                        <input asp-for="BudgetOther" class="form-control" step="0.01" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" asp-route-year="@ViewBag.Year" asp-route-month="@ViewBag.Month" class="btn btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Orçamento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

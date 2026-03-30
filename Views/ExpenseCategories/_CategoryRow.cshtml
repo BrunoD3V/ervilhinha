@@ -1,0 +1,32 @@
+@model Ervilhinha.Models.ExpenseCategory
+
+<tr class="htmx-added">
+    <td>
+        <span class="badge" style="background-color: @Model.Color">
+            @Model.Name
+        </span>
+    </td>
+    <td>
+        <input type="color" value="@Model.Color" disabled style="border: none;" />
+        <code>@Model.Color</code>
+    </td>
+    <td>
+        @if (Model.IsActive)
+        {
+            <span class="badge bg-success">Ativo</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">Inativo</span>
+        }
+    </td>
+    <td>
+        <div class="btn-group btn-group-sm">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Eliminar</a>
+            }
+        </div>
+    </td>
+</tr>

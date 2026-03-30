@@ -6,7 +6,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>💰 Despesas</h1>
-    <a asp-action="Create" class="btn btn-primary">➕ Adicionar Nova Despesa</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createExpenseModal">
+        ➕ Adicionar Nova Despesa
+    </button>
 </div>
 
 <div class="card mb-4">
@@ -55,7 +57,7 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="expensesList">
                 @foreach (var expense in Model)
                 {
                     <tr>
@@ -88,6 +90,73 @@
 else
 {
     <div class="alert alert-info">
-        Não foram encontradas despesas. <a asp-action="Create">Adiciona a tua primeira despesa!</a>
+        Não foram encontradas despesas. <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#createExpenseModal">Adiciona a tua primeira despesa!</button>
     </div>
+}
+
+<!-- Modal de Criação de Despesa -->
+<div class="modal fade" id="createExpenseModal" tabindex="-1" aria-labelledby="createExpenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);">
+                <h5 class="modal-title" id="createExpenseModalLabel">💰 Nova Despesa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="@Url.Action("CreatePartial", "Expenses")" 
+                  hx-target="#expensesList" 
+                  hx-swap="afterbegin"
+                  hx-on:htmx:after-request="closeModalAndReset('createExpenseModal')">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="expenseDescription" class="form-label fw-semibold">Descrição <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="expenseDescription" name="Description" required maxlength="200" placeholder="Ex: Supermercado Continente..." />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="expenseAmount" class="form-label fw-semibold">Montante <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-danger text-white fw-bold">€</span>
+                                <input type="number" class="form-control" id="expenseAmount" name="Amount" step="0.01" min="0" required placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="expenseDate" class="form-label fw-semibold">Data <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="expenseDate" name="Date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-12">
+                            <label for="expenseCategory" class="form-label fw-semibold">Categoria <span class="text-danger">*</span></label>
+                            <select class="form-select" id="expenseCategory" name="ExpenseCategoryId" required>
+                                <option value="">-- Seleciona uma categoria --</option>
+                                @foreach (var cat in ViewBag.Categories)
+                                {
+                                    <option value="@cat.Id">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="expenseNotes" class="form-label fw-semibold">Notas <span class="text-muted small">(opcional)</span></label>
+                            <textarea class="form-control" id="expenseNotes" name="Notes" rows="2" maxlength="500" placeholder="Observações adicionais..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Adicionar Despesa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .htmx-request .htmx-indicator {
+            display: inline-block;
+        }
+        .htmx-indicator {
+            display: none;
+        }
+    </style>
 }

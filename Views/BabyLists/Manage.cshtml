@@ -130,9 +130,9 @@
                 <h6 class="mb-3">⚙️ Ações Rápidas</h6>
                 
                 <div class="d-grid gap-2">
-                    <a asp-action="AddItem" asp-route-listId="@Model.Id" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         ➕ Adicionar Item
-                    </a>
+                    </button>
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
                         ✏️ Editar Lista
                     </a>
@@ -212,7 +212,7 @@
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="babyListItemsTable">
                         @foreach (var item in Model.Items.OrderBy(i => i.IsPurchased).ThenByDescending(i => i.Priority).ThenBy(i => i.Category))
                         {
                             <tr class="@(item.IsPurchased ? "table-success" : item.IsFullyReserved ? "table-warning" : "")">
@@ -328,10 +328,90 @@
         {
             <div class="text-center py-4">
                 <p class="text-soft mb-3">Ainda não há items nesta lista</p>
-                <a asp-action="AddItem" asp-route-listId="@Model.Id" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
                     ➕ Adicionar Primeiro Item
-                </a>
+                </button>
             </div>
         }
+    </div>
+</div>
+
+<!-- Modal de Adicionar Item -->
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);">
+                <h5 class="modal-title" id="addItemModalLabel">➕ Adicionar Item à Lista</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="@Url.Action("AddItemPartial", "BabyLists")"
+                  hx-target="#babyListItemsTable"
+                  hx-swap="afterbegin"
+                  hx-on:htmx:after-request="closeModalAndReset('addItemModal')">
+                <input type="hidden" name="BabyListId" value="@Model.Id" />
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Nome do Item <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Name" required maxlength="200" placeholder="Ex: Bodies 0-3M, Carrinho de bebé..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Quantidade <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="Quantity" value="1" min="1" max="100" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Categoria <span class="text-danger">*</span></label>
+                            <select class="form-select" name="Category" required>
+                                <option value="">-- Selecione --</option>
+                                <option value="1">🛏️ Quarto do Bebé</option>
+                                <option value="2">👕 Roupa 0-3M</option>
+                                <option value="3">👕 Roupa 3-6M</option>
+                                <option value="4">👕 Roupa 6-12M</option>
+                                <option value="5">🛁 Higiene e Banho</option>
+                                <option value="6">🍼 Alimentação</option>
+                                <option value="7">🚗 Passeio (Carrinho, Cadeira Auto)</option>
+                                <option value="8">🧸 Brinquedos</option>
+                                <option value="9">🏥 Saúde e Segurança</option>
+                                <option value="10">🎒 Acessórios</option>
+                                <option value="11">📦 Outros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Prioridade <span class="text-danger">*</span></label>
+                            <select class="form-select" name="Priority" required>
+                                <option value="1" selected>✅ Essencial</option>
+                                <option value="2">⭐ Recomendado</option>
+                                <option value="3">💡 Opcional</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Custo Estimado (€)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" class="form-control" name="EstimatedCost" step="0.01" min="0" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Link do Produto</label>
+                            <input type="url" class="form-control" name="ProductUrl" maxlength="500" placeholder="https://..." />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Descrição</label>
+                            <textarea class="form-control" name="Description" rows="2" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Notas</label>
+                            <textarea class="form-control" name="Notes" rows="2" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Adicionar Item
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
